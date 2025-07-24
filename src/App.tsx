@@ -11,10 +11,10 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import { airplaneSharp, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
+import Travels from './pages/Travels';
+import Baggages from './pages/Baggages';
+import StoreItems from './pages/StoreItems';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Settings from './pages/Settings';
 
 setupIonicReact();
 
@@ -42,32 +43,50 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
+
+          <Route exact path="/travels">
+            <Travels />
           </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
+
+          <Route exact path="/baggages">
+            <Baggages />
           </Route>
-          <Route path="/tab3">
-            <Tab3 />
+
+          <Route path="/store-items">
+            <StoreItems />
           </Route>
+
+          <Route path="/settings">
+            <Settings />
+          </Route>
+
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/travels" />
           </Route>
+
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
+
+          <IonTabButton tab="travels" href="/travels">
+            <IonIcon aria-hidden="true" icon={airplaneSharp} />
+            <IonLabel>Travels</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
+
+          <IonTabButton tab="baggages" href="/baggages">
+            <IonIcon aria-hidden="true" icon={briefcaseSharp} />
+            <IonLabel>Baggages</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
+
+          <IonTabButton tab="store-items" href="/store-items">
+            <IonIcon aria-hidden="true" icon={cartSharp} />
+            <IonLabel>Store</IonLabel>
           </IonTabButton>
+
+          <IonTabButton tab="settings" href="/settings">
+            <IonIcon aria-hidden="true" icon={settingsSharp} />
+            <IonLabel>Settings</IonLabel>
+          </IonTabButton>
+
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
