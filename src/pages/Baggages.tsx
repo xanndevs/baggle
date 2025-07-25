@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import TravelsAccordion from '../components/TravelsAccordion';
 import './Baggages.css';
 
 const Baggages: React.FC = () => {
@@ -8,7 +8,6 @@ const Baggages: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-
           <IonTitle>Baggages</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -18,7 +17,7 @@ const Baggages: React.FC = () => {
             <IonTitle size="large">Tab 2</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
+        <TravelsAccordion />
       </IonContent>
     </IonPage>
   );
