@@ -1,0 +1,11 @@
+ion-img::part(image) {
+    border-radius: 5px;
+}
+
+ion-toolbar .sc-ion-searchbar-ios-h {
+    padding-bottom: 1px;
+}
+
+ .md .ion-padding-horizontal {
+    background-color: var(--ion-backgroun-color) !important;
+}

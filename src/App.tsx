@@ -13,7 +13,7 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { airplaneSharp, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
 import Travels from './pages/Travels';
-import Baggages from './pages/Baggages';
+import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
 
 /* Core CSS required for Ionic components to work properly */
@@ -35,6 +35,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Settings from './pages/Settings';
+import BaggageDetails from './pages/Baggages/BaggageDetails';
 
 setupIonicReact();
 
@@ -51,6 +52,7 @@ const App: React.FC = () => (
           <Route exact path="/baggages">
             <Baggages />
           </Route>
+          <Route path="/baggages/:uuid" component={BaggageDetails} />
 
           <Route path="/store-items">
             <StoreItems />

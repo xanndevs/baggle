@@ -14,7 +14,7 @@ const StoreItems: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 3</IonTitle>
+            <IonTitle size="large">Store</IonTitle>
           </IonToolbar>
         </IonHeader>
         <TravelsAccordion />

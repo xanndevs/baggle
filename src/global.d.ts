@@ -10,6 +10,7 @@ declare global {
         name: string,
         amount: number,
         price?: number,
+        note?: string,
 
     }
     //#endregion
@@ -18,7 +19,7 @@ declare global {
     //#region Bag
     interface Bag {
         uuid?: string,
-        name: string,
+        name?: string,
         itemsPacked: Item[],
         itemsReady: Item[],
         itemsStore?: Item[],

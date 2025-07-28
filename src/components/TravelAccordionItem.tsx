@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonAccordion, IonChip, IonIcon, IonItem, IonLabel } from '@ionic/react';
+import { IonAccordion, IonBadge, IonChip, IonIcon, IonItem, IonLabel } from '@ionic/react';
 import { briefcaseSharp, calendarClearSharp, checkmarkDoneSharp, checkmarkSharp, pricetagSharp, sadSharp } from 'ionicons/icons';
 import BaggleDaysLabel from './BaggleDaysLabel';
 
@@ -8,10 +8,10 @@ interface ContainerProps {
   name: string,
   remainingDays: number,
   bags?: string[],
-
+  value: string,
 }
 
-const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDays, bags }) => {
+const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDays, bags, value }) => {
   const [bagValues, setBagValues] = useState<Bag[]>([]);
 
   useEffect(() => {
@@ -56,15 +56,15 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDa
   }, []);
 
   return (
-    //#region Render travel
-    <IonAccordion value="first">
-      <IonItem slot="header" color="light" >
+    //#region Render_travel
+    <IonAccordion value={`accordion-${value}`} >
+      <IonItem slot="header" >
 
         <IonLabel>
           {name}
         </IonLabel>
 
-        <IonChip outline={true}>
+        <IonChip outline>
           <IonIcon icon={briefcaseSharp}></IonIcon>
           <IonLabel>x{bagValues?.length || 0}</IonLabel>
         </IonChip>
@@ -78,9 +78,9 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDa
       </IonItem>
 
       {
-        //#region Render bags
+        //#region Render_bags
         bagValues?.map((bag, index) => (
-          <IonItem key={index} button={true} detail={true} slot="content">
+          <IonItem key={index} button={true} detail={true} slot="content" routerLink={`/baggages/${bag.uuid}`}>
             <IonIcon icon={sadSharp}></IonIcon>
             &nbsp;&nbsp;
             <IonLabel style={{ flex: "1" }}>{bag.name}</IonLabel>
