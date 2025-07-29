@@ -21,33 +21,29 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDa
       //res = askforbags([,"678-36-425469","904-53-4535"]) // the holly api call
 
       // a white old wizard arrived with the response
-      const res = {
+            const res: { bags: Bag[] } = {
+
         bags: [
           {
             uuid: "uuid-best",
             name: "Valiz",
-            itemsPacked: [
-              {name: "Ekmek", amount: 3}
-            ],
-            itemsReady: [
-              {name: "Ekmek", amount: 3}
-            ],
-            itemsStore: [
-              {name: "Ekmek", amount: 3, price: 300}
+            items: [
+              { type: 'packed', name: "Ekmek", amount: 3 },
+              { type: 'ready', name: "Ayakkabı", amount: 3 },
+              { type: 'store', name: "Balık", amount: 3, price: 300 }
             ],
           },
           {
             uuid: "uuis-notbest",
             name: "Sırt Çantası",
-            itemsPacked: [
-              {name: "Ekmek", amount: 3}
-            ],
-            itemsReady: [
-              {name: "Ekmek", amount: 3}
+            items: [
+              { type: 'ready', name: "Ekmek", amount: 3 },
+              { type: 'packed', name: "Ekmek", amount: 3 }
             ],
           }
         ]
       }
+
 
       setBagValues(res.bags);
     }
@@ -85,20 +81,20 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDa
             &nbsp;&nbsp;
             <IonLabel style={{ flex: "1" }}>{bag.name}</IonLabel>
 
-            {bag.itemsStore ? (
+            {bag.items.filter((elem) => elem.type === 'store').length ? (
               <IonChip disabled={true}>
                 <IonIcon icon={pricetagSharp}></IonIcon>
-                <IonLabel>x{bag.itemsStore.length}</IonLabel>
+                <IonLabel>x{bag.items.filter((elem) => elem.type === 'store').length}</IonLabel>
               </IonChip>
             ) : null}
             <IonChip disabled={true}>
               <IonIcon icon={checkmarkSharp}></IonIcon>
-              <IonLabel>x{bag.itemsReady.length}</IonLabel>
+              <IonLabel>x{bag.items.filter((elem) => elem.type === 'ready').length}</IonLabel>
             </IonChip>
 
             <IonChip disabled={true}>
               <IonIcon icon={checkmarkDoneSharp}></IonIcon>
-              <IonLabel>x{bag.itemsPacked.length}</IonLabel>
+              <IonLabel>x{bag.items.filter((elem) => elem.type === 'packed').length}</IonLabel>
             </IonChip>
           </IonItem>
         ))

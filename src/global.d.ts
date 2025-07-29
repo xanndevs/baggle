@@ -5,6 +5,7 @@ declare global {
 
     //#region Item
     interface Item {
+        type: "store" | "ready" | "packed", 
         uuid?: string,
         image?: string,
         name: string,
@@ -20,10 +21,7 @@ declare global {
     interface Bag {
         uuid?: string,
         name?: string,
-        itemsPacked: Item[],
-        itemsReady: Item[],
-        itemsStore?: Item[],
-
+        items: Item[],
     }
     //#endregion
 }

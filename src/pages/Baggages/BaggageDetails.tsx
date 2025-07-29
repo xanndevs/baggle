@@ -23,29 +23,24 @@ const BaggageDetails: React.FC = () => {
       //res = askforbags([,"678-36-425469","904-53-4535"]) // the holly api call
       console.log(uuid)
       // a white old wizard arrived with the response
-      const res = {
+      const res: { bags: Bag[] } = {
+
         bags: [
           {
             uuid: "uuid-best",
             name: "Valiz",
-            itemsPacked: [
-              { name: "Ekmek", amount: 3 }
-            ],
-            itemsReady: [
-              { name: "Ayakkabı", amount: 3 }
-            ],
-            itemsStore: [
-              { name: "Balık", amount: 3, price: 300 }
+            items: [
+              { type: 'packed', name: "Ekmek", amount: 3 },
+              { type: 'ready', name: "Ayakkabı", amount: 3 },
+              { type: 'store', name: "Balık", amount: 3, price: 300 }
             ],
           },
           {
             uuid: "uuis-notbest",
             name: "Sırt Çantası",
-            itemsPacked: [
-              { name: "Ekmek", amount: 3 }
-            ],
-            itemsReady: [
-              { name: "Ekmek", amount: 3 }
+            items: [
+              { type: 'ready', name: "Ekmek", amount: 3 },
+              { type: 'packed', name: "Ekmek", amount: 3 }
             ],
           }
         ]
@@ -55,9 +50,7 @@ const BaggageDetails: React.FC = () => {
       setBagValue(bag);
 
       const filteredBag = [
-        ...(bag?.itemsReady || []),
-        ...(bag?.itemsStore || []),
-        ...(bag?.itemsPacked || []),
+        ...(bag?.items || []),
       ];
       setData(filteredBag);
       setResults(filteredBag);
@@ -94,59 +87,59 @@ const BaggageDetails: React.FC = () => {
           <IonList class='ion-padding-horizontal '>
             {results?.map((result, key) => (
               <>
-              <IonGrid key={key} >
-                <IonCheckbox justify='space-between' alignment='center' style={{width:"100%"}}>
+                <IonGrid key={key} >
+                  <IonCheckbox justify='space-between' alignment='center' style={{ width: "100%" }}>
 
 
-                  <IonRow class='ion-align-items-start' >
-                    <IonCol size='auto' >
-                      <IonImg style={{ width: "45px", aspectRatio: "0.75", objectFit: "cover" }} src={result.image ?? WalrusBucket}></IonImg>
-                      <IonBadge color={'primary'} style={{position:"absolute", bottom:"0px", right:"0px", opacity:"0.85"}} >
-                            {result.amount ? `x${result.amount}` : undefined}
-                      </IonBadge>
-                    </IonCol>
-                    <IonCol class='ion-no-padding'>
+                    <IonRow class='ion-align-items-start' >
+                      <IonCol size='auto' >
+                        <IonImg style={{ width: "45px", aspectRatio: "0.75", objectFit: "cover" }} src={result.image ?? WalrusBucket}></IonImg>
+                        <IonBadge color={'primary'} style={{ position: "absolute", bottom: "0px", right: "0px", opacity: "0.85" }} >
+                          {result.amount ? `x${result.amount}` : undefined}
+                        </IonBadge>
+                      </IonCol>
+                      <IonCol class='ion-no-padding'>
 
-                      <IonRow class='ion-align-items-center' >
-                        <IonCol size='auto'>
-                          <IonTitle class='ion-text-start ion-no-padding' size='small'>
-                            {result.name}
-                          </IonTitle>
-                        </IonCol>
+                        <IonRow class='ion-align-items-center' >
+                          <IonCol size='auto'>
+                            <IonTitle class='ion-text-start ion-no-padding' size='small'>
+                              {result.name}
+                            </IonTitle>
+                          </IonCol>
 
-                        <IonCol>
+                          <IonCol>
 
 
-                          <IonBadge color={"success"}>
-                            {
-                              //#region WIP
-                              /**
-                               * Add a currency provider and replace the currency with the user provided currency
-                              */
-                              //#regionend
-                            }
-                            {result.price ? `${result.price}₺` : undefined}
-                          </IonBadge>&nbsp;
+                            <IonBadge color={"success"}>
+                              {
+                                //#region WIP
+                                /**
+                                 * Add a currency provider and replace the currency with the user provided currency
+                                */
+                                //#regionend
+                              }
+                              {result.price ? `${result.price}₺` : undefined}
+                            </IonBadge>&nbsp;
 
-                        </IonCol>
-                      </IonRow>
+                          </IonCol>
+                        </IonRow>
 
-                      <IonRow>
-                        <IonCol>
-                          <IonLabel>
-                            {result.note ?? undefined}
-                          </IonLabel>
-                        </IonCol>
-                      </IonRow>
+                        <IonRow>
+                          <IonCol>
+                            <IonLabel>
+                              {result.note ?? undefined}
+                            </IonLabel>
+                          </IonCol>
+                        </IonRow>
 
-                    </IonCol>
-                    <IonCol size='auto' class='ion-align-self-center'>
-                    </IonCol>
-                  </IonRow>
+                      </IonCol>
+                      <IonCol size='auto' class='ion-align-self-center'>
+                      </IonCol>
+                    </IonRow>
 
-                </IonCheckbox>
+                  </IonCheckbox>
 
-              </IonGrid>
+                </IonGrid>
               </>
             ))}
           </IonList>
