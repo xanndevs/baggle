@@ -10,6 +10,8 @@ import {
   IonPage,
   IonInput,
   IonProgressBar,
+  IonDatetime,
+  IonLabel,
 } from '@ionic/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,6 +21,8 @@ const Settings: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [progress, setProgress] = useState<number>(0);
   const [modalPage, setModalPage] = useState(1);
+
+  const [dateValue, setDateValue] = useState<string>();
 
   const setModal = () => {
     setProgress((previous) => previous + 0.05);
@@ -41,6 +45,8 @@ const Settings: React.FC = () => {
         <IonButton id="open-modal" expand="block" onClick={setModal}>
           Open Bottom Sheet
         </IonButton>
+        <IonDatetime value={dateValue}></IonDatetime>
+        <IonLabel>{dateValue}</IonLabel>
 
         <IonModal
           ref={modal}

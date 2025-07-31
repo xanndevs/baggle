@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { airplaneSharp, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
-import Travels from './pages/Travels';
+import Travels from './pages/Travels/Travels';
 import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
 

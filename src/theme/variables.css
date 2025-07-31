@@ -197,7 +197,7 @@ http://ionicframework.com/docs/theming/ */
    */
 
   .md body {
-    --ion-background-color: rgb(8, 8, 8);
+    --ion-background-color: rgb(18, 18, 18);
     --ion-background-color-rgb: 18,18,18;
 
     --ion-text-color: #eaeaea;
@@ -206,7 +206,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-border-color: #181818;
 
     --ion-color-step-50: #1e1e1e;
-    --ion-color-step-100: #2a2a2a;
+    --ion-color-step-100: #1e1e1e;
     --ion-color-step-150: #363636;
     --ion-color-step-200: #414141;
     --ion-color-step-250: #4d4d4d;
@@ -227,11 +227,11 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-item-background: #000000;
 
-    --ion-toolbar-background: #171717;
+    --ion-toolbar-background: #121212;
 
-    --ion-tab-bar-background: #171717;
+    --ion-tab-bar-background: #121212;
 
-    --ion-card-background: #1e1e1e;
+    --ion-card-background: #111111;
 
   }
 }

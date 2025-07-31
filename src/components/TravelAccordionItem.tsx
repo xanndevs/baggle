@@ -6,12 +6,12 @@ import BaggleDaysLabel from './BaggleDaysLabel';
 interface ContainerProps {
   uuid?: string,
   name: string,
-  remainingDays: number,
+  date?: string,
   bags?: string[],
   value: string,
 }
 
-const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDays, bags, value }) => {
+const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags, value }) => {
   const [bagValues, setBagValues] = useState<Bag[]>([]);
 
   useEffect(() => {
@@ -67,7 +67,11 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, remainingDa
         <IonChip outline={true}>
           <IonIcon icon={calendarClearSharp}></IonIcon>
           <IonLabel>
-            <BaggleDaysLabel remainingDays={remainingDays} />
+            {
+              //currently it substracts the current date from the travel date
+              //and the result is just a number of milliseconds so I need to make it days
+              date ? <BaggleDaysLabel remainingDays={Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} /> : undefined
+            }
           </IonLabel>
 
         </IonChip>

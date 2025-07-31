@@ -1,0 +1,27 @@
+
+#date-modal, #time-modal{
+    --height: auto !important;
+}
+
+
+#date-modal{
+    --height:auto !important;
+}
+
+
+
+
+html.md #time-picker{
+  margin: 25px 0px;
+}
+
+
+
+
+
+ion-input{
+    border-bottom: 1px solid;
+}
+
+
+
