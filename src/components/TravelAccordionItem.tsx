@@ -45,7 +45,7 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
       }
 
 
-      setBagValues(res.bags);
+      setBagValues(res.bags.filter(elem => elem.uuid === uuid))
     }
 
     fetchBags();

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
+  IonBadge,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
@@ -11,7 +12,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { airplaneSharp, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
+import { airplaneSharp, bag, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
 import Travels from './pages/Travels/Travels';
 import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
@@ -36,63 +37,112 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Settings from './pages/Settings';
 import BaggageDetails from './pages/Baggages/BaggageDetails';
+import { get, subscribe } from './utils/storage';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
+const App: React.FC = () => {
+  const [travelData, setTravelData] = React.useState<Travel[]>([]);
+  const [baggageData, setBaggageData] = React.useState<Bag[]>([]);
 
-          <Route exact path="/travels">
-            <Travels />
-          </Route>
 
-          <Route exact path="/baggages">
-            <Baggages />
-          </Route>
-          <Route path="/baggages/:uuid" component={BaggageDetails} />
+  useEffect(() => {
+    let isMounted = true;
 
-          <Route path="/store-items">
-            <StoreItems />
-          </Route>
+    const setup = async () => {
+      const travels = await get<Travel[]>("travels");
+      const baggages = await get<Bag[]>("baggages");
+      if (isMounted) {
+        if (travels) setTravelData(travels);
+        if (baggages) setBaggageData(baggages);
+      }
+    };
 
-          <Route path="/settings">
-            <Settings />
-          </Route>
+    setup();
 
-          <Route exact path="/">
-            <Redirect to="/travels" />
-          </Route>
+    const unsub_travels = subscribe<Travel[]>('travels', (travels) => {
+      if (isMounted) {
+        console.log("Travel data updated:", travels);
 
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
+        setTravelData(travels);
+      }
+    });
 
-          <IonTabButton tab="travels" href="/travels">
-            <IonIcon aria-hidden="true" icon={airplaneSharp} />
-            <IonLabel>Travels</IonLabel>
-          </IonTabButton>
 
-          <IonTabButton tab="baggages" href="/baggages">
-            <IonIcon aria-hidden="true" icon={briefcaseSharp} />
-            <IonLabel>Baggages</IonLabel>
-          </IonTabButton>
+    const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
+      if (isMounted) {
+        console.log("Baggage data updated:", baggages);
 
-          <IonTabButton tab="store-items" href="/store-items">
-            <IonIcon aria-hidden="true" icon={cartSharp} />
-            <IonLabel>Store</IonLabel>
-          </IonTabButton>
+        setBaggageData(baggages);
+      }
+    });
 
-          <IonTabButton tab="settings" href="/settings">
-            <IonIcon aria-hidden="true" icon={settingsSharp} />
-            <IonLabel>Settings</IonLabel>
-          </IonTabButton>
 
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+
+    return () => {
+      isMounted = false;
+      unsub_travels();
+      unsub_baggages();
+    };
+  }, []);
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+
+            <Route exact path="/travels">
+              <Travels travels={travelData} />
+            </Route>
+
+            <Route exact path="/baggages">
+              <Baggages 
+              />
+            </Route>
+            <Route path="/baggages/:uuid" component={BaggageDetails} />
+
+            <Route path="/store-items">
+              <StoreItems />
+            </Route>
+
+            <Route path="/settings">
+              <Settings />
+            </Route>
+
+            <Route exact path="/">
+              <Redirect to="/travels" />
+            </Route>
+
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+
+            <IonTabButton tab="travels" href="/travels">
+              <IonIcon aria-hidden="true" icon={airplaneSharp} />
+              <IonLabel>Travels</IonLabel>
+              {travelData.length ? <IonBadge color={'warning'}>{travelData.length}</IonBadge> : undefined}
+            </IonTabButton>
+
+            <IonTabButton tab="baggages" href="/baggages">
+              <IonIcon aria-hidden="true" icon={briefcaseSharp} />
+              <IonLabel>Baggages</IonLabel>
+              {baggageData.length ? <IonBadge color={'warning'}>{baggageData.length}</IonBadge> : undefined}
+            </IonTabButton>
+
+            <IonTabButton tab="store-items" href="/store-items">
+              <IonIcon aria-hidden="true" icon={cartSharp} />
+              <IonLabel>Store</IonLabel>
+            </IonTabButton>
+
+            <IonTabButton tab="settings" href="/settings">
+              <IonIcon aria-hidden="true" icon={settingsSharp} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
+  );
+}
 
 export default App;

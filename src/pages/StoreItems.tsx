@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import TravelsAccordion from '../components/TravelsAccordion';
 import './StoreItems.css';
 
@@ -17,7 +17,7 @@ const StoreItems: React.FC = () => {
             <IonTitle size="large">Store</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TravelsAccordion />
+        <IonLabel>No Content</IonLabel>
       </IonContent>
     </IonPage>
   );

@@ -4,13 +4,14 @@ import React, { useRef } from 'react';
 import { push } from '../../../utils/storage';
 
 interface ComponentTypes {
-  travelNameValue: any,
+  dispatch: any,
+  formState: any
   setModalPage: React.Dispatch<React.SetStateAction<number>>,
-  modal:any,
+  modal:React.RefObject<HTMLIonModalElement>,
 
 }
 
-const Page2: React.FC<ComponentTypes> = ({ travelNameValue, setModalPage, modal}) => {
+const Page2: React.FC<ComponentTypes> = ({ dispatch, formState, setModalPage, modal}) => {
 
   const date_modal = useRef<HTMLIonModalElement>(null);
   const time_modal = useRef<HTMLIonModalElement>(null);
@@ -34,10 +35,10 @@ const Page2: React.FC<ComponentTypes> = ({ travelNameValue, setModalPage, modal}
     >
       <div style={{ flexGrow: 1 }}>
         <h2>Review Input</h2>
-        <p>You entered: {travelNameValue}</p>
+        <p>You entered: {formState.travelNameValue}</p>
 
       </div>
-      <div style={{display:"flex", flexDirection:"row", paddingBottom: "15vh"}}>
+      <div style={{display:"flex", flexDirection:"row", paddingBottom: `${100 - ((modal.current?.initialBreakpoint || 0) * 100) }vh`}}>
 
         <IonButton
           style={{ flexGrow:3 }}
@@ -50,9 +51,9 @@ const Page2: React.FC<ComponentTypes> = ({ travelNameValue, setModalPage, modal}
         color="success"
         style={{ flexGrow:3 }}
         onClick={() => {
-          console.log('Input value:', travelNameValue);
+          console.log('Input value:', formState.travelNameValue);
           modal.current?.dismiss();
-          push("travels", { name: travelNameValue, bags: [], date: new Date().toISOString() });
+          push("travels", { name: formState.travelNameValue, bags: [], date: formState.travelDateValue });
         }}
         >
         Submit

@@ -3,16 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 
 interface ComponentTypes {
-    travelNameValue: any,
-    setInputValue: any,
-    travelDateValue: any,
-    setTravelDateValue: any,
+    dispatch: any,
+    formState: any,
     setModalPage: React.Dispatch<React.SetStateAction<number>>,
-    setProgress: any
+    modal: React.RefObject<HTMLIonModalElement>,
 
 }
 
-const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, travelDateValue, setTravelDateValue, setModalPage, setProgress }) => {
+const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage }) => {
 
     const date_modal = useRef<HTMLIonModalElement>(null);
     const time_modal = useRef<HTMLIonModalElement>(null);
@@ -24,12 +22,27 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
         exit: { opacity: 0, x: -50 },
     };
 
-
+    console.log(1 - (modal.current?.initialBreakpoint || 0))
     useEffect(() => {
         setTimeout(() => {
             firstInput.current?.setFocus();
         }, 100); // wait a bit to ensure modal is fully visible
     }, []);
+
+
+    function toLocalISOString(date: Date): string {
+        const pad = (n: number) => String(n).padStart(2, "0");
+
+        const yyyy = date.getFullYear();
+        const mm = pad(date.getMonth() + 1);
+        const dd = pad(date.getDate());
+        const hh = pad(date.getHours());
+        const mi = pad(date.getMinutes());
+        const ss = pad(date.getSeconds());
+
+        return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
+    }
+
 
     return (<>
 
@@ -50,9 +63,15 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                     color={'secondary'}
                     ref={firstInput}
                     className='bordered'
-                    value={travelNameValue}
+                    value={formState.travelNameValue}
 
-                    onIonChange={(e) => setInputValue(e.detail.value!)}
+                    onIonChange={(e) => {
+                        dispatch({
+                            type: "UPDATE",
+                            field: "travelNameValue",
+                            value: e.target.value,
+                        })
+                    }}
                 />
 
                 <br></br>
@@ -68,7 +87,7 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                         color={'secondary'}
                         className='bordered'
                         id='open-date'
-                        value={travelDateValue.split("T")[0]}
+                        value={formState.travelDateValue.toISOString().split("T")[0]}
 
                         onIonFocus={(e) => date_modal.current?.present()}
                     ></IonInput>
@@ -94,7 +113,7 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                                 <IonToolbar>
                                     <IonTitle className='ion-padding-vertical'>Date Picker</IonTitle>
                                     <IonButtons slot='end'>
-                                        <IonButton size='small' onClick={() => {date_modal.current?.dismiss()}}>Done</IonButton>
+                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss() }}>Done</IonButton>
                                     </IonButtons>
                                 </IonToolbar>
                             </IonHeader>
@@ -104,9 +123,27 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                                 color={'secondary'}
                                 size='cover'
                                 presentation='date'
-                                onIonChange={(elem) => { setTravelDateValue(elem.target.value) }}
+                                onIonChange={(e) => {
+                                    const rawValue = e.target.value;
 
-                                value={travelDateValue}
+                                    let dateValue = "";
+
+                                    if (Array.isArray(rawValue) && rawValue.length > 0) {
+                                        const parts = rawValue[0].split("T")[0]
+                                        dateValue = parts || "";
+                                    } else if (typeof rawValue === "string") {
+                                        const parts = rawValue.split("T")[0]
+                                        dateValue = parts || "";
+                                    }
+
+                                    dispatch({
+                                        type: "UPDATE",
+                                        field: "travelDateValue",
+                                        value: new Date(dateValue),
+                                    });
+                                }}
+
+                                value={formState.travelDateValue.toISOString()}
 
                             />
                         </div>
@@ -129,7 +166,7 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                         color={'secondary'}
                         className='bordered'
                         id='open-time'
-                        value={travelDateValue.split("T")[1]}
+                        value={toLocalISOString(formState.travelTimeValue).split("T")[1].split(".")[0]}
 
                         onIonFocus={(e) => time_modal.current?.present()}
                     ></IonInput>
@@ -151,7 +188,7 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                                 <IonToolbar>
                                     <IonTitle className='ion-padding-vertical'>Time Picker</IonTitle>
                                     <IonButtons slot='end'>
-                                        <IonButton size='small' onClick={() => {time_modal.current?.dismiss()}}>Done</IonButton>
+                                        <IonButton size='small' onClick={() => { time_modal.current?.dismiss() }}>Done</IonButton>
                                     </IonButtons>
                                 </IonToolbar>
                             </IonHeader>
@@ -161,9 +198,31 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
                                 color={'secondary'}
                                 size='cover'
                                 presentation='time'
-                                onIonChange={(elem) => { setTravelDateValue(elem.target.value) }}
+                                onIonChange={(e) => {
+                                    const rawValue = e.target.value;
+                                    let timeValue = "";
 
-                                value={travelDateValue}
+                                    if (Array.isArray(rawValue) && rawValue.length > 0) {
+                                        const parts = rawValue[0].split("T")[1]?.split(".");
+                                        timeValue = parts?.[0] || "";
+                                    } else if (typeof rawValue === "string") {
+                                        const parts = rawValue.split("T")[1]?.split(".");
+                                        timeValue = parts?.[0] || "";
+                                    }
+
+                                    // Fallback to 0 for missing time segments
+                                    const [h, m, s] = timeValue.split(":").map((v) => parseInt(v, 10) || 0);
+
+                                    const date = new Date();
+                                    date.setHours(h, m, s, 0); // local time
+
+                                    dispatch({
+                                        type: "UPDATE",
+                                        field: "travelTimeValue",
+                                        value: date,
+                                    });
+                                }}
+                                value={toLocalISOString(formState.travelTimeValue)}
 
                             />
                         </div>
@@ -177,8 +236,15 @@ const Page1: React.FC<ComponentTypes> = ({ travelNameValue, setInputValue, trave
             <IonButton
                 expand="block"
                 className="ion-margin-top"
-                style={{ paddingBottom: "15vh" }}
-                onClick={() => { setModalPage((prev) => prev + 1); setProgress(0.5); }}
+                style={{ paddingBottom: `${100 - ((modal.current?.initialBreakpoint || 0) * 100) }vh` }}
+                onClick={() => {
+                    setModalPage((prev) => prev + 1);
+                    dispatch({
+                        type: "UPDATE",
+                        field: "progress",
+                        value: 0.5,
+                    })
+                }}
             >
                 Next
             </IonButton>

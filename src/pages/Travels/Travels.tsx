@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { act, useReducer, useRef, useState } from 'react';
 import {
   IonContent, IonFab, IonFabButton, IonFabList, IonHeader, IonIcon, IonModal, IonPage, IonTitle, IonToolbar, IonButtons,
   IonButton,
@@ -11,25 +11,83 @@ import {
 import TravelsAccordion from '../../components/TravelsAccordion';
 import './Travels.css';
 import { addSharp } from 'ionicons/icons';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, number } from 'framer-motion';
 import { push } from '../../utils/storage';
 import Page1 from './modal/page1';
 import Page2 from './modal/page2';
+import Page3 from './modal/page3';
 
+interface ComponentProps { travels: Travel[] }
 
-
-const Travels: React.FC = () => {
+const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
 
   const [travelNameValue, setInputValue] = useState<string>('');
-  const [travelDateValue, setTravelDateValue] = useState<any>(new Date().toISOString().split(".")[0]);
+  const [travelDateValue, setTravelDateValue] = useState<any>();
   const [progress, setProgress] = useState<number>(0);
   const [modalPage, setModalPage] = useState(1);
 
+  type FormState = {
+    travelNameValue: string,
+    travelDateValue: Date,
+    travelTimeValue: Date,
+    bagNameValue: string,
+    bagItems: Item[],
+    progress: number,
+  };
+  type FormAction =
+    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "RESET" };
+
+  const formReducer = (state: FormState, action: FormAction) => {
+    switch (action.type) {
+      case "UPDATE":
+        return { ...state, [action.field]: action.value };
+      case "RESET":
+        return {
+          travelNameValue: "",
+          travelDateValue: new Date(),
+          travelTimeValue: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate(),
+            6, 30, 0, 0
+          ),
+
+          bagNameValue: "",
+          bagItems: [],
+
+          progress: 0.02,
+        };
+      default:
+        return state;
+    }
+  }
+
+  const [formState, dispatch] = useReducer(formReducer, {
+    travelNameValue: "",
+    travelDateValue: new Date(),
+    travelTimeValue: new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate(),
+      6, 30, 0, 0
+    ),
+
+    bagNameValue: "",
+    bagItems: [],
+
+    progress: 0.02
+  })
+
+
+
   const setModal = () => {
-    setProgress((previous) => previous + 0.05);
+    dispatch({
+      type: "RESET",
+    })
   };
 
   return (
@@ -45,7 +103,7 @@ const Travels: React.FC = () => {
             <IonTitle size="large">Travels</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TravelsAccordion />
+        <TravelsAccordion travels={travels} />
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-modal">
           <IonFabButton onClick={setModal}>
@@ -55,8 +113,8 @@ const Travels: React.FC = () => {
         <IonModal
           ref={modal}
           trigger="open-modal"
-          initialBreakpoint={0.85}
-          breakpoints={[0, 0.85]}
+          initialBreakpoint={0.65}
+          breakpoints={[0, 0.65]}
           canDismiss={true}
           handleBehavior="none"
           onWillDismiss={() => setModalPage(1)}
@@ -66,28 +124,35 @@ const Travels: React.FC = () => {
               <IonTitle>New Travel</IonTitle>
               <IonButton slot='end' fill='clear' size='small' onClick={() => modal.current?.dismiss()}>Cancel</IonButton>
             </IonToolbar>
-            <IonProgressBar value={progress}></IonProgressBar>
+            <IonProgressBar value={formState.progress}></IonProgressBar>
           </IonHeader>
           <IonContent className="ion-padding">
 
             <AnimatePresence mode="wait">
               {modalPage === 1 && (
-                <Page1 
-                  setInputValue={setInputValue}
+                <Page1
+                  modal={modal}
+                  dispatch={dispatch}
+                  formState={formState}
                   setModalPage={setModalPage}
-                  setProgress={setProgress}
-                  setTravelDateValue={setTravelDateValue}
-                  travelDateValue={travelDateValue}
-                  travelNameValue={travelNameValue}
-
                 />
               )}
 
               {modalPage === 2 && (
+                <Page3
+                  modal={modal}
+                  dispatch={dispatch}
+                  formState={formState}
+                  setModalPage={setModalPage}
+                />
+              )}
+
+              {modalPage === 3 && (
                 <Page2
                   modal={modal}
+                  dispatch={dispatch}
+                  formState={formState}
                   setModalPage={setModalPage}
-                  travelNameValue={travelNameValue}
                 />
               )}
             </AnimatePresence>
