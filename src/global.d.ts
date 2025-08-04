@@ -19,8 +19,8 @@ declare global {
 
     //#region Bag
     interface Bag {
-        uuid?: string, // Automatically generated uuid using uuidv4
-        name?: string, // Name of the bag
+        uuid: string, // Automatically generated uuid using uuidv4
+        name: string, // Name of the bag
         items: Item[], // Items inside the bag
         category?: string[], // Categories of the items inside of the bag 
     }
@@ -29,7 +29,7 @@ declare global {
 
     //#region Travel
     interface Travel {
-        uuid?: string,
+        uuid: string,
         name: string,
         date?: string,
         bags?: string[],

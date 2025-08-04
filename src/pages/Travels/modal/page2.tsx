@@ -2,6 +2,8 @@ import { IonButton, IonButtons, IonDatetime, IonHeader, IonInput, IonModal, IonT
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useRef } from 'react';
 import { push } from '../../../utils/storage';
+import { v4 as uuid_v4 } from 'uuid';
+
 
 interface ComponentTypes {
   dispatch: any,
@@ -21,6 +23,17 @@ const Page2: React.FC<ComponentTypes> = ({ dispatch, formState, setModalPage, mo
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -50 },
   };
+
+  function getFormInput(): any {
+    const travel: { uuid: string; name: string; bags: string[]; date: string } = {
+      uuid: uuid_v4(),
+      name: formState.travelNameValue,
+      bags: ["uuid-best"],
+      date: formState.travelDateValue,
+    };
+
+    return travel
+  }
 
   return (<>
 
@@ -53,7 +66,7 @@ const Page2: React.FC<ComponentTypes> = ({ dispatch, formState, setModalPage, mo
         onClick={() => {
           console.log('Input value:', formState.travelNameValue);
           modal.current?.dismiss();
-          push("travels", { name: formState.travelNameValue, bags: [], date: formState.travelDateValue });
+          push("travels", getFormInput());
         }}
         >
         Submit

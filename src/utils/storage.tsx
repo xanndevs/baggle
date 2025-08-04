@@ -14,6 +14,27 @@ let storageReady = false;
 async function initStorage() {
   if (!storageReady) {
     await store.create();
+
+
+    push("baggages", {
+      uuid: "uuid-best",
+      name: "Valiz",
+      items: [
+        { type: 'packed', name: "Ekmek", amount: 3 },
+        { type: 'ready', name: "Ayakkabı", amount: 3 },
+        { type: 'store', name: "Balık", amount: 3, price: 300 }
+      ],
+    })
+
+    push("baggages", {
+      uuid: "uuid-best",
+      name: "Valiz",
+      items: [
+        { type: 'packed', name: "Ekmek", amount: 3 },
+        { type: 'ready', name: "Ayakkabı", amount: 3 },
+        { type: 'store', name: "Balık", amount: 3, price: 300 }
+      ],
+    })
     storageReady = true;
   }
 }

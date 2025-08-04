@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IonAccordion, IonBadge, IonChip, IonIcon, IonItem, IonLabel } from '@ionic/react';
-import { briefcaseSharp, calendarClearSharp, checkmarkDoneSharp, checkmarkSharp, pricetagSharp, sadSharp } from 'ionicons/icons';
+import { briefcaseSharp, calendarClearSharp, checkmarkDoneSharp, checkmarkSharp, chevronForward, pricetagSharp, sadSharp } from 'ionicons/icons';
 import BaggleDaysLabel from './BaggleDaysLabel';
 
 interface ContainerProps {
   uuid?: string,
-  name: string,
-  date?: string,
-  bags?: string[],
-  value: string,
 }
 
-const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags, value }) => {
+const BaggageAccordionItem: React.FC<ContainerProps> = ({ uuid }) => {
   const [bagValues, setBagValues] = useState<Bag[]>([]);
+
+
+  const button = useRef(null);
+
 
   useEffect(() => {
     const fetchBags = async () => {
@@ -21,7 +21,7 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
       //res = askforbags([,"678-36-425469","904-53-4535"]) // the holly api call
 
       // a white old wizard arrived with the response
-            const res: { bags: Bag[] } = {
+      const res: { bags: Bag[] } = {
 
         bags: [
           {
@@ -45,7 +45,7 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
       }
 
 
-      setBagValues(res.bags.filter(elem => elem.uuid === uuid))
+      setBagValues(res.bags/*.filter(elem => elem.uuid === uuid)*/)
     }
 
     fetchBags();
@@ -53,14 +53,14 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
 
   return (
     //#region Render_travel
-    <IonAccordion value={`accordion-${value}`} >
+    <IonAccordion toggleIcon={chevronForward} ref={button} value={`accordion-${/*value*/ "test"}`}>
       <IonItem slot="header" >
 
         <IonLabel>
-          {name}
+          {/* {name} */}
         </IonLabel>
 
-        <IonChip outline>
+        <IonChip ref={button} outline>
           <IonIcon icon={briefcaseSharp}></IonIcon>
           <IonLabel>x{bagValues?.length || 0}</IonLabel>
         </IonChip>
@@ -70,7 +70,7 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
             {
               //currently it substracts the current date from the travel date
               //and the result is just a number of milliseconds so I need to make it days
-              date ? <BaggleDaysLabel remainingDays={Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} /> : undefined
+              // date ? <BaggleDaysLabel remainingDays={Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} /> : undefined
             }
           </IonLabel>
 
@@ -114,4 +114,4 @@ const TravelAccordionItem: React.FC<ContainerProps> = ({ uuid, name, date, bags,
   );
 };
 
-export default TravelAccordionItem;
+export default BaggageAccordionItem;

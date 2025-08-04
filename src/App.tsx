@@ -12,7 +12,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { airplaneSharp, bag, briefcaseSharp, cartSharp, pricetagSharp, settingsSharp } from 'ionicons/icons';
+import { airplaneSharp, bag, briefcaseSharp, cartSharp, chevronForwardSharp, logoAndroid, playForwardCircleSharp, pricetagSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
 import Travels from './pages/Travels/Travels';
 import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
@@ -38,8 +38,11 @@ import './theme/variables.css';
 import Settings from './pages/Settings';
 import BaggageDetails from './pages/Baggages/BaggageDetails';
 import { get, subscribe } from './utils/storage';
+import TravelDetails from './pages/Travels/TravelDetails';
 
-setupIonicReact();
+setupIonicReact({
+  mode: 'ios',
+});
 
 const App: React.FC = () => {
   const [travelData, setTravelData] = React.useState<Travel[]>([]);
@@ -94,9 +97,10 @@ const App: React.FC = () => {
             <Route exact path="/travels">
               <Travels travels={travelData} />
             </Route>
+            <Route path="/travels/:uuid" component={TravelDetails} />
 
             <Route exact path="/baggages">
-              <Baggages 
+              <Baggages
               />
             </Route>
             <Route path="/baggages/:uuid" component={BaggageDetails} />
@@ -134,7 +138,7 @@ const App: React.FC = () => {
             </IonTabButton>
 
             <IonTabButton tab="settings" href="/settings">
-              <IonIcon aria-hidden="true" icon={settingsSharp} />
+              <IonIcon aria-hidden="true" icon={settingsOutline} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
 

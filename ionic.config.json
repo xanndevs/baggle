@@ -1,5 +1,7 @@
 {
   "name": "baggle",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }

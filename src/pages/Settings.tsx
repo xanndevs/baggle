@@ -42,91 +42,9 @@ const Settings: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonButton id="open-modal" expand="block" onClick={setModal}>
-          Open Bottom Sheet
-        </IonButton>
+
         <IonDatetime value={dateValue}></IonDatetime>
         <IonLabel>{dateValue}</IonLabel>
-
-        <IonModal
-          ref={modal}
-          trigger="open-modal"
-          initialBreakpoint={0.85}
-          breakpoints={[0, 0.85]}
-          backdropBreakpoint={0.1}
-          canDismiss={true}
-          handleBehavior="none"
-          onWillDismiss={() => setModalPage(1)}
-        >
-          <IonHeader >
-            <IonToolbar>
-              <IonTitle>New Travel</IonTitle>
-              <IonButton slot='end' fill='clear' size='small' onClick={() => modal.current?.dismiss()}>Cancel</IonButton>
-            </IonToolbar>
-              <IonProgressBar value={progress}></IonProgressBar>
-          </IonHeader>
-            <IonContent className="ion-padding">
-
-              <AnimatePresence mode="wait">
-                {modalPage === 1 && (
-                  <motion.div
-                    key="page1"
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <IonInput
-                      label="Travel Name"
-                      labelPlacement="floating"
-                      fill="outline"
-                      value={inputValue}
-                      onIonChange={(e) => setInputValue(e.detail.value!)}
-                    />
-                    <IonButton
-                      expand="block"
-                      className="ion-margin-top"
-                      onClick={() => {setModalPage(2); setProgress(0.5);}}
-                    >
-                      Next
-                    </IonButton>
-                  </motion.div>
-                )}
-
-                {modalPage === 2 && (
-                  <motion.div
-                    key="page2"
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h2>Review Input</h2>
-                    <p>You entered: {inputValue}</p>
-                    <IonButton
-                      expand="block"
-                      className="ion-margin-bottom"
-                      onClick={() => setModalPage(1)}
-                    >
-                      Back
-                    </IonButton>
-                    <IonButton
-                      expand="block"
-                      color="success"
-                      onClick={() => {
-                        console.log('Input value:', inputValue);
-                        modal.current?.dismiss();
-                      }}
-                    >
-                      Submit
-                    </IonButton>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </IonContent>
-        </IonModal>
       </IonContent>
     </IonPage>
   );

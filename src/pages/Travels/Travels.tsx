@@ -23,7 +23,6 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-
   const [travelNameValue, setInputValue] = useState<string>('');
   const [travelDateValue, setTravelDateValue] = useState<any>();
   const [progress, setProgress] = useState<number>(0);
@@ -97,7 +96,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
           <IonTitle>Travels</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent  fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Travels</IonTitle>
@@ -122,7 +121,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
           <IonHeader >
             <IonToolbar>
               <IonTitle>New Travel</IonTitle>
-              <IonButton slot='end' fill='clear' size='small' onClick={() => modal.current?.dismiss()}>Cancel</IonButton>
+              
             </IonToolbar>
             <IonProgressBar value={formState.progress}></IonProgressBar>
           </IonHeader>

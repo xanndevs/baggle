@@ -1,0 +1,40 @@
+ion-img::part(image) {
+    border-radius: 5px;
+}
+
+ion-toolbar .sc-ion-searchbar-ios-h {
+    padding-bottom: 1px;
+}
+
+ .md .ion-padding-horizontal {
+    background-color: var(--ion-backgroun-color) !important;
+}
+
+
+.baggle-horizontal-slider{
+    flex-wrap: nowrap;
+overflow-x: scroll!important;
+overflow-y: hidden;
+}
+
+.float-end{
+    float: right;
+}
+
+.padding-bottom-none{
+    padding-bottom: 0px !important;
+}
+
+
+.margin-none{
+    margin: 0px 0px 5px 0px !important;
+}
+
+.flex-middle{
+    display: flex;
+    align-items: center
+}
+
+.space-between{
+    justify-content: space-between;
+}

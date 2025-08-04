@@ -18,3 +18,12 @@
   align-items: center;
   border-bottom: 2px solid #44444474;
 }
+
+.flex-middle{
+  display: flex;
+  align-items: center;
+}
+
+.card-margin{
+  margin: 0px 10px 10px !important;
+}
