@@ -28,7 +28,7 @@ function calculateRemainingDays(dateStr: string | null | undefined): number {
         
         <IonCard key={index} className='card-margin' color={"light"} button routerLink={`/travels/${elem.uuid}`}>
         <IonCardHeader className='padding-bottom-none'>
-          <IonCardSubtitle>{elem.date?.toString().split(" ", 6).splice(0,5).join(" ")}</IonCardSubtitle>
+          <IonCardSubtitle>{elem.date?.toString().split(" ", 6).splice(0,4).join(" ")}</IonCardSubtitle>
 
           <IonCardTitle className='flex-middle'>
             {elem.name} <IonChip disabled><BaggleDaysLabel remainingDays={calculateRemainingDays(elem.date)}/></IonChip>
