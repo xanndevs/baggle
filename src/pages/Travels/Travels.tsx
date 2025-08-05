@@ -8,7 +8,7 @@ import {
   IonDatetimeButton,
   IonFooter,
 } from '@ionic/react';
-import TravelsAccordion from '../../components/TravelsAccordion';
+import TravelsCard from '../../components/TravelsCard';
 import './Travels.css';
 import { addSharp } from 'ionicons/icons';
 import { motion, AnimatePresence, number } from 'framer-motion';
@@ -96,13 +96,17 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
           <IonTitle>Travels</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent  fullscreen>
+      <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Travels</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TravelsAccordion travels={travels} />
+        {
+          sortTravels(travels).map((elem, index) =>
+            <TravelsCard key={index} travel={elem} />
+          )
+        }
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-modal">
           <IonFabButton onClick={setModal}>
@@ -121,7 +125,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
           <IonHeader >
             <IonToolbar>
               <IonTitle>New Travel</IonTitle>
-              
+
             </IonToolbar>
             <IonProgressBar value={formState.progress}></IonProgressBar>
           </IonHeader>
@@ -162,5 +166,45 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
     </IonPage>
   );
 };
+
+
+function sortTravels(travels: Travel[]): Travel[] {
+  return [...travels].sort((a, b) => {
+    const daysA = calculateRemainingDays(a.date);
+    const daysB = calculateRemainingDays(b.date);
+
+    const priority = (days: number) => {
+      if (days >= 0 && days <= 3) return 0;   // Group 1: 0–3 days
+      if (days > 3) return 1;                 // Group 2: >3 days
+      return 2;                               // Group 3: Past
+    };
+
+    const groupA = priority(daysA);
+    const groupB = priority(daysB);
+
+    if (groupA !== groupB) {
+      return groupA - groupB; // First sort by group
+    }
+
+    // Within group, sort differently depending on the group
+    if (groupA === 2) {
+      // Group 3: Past — descending (closest past first)
+      return daysB - daysA;
+    } else {
+      // Groups 1 and 2: ascending (soonest first)
+      return daysA - daysB;
+    }
+  });
+}
+
+function calculateRemainingDays(dateStr: string | null | undefined): number {
+  if (!dateStr) return 0;  // If the date is invalid, return 0 (or handle it however you want)
+
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return 0;  // Handle invalid date cases
+
+  const remainingMilliseconds = date.getTime() - Date.now();
+  return Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24));  // Convert milliseconds to full days
+}
 
 export default Travels;

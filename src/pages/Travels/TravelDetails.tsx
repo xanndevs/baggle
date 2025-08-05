@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IonAccordionGroup, IonBackButton, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
-import TravelsAccordion from '../../components/TravelsAccordion';
+import TravelsCard from '../../components/TravelsCard';
 import './TravelDetails.css';
 import WalrusBucket from '../../walrus_bucket.jpg';
 import { useParams } from 'react-router';

@@ -65,6 +65,19 @@ export async function push(key: string, value: any): Promise<void> {
   emitter.emit(key, existingData);
 }
 
+export async function pop_uuid(key: string, value: any): Promise<void> {
+  await initStorage();
+  const existingData = await store.get(key) || [];
+
+  const index = existingData.findIndex((item: Travel | Bag | Item)  => item.uuid === value);
+
+  if (index !== -1) {
+    existingData.splice(index, 1); // removes the first matching uuid
+  }
+  await store.set(key, existingData);
+  emitter.emit(key, existingData);
+}
+
 export async function keys(): Promise<string[]> {
   await initStorage();
   return await store.keys();
