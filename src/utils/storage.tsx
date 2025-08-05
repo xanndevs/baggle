@@ -15,26 +15,20 @@ async function initStorage() {
   if (!storageReady) {
     await store.create();
 
-
     push("baggages", {
       uuid: "uuid-best",
       name: "Valiz",
       items: [
-        { type: 'packed', name: "Ekmek", amount: 3 },
-        { type: 'ready', name: "Ayakkabı", amount: 3 },
-        { type: 'store', name: "Balık", amount: 3, price: 300 }
+        "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
       ],
     })
 
-    push("baggages", {
-      uuid: "uuid-best",
-      name: "Valiz",
-      items: [
-        { type: 'packed', name: "Ekmek", amount: 3 },
-        { type: 'ready', name: "Ayakkabı", amount: 3 },
-        { type: 'store', name: "Balık", amount: 3, price: 300 }
-      ],
-    })
+
+    set("items", [
+      { uuid:"bag-uuid",type: 'packed', name: "Ekmek", amount: 3 },
+      { uuid:"bag-uuid",type: 'ready', name: "Ayakkabı", amount: 3 },
+      { uuid:"bag-uuid",type: 'store', name: "Balık", amount: 3, price: 300 }
+    ])
     storageReady = true;
   }
 }
@@ -50,6 +44,23 @@ export async function get<T = any>(key: string): Promise<T | null> {
   await initStorage();
   return await store.get(key);
 }
+
+export async function retrive_bag_items(uuid: string): Promise<Item[] | null> {
+  await initStorage();
+
+  const baggages: Bag[] = (await store.get("baggages")) ?? [];
+  const items: Item[] = (await store.get("items")) ?? [];
+
+  const bag = baggages.find((b) => b.uuid === uuid);
+  if (!bag) return null;
+
+  // If bag.items is string[] (UUIDs)
+  const filteredItems = items.filter((item) => bag.items.includes(item.uuid!));
+
+  return filteredItems;
+}
+
+
 
 export async function remove(key: string): Promise<void> {
   await initStorage();
@@ -69,7 +80,7 @@ export async function pop_uuid(key: string, value: any): Promise<void> {
   await initStorage();
   const existingData = await store.get(key) || [];
 
-  const index = existingData.findIndex((item: Travel | Bag | Item)  => item.uuid === value);
+  const index = existingData.findIndex((item: Travel | Bag | Item) => item.uuid === value);
 
   if (index !== -1) {
     existingData.splice(index, 1); // removes the first matching uuid

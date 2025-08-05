@@ -7,6 +7,7 @@ import { useParams } from 'react-router';
 import { get, subscribe } from '../../utils/storage';
 import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pricetagSharp, sadSharp } from 'ionicons/icons';
 import BaggageAccordionItem from '../../components/BaggageAccordionItem';
+import BagContainer from './BagContainer';
 
 
 const TravelDetails: React.FC = () => {
@@ -68,6 +69,7 @@ const TravelDetails: React.FC = () => {
     setBaggages(baggageData?.filter((elem) => travel?.bags?.includes(elem.uuid || "")))
   }, [baggageData])
 
+
   const handleInput = (event: Event) => {
     let query = '';
     const target = event.target as HTMLIonSearchbarElement;
@@ -106,41 +108,7 @@ const TravelDetails: React.FC = () => {
 
                   {results?.map((bag, index) => (
                     <>
-                      <IonCol size='10' key={index}>
-                        <IonCard className='margin-none' color={"light"} button routerLink={`/baggages/${bag.uuid}`}>
-                          <IonCardHeader className='padding-bottom-none'>
-                            <IonCardSubtitle>Has {bag.category?.length || "No"} Categories</IonCardSubtitle>
-
-                            <IonCardTitle className='flex-middle'>
-                              {bag.name}
-
-                            </IonCardTitle>
-
-                          </IonCardHeader>
-
-                          <IonCardContent className='flex-middle space-between'>
-                            <div>
-                              {bag.items.filter((elem) => elem.type === 'store').length ? (
-                              <IonChip disabled={true}>
-                                <IonIcon icon={pricetagSharp}></IonIcon>
-                                <IonLabel>x{bag.items.filter((elem) => elem.type === 'store').length}</IonLabel>
-                              </IonChip>
-                            ) : null}
-                            <IonChip disabled={true}>
-                              <IonIcon icon={checkmarkSharp}></IonIcon>
-                              <IonLabel>x{bag.items.filter((elem) => elem.type === 'ready').length}</IonLabel>
-                            </IonChip>
-
-                            <IonChip disabled={true}>
-                              <IonIcon icon={checkmarkDoneSharp}></IonIcon>
-                              <IonLabel>x{bag.items.filter((elem) => elem.type === 'packed').length}</IonLabel>
-                            </IonChip>
-                            </div>
-                          <IonIcon  size='small' color='primary' icon={chevronForwardSharp}></IonIcon>
-                          </IonCardContent>
-
-                        </IonCard>
-                      </IonCol>
+                      <BagContainer bag={bag} key={index}/>
 
                     </>
                   ))}

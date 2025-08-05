@@ -98,7 +98,7 @@ const MOVE_CANCEL_THRESHOLD = 6; // px
     <>
       <IonCard ref={card} className='card-margin' color={"light"} button routerLink={`/travels/${travel.uuid}`} >
         <IonCardHeader className='padding-bottom-none padding-small'>
-          <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> <BaggleDaysLabel color={calculateColor(travel.date)} remainingDays={calculateRemainingDays(travel.date)} /></IonCardSubtitle>
+          <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> • <BaggleDaysLabel color={calculateColor(travel.date)} remainingDays={calculateRemainingDays(travel.date)} /></IonCardSubtitle>
 
           <IonCardTitle className='flex-middle'>
             {travel.name} 

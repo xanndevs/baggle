@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { IonAccordion, IonBadge, IonChip, IonIcon, IonItem, IonLabel } from '@ionic/react';
+import { IonAccordion, IonChip, IonIcon, IonItem, IonLabel } from '@ionic/react';
 import { briefcaseSharp, calendarClearSharp, checkmarkDoneSharp, checkmarkSharp, chevronForward, pricetagSharp, sadSharp } from 'ionicons/icons';
-import BaggleDaysLabel from './BaggleDaysLabel';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ContainerProps {
   uuid?: string,
@@ -27,19 +26,13 @@ const BaggageAccordionItem: React.FC<ContainerProps> = ({ uuid }) => {
           {
             uuid: "uuid-best",
             name: "Valiz",
-            items: [
-              { type: 'packed', name: "Ekmek", amount: 3 },
-              { type: 'ready', name: "Ayakkabı", amount: 3 },
-              { type: 'store', name: "Balık", amount: 3, price: 300 }
-            ],
+            items: ["123","234","345"],
           },
           {
             uuid: "uuis-notbest",
             name: "Sırt Çantası",
-            items: [
-              { type: 'ready', name: "Ekmek", amount: 3 },
-              { type: 'packed', name: "Ekmek", amount: 3 }
-            ],
+            items: ["123","234","345"],
+
           }
         ]
       }
@@ -85,7 +78,10 @@ const BaggageAccordionItem: React.FC<ContainerProps> = ({ uuid }) => {
             &nbsp;&nbsp;
             <IonLabel style={{ flex: "1" }}>{bag.name}</IonLabel>
 
-            {bag.items.filter((elem) => elem.type === 'store').length ? (
+            {
+              /*
+              
+              {bag.items.filter((elem) => elem.type === 'store').length ? (
               <IonChip disabled={true}>
                 <IonIcon icon={pricetagSharp}></IonIcon>
                 <IonLabel>x{bag.items.filter((elem) => elem.type === 'store').length}</IonLabel>
@@ -100,6 +96,9 @@ const BaggageAccordionItem: React.FC<ContainerProps> = ({ uuid }) => {
               <IonIcon icon={checkmarkDoneSharp}></IonIcon>
               <IonLabel>x{bag.items.filter((elem) => elem.type === 'packed').length}</IonLabel>
             </IonChip>
+              
+              */
+            }
           </IonItem>
         ))
         // #endregion

@@ -21,7 +21,7 @@ declare global {
     interface Bag {
         uuid: string, // Automatically generated uuid using uuidv4
         name: string, // Name of the bag
-        items: Item[], // Items inside the bag
+        items: string[], // uuids of the items inside the bag
         category?: string[], // Categories of the items inside of the bag 
     }
     //#endregion

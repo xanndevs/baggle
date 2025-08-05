@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonPage, IonRow, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
-import TravelsCard from '../../components/TravelsCard';
 import './BaggageDetails.css';
 import WalrusBucket from '../../walrus_bucket.jpg';
 import { useParams } from 'react-router';
@@ -23,34 +22,35 @@ const BaggageDetails: React.FC = () => {
       //res = askforbags([,"678-36-425469","904-53-4535"]) // the holly api call
       console.log(uuid)
       // a white old wizard arrived with the response
-      const res: { bags: Bag[] } = {
+      const res: { bags: Bag[], items: Item[] } = {
 
         bags: [
           {
             uuid: "uuid-best",
             name: "Valiz",
-            items: [
-              { type: 'packed', name: "Ekmek", amount: 3 },
-              { type: 'ready', name: "Ayakkabı", amount: 3 },
-              { type: 'store', name: "Balık", amount: 3, price: 300 }
-            ],
+            items: ["123", "234", "345"],
+
           },
           {
             uuid: "uuis-notbest",
             name: "Sırt Çantası",
-            items: [
-              { type: 'ready', name: "Ekmek", amount: 3 },
-              { type: 'packed', name: "Ekmek", amount: 3 }
-            ],
+            items: ["123", "234", "345"],
+
           }
-        ]
+        ],
+        items: [
+          { type: 'packed', name: "Ekmek", amount: 3 },
+          { type: 'ready', name: "Ayakkabı", amount: 3 },
+          { type: 'store', name: "Balık", amount: 3, price: 300 }
+        ],
       }
 
-      const bag = res.bags.find((elem) => elem.uuid === uuid);
-      setBagValue(bag);
+      //const bag = res.bags.find((elem) => elem.uuid === uuid);
+      //const bag = res.items;
+      setBagValue(res.bags.find((elem) => elem.uuid === uuid));
 
       const filteredBag = [
-        ...(bag?.items || []),
+        ...(res.items || []),
       ];
       setData(filteredBag);
       setResults(filteredBag);
