@@ -13,7 +13,7 @@ import './Travels.css';
 import { addSharp } from 'ionicons/icons';
 import { motion, AnimatePresence, number } from 'framer-motion';
 import { push } from '../../utils/storage';
-import Page1 from './modal/page1';
+import AddTravelModal from './modal/AddTravelModal';
 import Page2 from './modal/page2';
 import Page3 from './modal/page3';
 
@@ -120,7 +120,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
             <AnimatePresence mode="wait">
               {modalPage === 1 && (
-                <Page1
+                <AddTravelModal
                   modal={modal}
                   dispatch={dispatch}
                   formState={formState}

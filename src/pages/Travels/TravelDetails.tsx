@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { IonAccordionGroup, IonBackButton, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
-import TravelsCard from '../../components/TravelsCard';
-import './TravelDetails.css';
-import WalrusBucket from '../../walrus_bucket.jpg';
+import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { AnimatePresence } from 'framer-motion';
+import { addSharp } from 'ionicons/icons';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { get, subscribe } from '../../utils/storage';
-import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pricetagSharp, sadSharp } from 'ionicons/icons';
-import BaggageAccordionItem from '../../components/BaggageAccordionItem';
 import BagContainer from './BagContainer';
-
+import './TravelDetails.css';
+import AddBaggageModal from './modal/AddBaggageModal';
 
 const TravelDetails: React.FC = () => {
 
@@ -20,6 +18,58 @@ const TravelDetails: React.FC = () => {
 
   const { uuid } = useParams<{ uuid: string }>();
   const [results, setResults] = useState<Bag[]>();
+
+
+
+
+
+
+
+
+
+
+
+  const modal = useRef<HTMLIonModalElement>(null);
+
+  const [modalPage, setModalPage] = useState(1);
+
+  type FormState = {
+    baggageNameValue: string,
+    progress: number,
+  };
+  type FormAction =
+    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "RESET" };
+
+  const formReducer = (state: FormState, action: FormAction) => {
+    switch (action.type) {
+      case "UPDATE":
+        return { ...state, [action.field]: action.value };
+      case "RESET":
+        return {
+          baggageNameValue: "",
+          progress: 0.02,
+        };
+      default:
+        return state;
+    }
+  }
+
+  const [formState, dispatch] = useReducer(formReducer, {
+    baggageNameValue: "",
+    progress: 0.02
+  })
+
+
+
+  const setModal = () => {
+    dispatch({
+      type: "RESET",
+    })
+  };
+
+
+
 
 
 
@@ -90,12 +140,7 @@ const TravelDetails: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          {/* <IonHeader >
-            <IonToolbar>
-              <IonSearchbar debounce={250} onIonInput={(event) => handleInput(event)}></IonSearchbar>
-            </IonToolbar>
-          </IonHeader> */}
-          <IonContent>
+
             <IonCard className='ion-padding-none'>
               <IonCardHeader className="padding-bottom-none">
                 <IonCardTitle>
@@ -116,8 +161,51 @@ const TravelDetails: React.FC = () => {
                 </IonRow>
               </IonGrid>
             </IonCard>
-          </IonContent>
 
+
+          <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-baggage-modal">
+            <IonFabButton onClick={setModal}>
+              <IonIcon icon={addSharp}></IonIcon>
+            </IonFabButton>
+          </IonFab>
+          <IonModal
+            ref={modal}
+            trigger="open-baggage-modal"
+            initialBreakpoint={0.65}
+            breakpoints={[0, 0.65]}
+            canDismiss={true}
+            handleBehavior="none"
+            onWillDismiss={() => setModalPage(1)}
+          >
+            <IonHeader >
+              <IonToolbar>
+                <IonTitle>New Baggage</IonTitle>
+
+              </IonToolbar>
+              <IonProgressBar value={formState.progress}></IonProgressBar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+
+              <AnimatePresence mode="wait">
+                {modalPage === 1 && (
+                  <AddBaggageModal
+                    modal={modal}
+                    dispatch={dispatch}
+                    formState={formState}
+                    setModalPage={setModalPage}
+                  />
+                )}
+
+                {modalPage === 2 && (
+                  <></>
+                )}
+
+                {modalPage === 3 && (
+                  <></>
+                )}
+              </AnimatePresence>
+            </IonContent>
+          </IonModal>
         </IonContent>
       </IonPage>
 

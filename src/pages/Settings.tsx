@@ -45,6 +45,7 @@ const Settings: React.FC = () => {
 
         <IonDatetime value={dateValue}></IonDatetime>
         <IonLabel>{dateValue}</IonLabel>
+        <IonInput value={inputValue} onIonChange={e => setInputValue(e.detail.value!)} />
       </IonContent>
     </IonPage>
   );

@@ -14,7 +14,7 @@ interface ComponentTypes {
 
 }
 
-const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage }) => {
+const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage }) => {
 
     const date_modal = useRef<HTMLIonModalElement>(null);
     const time_modal = useRef<HTMLIonModalElement>(null);
@@ -247,4 +247,4 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
     );
 }
 
-export default Page1;
+export default AddTravelModal;
