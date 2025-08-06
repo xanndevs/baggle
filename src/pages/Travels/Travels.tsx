@@ -28,8 +28,6 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
   type FormState = {
     travelNameValue: string,
     travelDateValue: Date,
-    bagNameValue: string,
-    bagItems: Item[],
     progress: number,
   };
   type FormAction =
@@ -50,8 +48,6 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
             6, 30, 0, 0
           ),
 
-          bagNameValue: "",
-          bagItems: [],
 
           progress: 0.02,
         };
@@ -68,9 +64,6 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
       new Date().getDate(),
       6, 30, 0, 0
     ),
-
-    bagNameValue: "",
-    bagItems: [],
 
     progress: 0.02
   })

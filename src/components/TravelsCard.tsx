@@ -13,12 +13,12 @@ interface ComponentProps {
 const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
   const Popover = () =>
     <>
-        <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button'  onClick={() => { alert("Editioriique espaganzo!\n\nMekanic (/-_-)/") }}>
+        <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button'  onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */}}>
           <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
           <IonLabel color={'primary'}>Edit</IonLabel>
         </IonButton>
 
-        <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block'  onClick={() => { alert("Oh no el deletianzo!\n\nItalia Mentzionate!!!"); pop_uuid("travels", travel.uuid) }}>
+        <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block'  onClick={() => { /*alert("Oh no el deletianzo!\n\nItalia Mentzionate!!!"); */ pop_uuid("travels", travel.uuid) }}>
           <IonIcon slot="start" color={"danger"} icon={trashSharp} />
           <IonLabel color={'danger'}>Delete</IonLabel>
         </IonButton>
@@ -30,7 +30,7 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
 
   const card = useRef<HTMLIonCardElement | null>(null);
   const pressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const PRESS_DURATION = 350; // milliseconds
+  const PRESS_DURATION = 400; // milliseconds
 
   const onStart = (e: any) => {
     pressTimeout.current = setTimeout(() => {
