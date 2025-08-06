@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package dev.xann.baggle;
 
 import com.getcapacitor.BridgeActivity;
 
