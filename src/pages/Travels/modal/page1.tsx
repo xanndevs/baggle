@@ -1,6 +1,10 @@
 import { IonButton, IonButtons, IonDatetime, IonHeader, IonInput, IonModal, IonTitle, IonToolbar } from '@ionic/react';
+import { time } from 'console';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
+import { push } from '../../../utils/storage';
+import { v4 as uuid_v4 } from 'uuid';
+
 
 interface ComponentTypes {
     dispatch: any,
@@ -41,6 +45,18 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
         const ss = pad(date.getSeconds());
 
         return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
+    }
+
+    
+    function getFormInput(): any {
+        const travel: { uuid: string; name: string; bags: string[]; date: string } = {
+        uuid: uuid_v4(),
+        name: formState.travelNameValue,
+        bags: ["uuid-best"],
+        date: formState.travelDateValue,
+        };
+
+        return travel
     }
 
 
@@ -97,7 +113,9 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
                         trigger="open-date"
 
                         canDismiss={true}
-                        onWillDismiss={() => { console.log("1"); }}
+                        onWillDismiss={() => { /* Dismiss */ }}
+
+
                         keepContentsMounted
                         id='date-modal'
                         initialBreakpoint={1}
@@ -113,7 +131,7 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
                                 <IonToolbar>
                                     <IonTitle className='ion-padding-vertical'>Date Picker</IonTitle>
                                     <IonButtons slot='end'>
-                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss() }}>Done</IonButton>
+                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss(); time_modal.current?.present() }}>Next</IonButton>
                                     </IonButtons>
                                 </IonToolbar>
                             </IonHeader>
@@ -166,7 +184,7 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
                         color={'secondary'}
                         className='bordered'
                         id='open-time'
-                        value={toLocalISOString(formState.travelTimeValue).split("T")[1].split(".")[0]}
+                        value={toLocalISOString(formState.travelDateValue).split("T")[1].split(".")[0]}
 
                         onIonFocus={(e) => time_modal.current?.present()}
                     ></IonInput>
@@ -213,16 +231,16 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
                                     // Fallback to 0 for missing time segments
                                     const [h, m, s] = timeValue.split(":").map((v) => parseInt(v, 10) || 0);
 
-                                    const date = new Date();
+                                    const date = new Date(formState.travelDateValue);
                                     date.setHours(h, m, s, 0); // local time
 
                                     dispatch({
                                         type: "UPDATE",
-                                        field: "travelTimeValue",
+                                        field: "travelDateValue",
                                         value: date,
                                     });
                                 }}
-                                value={toLocalISOString(formState.travelTimeValue)}
+                                value={toLocalISOString(formState.travelDateValue)}
 
                             />
                         </div>
@@ -238,12 +256,14 @@ const Page1: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
                 className="ion-margin-top"
                 style={{ paddingBottom: `${100 - ((modal.current?.initialBreakpoint || 0) * 100) }vh` }}
                 onClick={() => {
-                    setModalPage((prev) => prev + 1);
+                    push("travels", getFormInput());
+                    //setModalPage((prev) => prev + 1);
                     dispatch({
                         type: "UPDATE",
                         field: "progress",
-                        value: 0.5,
+                        value: 1,
                     })
+                    modal.current?.dismiss();
                 }}
             >
                 Next

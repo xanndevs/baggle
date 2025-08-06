@@ -98,7 +98,7 @@ const MOVE_CANCEL_THRESHOLD = 6; // px
     <>
       <IonCard ref={card} className='card-margin' color={"light"} button routerLink={`/travels/${travel.uuid}`} >
         <IonCardHeader className='padding-bottom-none padding-small'>
-          <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> • <BaggleDaysLabel color={calculateColor(travel.date)} remainingDays={calculateRemainingDays(travel.date)} /></IonCardSubtitle>
+          <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> • <BaggleDaysLabel date={travel.date} /></IonCardSubtitle>
 
           <IonCardTitle className='flex-middle'>
             {travel.name} 
@@ -118,25 +118,5 @@ const MOVE_CANCEL_THRESHOLD = 6; // px
   );
 };
 
-function calculateRemainingDays(dateStr: string | null | undefined): number {
-  if (!dateStr) return 0;  // If the date is invalid, return 0 (or handle it however you want)
 
-  const date = new Date(dateStr);
-  if (isNaN(date.getTime())) return 0;  // Handle invalid date cases
-
-  const remainingMilliseconds = date.getTime() - Date.now();
-  return Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24));  // Convert milliseconds to full days
-}
-
-function calculateColor(date: string | null | undefined){
-  const days = calculateRemainingDays(date); 
-    if (days > 3) {
-      return "medium"
-    } 
-    else if (days >= 0) {
-      return "warning"
-    } else {
-      return "danger"
-    }
-}
 export default TravelsCard;

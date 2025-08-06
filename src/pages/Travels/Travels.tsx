@@ -23,15 +23,11 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-  const [travelNameValue, setInputValue] = useState<string>('');
-  const [travelDateValue, setTravelDateValue] = useState<any>();
-  const [progress, setProgress] = useState<number>(0);
   const [modalPage, setModalPage] = useState(1);
 
   type FormState = {
     travelNameValue: string,
     travelDateValue: Date,
-    travelTimeValue: Date,
     bagNameValue: string,
     bagItems: Item[],
     progress: number,
@@ -47,8 +43,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
       case "RESET":
         return {
           travelNameValue: "",
-          travelDateValue: new Date(),
-          travelTimeValue: new Date(
+          travelDateValue: new Date(
             new Date().getFullYear(),
             new Date().getMonth(),
             new Date().getDate(),
@@ -67,8 +62,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const [formState, dispatch] = useReducer(formReducer, {
     travelNameValue: "",
-    travelDateValue: new Date(),
-    travelTimeValue: new Date(
+    travelDateValue: new Date(
       new Date().getFullYear(),
       new Date().getMonth(),
       new Date().getDate(),
@@ -204,7 +198,8 @@ function calculateRemainingDays(dateStr: string | null | undefined): number {
   if (isNaN(date.getTime())) return 0;  // Handle invalid date cases
 
   const remainingMilliseconds = date.getTime() - Date.now();
-  return Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24));  // Convert milliseconds to full days
+  return (remainingMilliseconds / (1000 * 60 * 60 * 24));  // Convert milliseconds to full days
 }
+
 
 export default Travels;
