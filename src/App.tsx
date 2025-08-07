@@ -17,6 +17,7 @@ import Travels from './pages/Travels/Travels';
 import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
 
+import './App.css';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -91,7 +92,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
+        <IonTabs >
           <IonRouterOutlet>
 
             <Route exact path="/travels">
@@ -118,7 +119,7 @@ const App: React.FC = () => {
             </Route>
 
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
+          <IonTabBar slot="bottom" className='floating-tabs glow-border'>
 
             <IonTabButton tab="travels" href="/travels">
               <IonIcon aria-hidden="true" icon={airplaneSharp} />
@@ -138,7 +139,7 @@ const App: React.FC = () => {
             </IonTabButton>
 
             <IonTabButton tab="settings" href="/settings">
-              <IonIcon aria-hidden="true" icon={settingsOutline} />
+              <IonIcon aria-hidden="true" icon={settingsSharp} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
 
