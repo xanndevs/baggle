@@ -23,7 +23,6 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-  const [modalPage, setModalPage] = useState(1);
 
   type FormState = {
     travelNameValue: string,
@@ -96,57 +95,24 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
         }
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-modal">
-          <IonFabButton onClick={setModal}>
+          <IonFabButton >
             <IonIcon icon={addSharp}></IonIcon>
           </IonFabButton>
         </IonFab>
         <IonModal
           ref={modal}
           trigger="open-modal"
-          initialBreakpoint={0.65}
-          breakpoints={[0, 0.65]}
+          initialBreakpoint={1}
+          breakpoints={[0, 1]}
           canDismiss={true}
           handleBehavior="none"
-          onWillDismiss={() => setModalPage(1)}
+          id='new-travel-modal'
         >
-          <IonHeader >
-            <IonToolbar>
-              <IonTitle>New Travel</IonTitle>
-
-            </IonToolbar>
-            <IonProgressBar value={formState.progress}></IonProgressBar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-
-            <AnimatePresence mode="wait">
-              {modalPage === 1 && (
-                <AddTravelModal
-                  modal={modal}
-                  dispatch={dispatch}
-                  formState={formState}
-                  setModalPage={setModalPage}
-                />
-              )}
-
-              {modalPage === 2 && (
-                <Page3
-                  modal={modal}
-                  dispatch={dispatch}
-                  formState={formState}
-                  setModalPage={setModalPage}
-                />
-              )}
-
-              {modalPage === 3 && (
-                <Page2
-                  modal={modal}
-                  dispatch={dispatch}
-                  formState={formState}
-                  setModalPage={setModalPage}
-                />
-              )}
-            </AnimatePresence>
-          </IonContent>
+          <AddTravelModal
+            modal={modal}
+            formState={formState}
+            dispatch={dispatch}
+          />
         </IonModal>
 
       </IonContent>

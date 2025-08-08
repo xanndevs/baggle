@@ -17,7 +17,9 @@ html.md #time-picker{
 
 
 
-
+#new-travel-modal{
+    --height: auto !important;
+}
 
 ion-input{
     border-bottom: 1px solid;

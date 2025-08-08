@@ -1,8 +1,6 @@
 // /global.d.ts
 declare global {
 
-
-
     //#region Item
     interface Item {
         type: "store" | "ready" | "packed", // If an item is not bought then its a "store" item, if it is bought or user already has it then "ready" or if the user has put the thing inside of the bag then its "packed" 
@@ -16,7 +14,6 @@ declare global {
     }
     //#endregion
 
-
     //#region Bag
     interface Bag {
         uuid: string, // Automatically generated uuid using uuidv4
@@ -25,7 +22,6 @@ declare global {
         category?: string[], // Categories of the items inside of the bag 
     }
     //#endregion
-
 
     //#region Travel
     interface Travel {

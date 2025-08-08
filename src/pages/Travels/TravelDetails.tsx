@@ -31,7 +31,6 @@ const TravelDetails: React.FC = () => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-  const [modalPage, setModalPage] = useState(1);
 
   type FormState = {
     baggageNameValue: string,
@@ -60,13 +59,6 @@ const TravelDetails: React.FC = () => {
     progress: 0.02
   })
 
-
-
-  const setModal = () => {
-    dispatch({
-      type: "RESET",
-    })
-  };
 
 
 
@@ -141,70 +133,47 @@ const TravelDetails: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
 
-            <IonCard className='ion-padding-none'>
-              <IonCardHeader className="padding-bottom-none">
-                <IonCardTitle>
-                  Baggages
-                </IonCardTitle>
-              </IonCardHeader >
+          <IonCard className='ion-padding-none'>
+            <IonCardHeader className="padding-bottom-none">
+              <IonCardTitle>
+                Baggages
+              </IonCardTitle>
+            </IonCardHeader >
 
-              <IonGrid >
-                <IonRow className="baggle-horizontal-slider" >
+            <IonGrid>
+              <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
-                  {results?.map((bag, index) => (
-                    <>
-                      <BagContainer bag={bag} key={index}/>
+                {results?.map((bag, index) => (
+                    <BagContainer bag={bag} key={index} />
+                ))}
 
-                    </>
-                  ))}
-
-                </IonRow>
-              </IonGrid>
-            </IonCard>
+              </IonRow>
+            </IonGrid>
+          </IonCard>
 
 
           <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-baggage-modal">
-            <IonFabButton onClick={setModal}>
+            <IonFabButton>
               <IonIcon icon={addSharp}></IonIcon>
             </IonFabButton>
           </IonFab>
           <IonModal
             ref={modal}
             trigger="open-baggage-modal"
-            initialBreakpoint={0.65}
-            breakpoints={[0, 0.65]}
             canDismiss={true}
-            handleBehavior="none"
-            onWillDismiss={() => setModalPage(1)}
+            onWillDismiss={() => { /* Dismiss */ }}
+            keepContentsMounted
+            initialBreakpoint={1}
+            breakpoints={[0, 1]}
+            animated
           >
-            <IonHeader >
-              <IonToolbar>
-                <IonTitle>New Baggage</IonTitle>
-
-              </IonToolbar>
-              <IonProgressBar value={formState.progress}></IonProgressBar>
-            </IonHeader>
-            <IonContent className="ion-padding">
-
-              <AnimatePresence mode="wait">
-                {modalPage === 1 && (
-                  <AddBaggageModal
-                    modal={modal}
-                    dispatch={dispatch}
-                    formState={formState}
-                    setModalPage={setModalPage}
-                  />
-                )}
-
-                {modalPage === 2 && (
-                  <></>
-                )}
-
-                {modalPage === 3 && (
-                  <></>
-                )}
-              </AnimatePresence>
-            </IonContent>
+            <AddBaggageModal
+              modal={modal}
+              formState={formState}
+              dispatch={dispatch}
+              travel={uuid}
+            />
+            
           </IonModal>
         </IonContent>
       </IonPage>

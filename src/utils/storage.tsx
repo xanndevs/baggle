@@ -15,19 +15,25 @@ async function initStorage() {
   if (!storageReady) {
     await store.create();
 
-    push("baggages", {
+    set("baggages", [{
       uuid: "uuid-best",
       name: "Valiz",
       items: [
         "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
       ],
-    })
+    }, {
+      uuid: "uuid-best",
+      name: "Valiz",
+      items: [
+        "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
+      ],
+    } ])
 
 
     set("items", [
-      { uuid:"bag-uuid",type: 'packed', name: "Ekmek", amount: 3 },
-      { uuid:"bag-uuid",type: 'ready', name: "Ayakkabı", amount: 3 },
-      { uuid:"bag-uuid",type: 'store', name: "Balık", amount: 3, price: 300 }
+      { uuid: "bag-uuid", type: 'packed', name: "Ekmek", amount: 3 },
+      { uuid: "bag-uuid", type: 'ready', name: "Ayakkabı", amount: 3 },
+      { uuid: "bag-uuid", type: 'store', name: "Balık", amount: 3, price: 300 }
     ])
     storageReady = true;
   }
@@ -88,6 +94,38 @@ export async function pop_uuid(key: string, value: any): Promise<void> {
   await store.set(key, existingData);
   emitter.emit(key, existingData);
 }
+
+export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partial<Bag> | Partial<Travel>): Promise<void> {
+  await initStorage();
+
+  const [storeKey, uuid] = fullKey.split(".");
+  if (!storeKey || !uuid) {
+    throw new Error("Invalid key format. Use 'key.uuid', e.g., 'baggages.3454'");
+  }
+
+  const existingData: any[] = await store.get(storeKey) || [];
+
+  const index = existingData.findIndex(entry => entry.uuid === uuid);
+  if (index === -1) return;
+
+  // Type-safe merge
+  if (storeKey === "items") {
+    const original = existingData[index] as Item;
+    existingData[index] = { ...original, ...(updates as Partial<Item>) };
+  } else if (storeKey === "baggages") {
+    const original = existingData[index] as Bag;
+    existingData[index] = { ...original, ...(updates as Partial<Bag>) };
+  } else if (storeKey === "travels") {
+    const original = existingData[index] as Travel;
+    existingData[index].push( { ...original, ...(updates as Partial<Travel>) });
+  } else {
+    throw new Error("Unknown storeKey: " + storeKey);
+  }
+
+  await store.set(storeKey, existingData);
+  emitter.emit(storeKey, existingData);
+}
+
 
 export async function keys(): Promise<string[]> {
   await initStorage();

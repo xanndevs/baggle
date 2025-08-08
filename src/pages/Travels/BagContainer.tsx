@@ -30,8 +30,8 @@ const BagContainer: React.FC<ComponentProps> = ({ bag }) => {
 
   return (
     <>
-      <IonCol size='10'>
-        <IonCard className='margin-none' color={"light"} button routerLink={`/baggages/${bag.uuid}`}>
+      <IonCol size='10' style={{ minWidth: '285px' }} >
+        <IonCard className='margin-none baggage-card' color={"light"} button routerLink={`/baggages/${bag.uuid}`} >
           <IonCardHeader className='padding-bottom-none'>
             <IonCardSubtitle>Has {bag.category?.length || "No"} Categories</IonCardSubtitle>
 
