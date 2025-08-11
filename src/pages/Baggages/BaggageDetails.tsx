@@ -1,25 +1,16 @@
 import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
-import { addSharp } from 'ionicons/icons';
+import { addSharp, search } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import WalrusBucket from '../../walrus_bucket.jpg';
 import './BaggageDetails.css';
 import './Baggages.css';
-import Page1 from './modal/Page1';
+import Page2_AddItemModal from './modal/Page2_AddItemModal';
+import { get, retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
+import Page1_AddItemModal from './modal/Page1_AddItemModal';
 
 const BaggageDetails: React.FC = () => {
-
-  const [bagValue, setBagValue] = useState<Bag | undefined>();
-
-  const { uuid } = useParams<{ uuid: string }>();
-  const [data, setData] = useState<Item[]>();
-  const [results, setResults] = useState<Item[]>();
-
-
-
-
-
 
 
 
@@ -27,13 +18,25 @@ const BaggageDetails: React.FC = () => {
 
   const [modalPage, setModalPage] = useState(1);
 
-  type FormState = {
-    baggageNameValue: string,
-    progress: number,
-  };
+
   type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "UPDATE"; field: keyof Item; value: string | number }
     | { type: "RESET" };
+  interface FormState extends Item {
+    progress: number;
+  }
+  const defaults: FormState = {
+    uuid: "",
+    name: "",
+    amount: 1,
+    type: "ready",
+    image: undefined,
+    price: 0,
+    note: "",
+    category: "",
+
+    progress: 0.02,
+  };
 
   const formReducer = (state: FormState, action: FormAction) => {
     switch (action.type) {
@@ -41,8 +44,7 @@ const BaggageDetails: React.FC = () => {
         return { ...state, [action.field]: action.value };
       case "RESET":
         return {
-          baggageNameValue: "",
-          progress: 0.02,
+          ...defaults
         };
       default:
         return state;
@@ -50,8 +52,7 @@ const BaggageDetails: React.FC = () => {
   }
 
   const [formState, dispatch] = useReducer(formReducer, {
-    baggageNameValue: "",
-    progress: 0.02
+    ...defaults
   })
 
 
@@ -66,58 +67,64 @@ const BaggageDetails: React.FC = () => {
 
 
 
+  const [baggageData, setBaggageData] = useState<Bag>();
+
+
+  const { uuid } = useParams<{ uuid: string }>();
+
+
+
+  const [data, setData] = useState<Item[]>();
+  const [results, setResults] = useState<Item[]>();
 
 
   useEffect(() => {
-    const fetchBags = async () => {
-      //Get bags from the api?
-      //Since I have no api  I will jsut define a fake response
-      //res = askforbags([,"678-36-425469","904-53-4535"]) // the holly api call
-      console.log(uuid)
-      // a white old wizard arrived with the response
-      const res: { bags: Bag[], items: Item[] } = {
+    let isMounted = true;
 
-        bags: [
-          {
-            uuid: "uuid-best",
-            name: "Valiz",
-            items: ["123", "234", "345"],
+    const setup = async () => {
+      const bag = await retrive_bag(uuid);
+      const items = await retrive_bag_items(uuid);
 
-          },
-          {
-            uuid: "uuis-notbest",
-            name: "Sırt Çantası",
-            items: ["123", "234", "345"],
+      if (isMounted && bag) { setBaggageData(bag); }
+      if (isMounted && items) { setData(items); setResults(items); }
+    };
 
-          }
-        ],
-        items: [
-          { type: 'packed', name: "Ekmek", amount: 3 },
-          { type: 'ready', name: "Ayakkabı", amount: 3 },
-          { type: 'store', name: "Balık", amount: 3, price: 300 }
-        ],
+    setup();
+
+    const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
+      if (isMounted) {
+        console.log("Baggage data updated:", baggages);
+        setBaggageData(baggages.find((elem) => elem.uuid === uuid));
       }
+    });
 
-      //const bag = res.bags.find((elem) => elem.uuid === uuid);
-      //const bag = res.items;
-      setBagValue(res.bags.find((elem) => elem.uuid === uuid));
+    const unsub_items = subscribe<Item[]>('items', (items) => {
+      if (isMounted && items) {
+        setData(items.filter((item) => baggageData?.items.includes(item.uuid)));
+        console.log("Items data updated:", items);
+      }
+    });
 
-      const filteredBag = [
-        ...(res.items || []),
-      ];
-      setData(filteredBag);
-      setResults(filteredBag);
+    return () => {
+      isMounted = false;
+      unsub_baggages();
+      unsub_items();
+    };
+  }, []);
 
-    }
-    fetchBags();
-  }, [uuid]);
+
+
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleInput = (event: Event) => {
-    let query = '';
-    const target = event.target as HTMLIonSearchbarElement;
-    if (target) query = target.value!.toLowerCase();
 
-    setResults(data?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
+    const target = event.target as HTMLIonSearchbarElement;
+    if (target) {
+      setSearchTerm(target.value!);
+      const query = target.value!.toLowerCase();
+      setResults(data?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
+    }
   };
 
   return (
@@ -128,13 +135,13 @@ const BaggageDetails: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton text={isPlatform('ios') ? "Back" : undefined} />
             </IonButtons>
-            <IonTitle>{bagValue?.name || "Unnamed Baggage"}</IonTitle>
+            <IonTitle>{baggageData?.name || "Unnamed Baggage"}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
           <IonHeader >
             <IonToolbar>
-              <IonSearchbar debounce={250} onIonInput={(event) => handleInput(event)}></IonSearchbar>
+              <IonSearchbar debounce={250} value={searchTerm} onIonInput={(event) => handleInput(event)}></IonSearchbar>
             </IonToolbar>
           </IonHeader>
           <IonList class='ion-padding-horizontal '>
@@ -206,15 +213,19 @@ const BaggageDetails: React.FC = () => {
           <IonModal
             ref={modal}
             trigger="open-item-modal"
-            initialBreakpoint={0.65}
-            breakpoints={[0, 0.65]}
-            canDismiss={true}
             handleBehavior="none"
-            onWillDismiss={() => setModalPage(1)}
+            canDismiss={true}
+            onWillDismiss={() => { /* Dismiss */ }}
+            
+            initialBreakpoint={1}
+            breakpoints={[0, 1]}
+            animated
           >
+            <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
+
             <IonHeader >
               <IonToolbar>
-                <IonTitle>New Travel</IonTitle>
+                <IonTitle>New Item</IonTitle>
 
               </IonToolbar>
               <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -223,16 +234,21 @@ const BaggageDetails: React.FC = () => {
 
               <AnimatePresence mode="wait">
                 {modalPage === 1 && (
-                  <Page1
-                    modal={modal}
-                    dispatch={dispatch}
-                    formState={formState}
-                    setModalPage={setModalPage}
+                  <Page1_AddItemModal
+                  modal={modal}
+                  dispatch={dispatch}
+                  formState={formState}
+                  setModalPage={setModalPage}
                   />
                 )}
 
                 {modalPage === 2 && (
-                  <></>
+                  <Page2_AddItemModal
+                  modal={modal}
+                  dispatch={dispatch}
+                  formState={formState}
+                  setModalPage={setModalPage}
+                  />
                 )}
 
                 {modalPage === 3 && (
@@ -240,32 +256,12 @@ const BaggageDetails: React.FC = () => {
                 )}
               </AnimatePresence>
             </IonContent>
+                </div>
           </IonModal>
         </IonContent>
       </IonPage>
 
     </>
-  );
-
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton text={isPlatform('ios') ? "Back" : undefined} />
-          </IonButtons>
-          <IonTitle>{bagValue?.name || "Unnamed Baggage"}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader >
-          <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-      </IonContent>
-    </IonPage>
   );
 };
 

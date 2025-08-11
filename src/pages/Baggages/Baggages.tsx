@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { addSharp } from 'ionicons/icons';
 import React from 'react';
 import './Baggages.css';
-import Page1 from './modal/Page1';
+import Page2_AddItemModal from './modal/Page2_AddItemModal';
 
 const Baggages: React.FC = () => {
 

@@ -15,26 +15,26 @@ async function initStorage() {
   if (!storageReady) {
     await store.create();
 
-    set("baggages", [{
-      uuid: "uuid-best",
-      name: "Valiz",
-      items: [
-        "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
-      ],
-    }, {
-      uuid: "uuid-best",
-      name: "Valiz",
-      items: [
-        "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
-      ],
-    } ])
+    // set("baggages", [{
+    //   uuid: "uuid-best",
+    //   name: "Valiz",
+    //   items: [
+    //     "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
+    //   ],
+    // }, {
+    //   uuid: "uuid-best",
+    //   name: "Valiz",
+    //   items: [
+    //     "bag-uuid", "bag-uuid", "bag-uuid", "bag-uuid"
+    //   ],
+    // } ])
 
 
-    set("items", [
-      { uuid: "bag-uuid", type: 'packed', name: "Ekmek", amount: 3 },
-      { uuid: "bag-uuid", type: 'ready', name: "Ayakkabı", amount: 3 },
-      { uuid: "bag-uuid", type: 'store', name: "Balık", amount: 3, price: 300 }
-    ])
+    // set("items", [
+    //   { uuid: "bag-uuid", type: 'packed', name: "Ekmek", amount: 3 },
+    //   { uuid: "bag-uuid", type: 'ready', name: "Ayakkabı", amount: 3 },
+    //   { uuid: "bag-uuid", type: 'store', name: "Balık", amount: 3, price: 300 }
+    // ])
     storageReady = true;
   }
 }
@@ -61,9 +61,20 @@ export async function retrive_bag_items(uuid: string): Promise<Item[] | null> {
   if (!bag) return null;
 
   // If bag.items is string[] (UUIDs)
-  const filteredItems = items.filter((item) => bag.items.includes(item.uuid!));
+  const filteredItems = items.filter((item) => bag?.items?.includes(item.uuid!));
 
   return filteredItems;
+}
+
+export async function retrive_bag(uuid: string): Promise<Bag | null> {
+  await initStorage();
+
+  const baggages: Bag[] = (await store.get("baggages")) ?? [];
+  const items: Item[] = (await store.get("items")) ?? [];
+
+  const bag = baggages.find((b) => b.uuid === uuid);
+  if (!bag) return null;
+  return bag;
 }
 
 

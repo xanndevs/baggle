@@ -10,18 +10,6 @@ import AddBaggageModal from './modal/AddBaggageModal';
 
 const TravelDetails: React.FC = () => {
 
-  const [travelData, setTravelData] = useState<Travel[]>();
-  const [baggageData, setBaggageData] = useState<Bag[]>();
-
-  const [travel, setTravel] = useState<Travel>()
-  const [baggages, setBaggages] = useState<Bag[]>()
-
-  const { uuid } = useParams<{ uuid: string }>();
-  const [results, setResults] = useState<Bag[]>();
-
-
-
-
 
 
 
@@ -61,9 +49,13 @@ const TravelDetails: React.FC = () => {
 
 
 
+  const [travelData, setTravelData] = useState<Travel[]>();
+  const [baggageData, setBaggageData] = useState<Bag[]>();
 
+  const [travel, setTravel] = useState<Travel>()
+  const [baggages, setBaggages] = useState<Bag[]>()
 
-
+  const { uuid } = useParams<{ uuid: string }>();
 
   useEffect(() => {
     let isMounted = true;
@@ -73,7 +65,7 @@ const TravelDetails: React.FC = () => {
       const baggages = await get<Bag[]>("baggages");
 
       if (isMounted && travels) setTravelData(travels);
-      if (isMounted && baggages) { setBaggageData(baggages); setResults(baggages) }
+      if (isMounted && baggages) { setBaggageData(baggages); }
     };
 
     setup();
@@ -117,7 +109,7 @@ const TravelDetails: React.FC = () => {
     const target = event.target as HTMLIonSearchbarElement;
     if (target) query = target.value!.toLowerCase();
 
-    setResults(baggages?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
+    setBaggageData(baggages?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
   };
 
   return (
@@ -143,8 +135,8 @@ const TravelDetails: React.FC = () => {
             <IonGrid>
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
-                {results?.map((bag, index) => (
-                    <BagContainer bag={bag} key={index} />
+                {baggageData?.map((bag, index) => (
+                  <BagContainer bag={bag} key={index} />
                 ))}
 
               </IonRow>
@@ -173,7 +165,7 @@ const TravelDetails: React.FC = () => {
               dispatch={dispatch}
               travel={uuid}
             />
-            
+
           </IonModal>
         </IonContent>
       </IonPage>

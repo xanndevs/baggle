@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { push } from '../../../utils/storage';
 import { v4 as uuid_v4 } from 'uuid';
+import { useHistory } from 'react-router';
 
 
 interface ComponentTypes {
@@ -20,6 +21,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
     const time_modal = useRef<HTMLIonModalElement>(null);
     const firstInput = useRef<HTMLIonInputElement>(null);
     const [nameError, setNameError] = useState<string>("");
+    const history = useHistory();
 
     const pageVariants = {
         initial: { opacity: 0, x: 50 },
@@ -57,7 +59,8 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
     async function handleAddTravel(e?: React.FormEvent<HTMLFormElement>) {
         if (e) e.preventDefault();
         // Use input validity instead of manual length check
-        push("travels", getFormInput());
+        const formInput = getFormInput();
+        await push("travels", formInput);
         dispatch({
             type: "UPDATE",
             field: "progress",
@@ -68,8 +71,8 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
             dispatch({
                 type: "RESET",
             })
+            history.push(`/travels/${formInput.uuid}`);
         }, 350);
-
     }
 
     return (
@@ -96,25 +99,39 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                 transition={{ duration: 0.2 }}
                                 style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 
-                                <form style={{ flexGrow: 1 }} onSubmit={handleAddTravel}>
+                                <form noValidate style={{ flexGrow: 1 }} onSubmit={handleAddTravel}>
                                     <IonInput
                                         label="Travel Name *"
                                         labelPlacement="stacked"
                                         fill="solid"
+                                        type='text'
                                         color={nameError ? 'danger' : 'secondary'}
                                         ref={firstInput}
                                         className={`bordered ${nameError ? 'input-error' : ''}`}
                                         value={formState.travelNameValue}
                                         minlength={3}
-                                        maxlength={32}
+                                        counter={formState.travelNameValue.length}
+                                        counterFormatter={(value: number) => `${value}/16`}
+                                        maxlength={16}
                                         required
-                                        onIonChange={(e) => {
+                                        onIonInput={(e) => {
+                                            e.preventDefault();
+                                            console.log("Input Value: ", e.target.value?.toString().length);
+
+                                            console.log("Target Object: ", e.target.attributes);
+
                                             dispatch({
                                                 type: "UPDATE",
                                                 field: "travelNameValue",
-                                                value: e.target.value,
+                                                value: e.target.value?.toString().split("").splice(0,16).join(""),
                                             });
-                                            if (nameError) setNameError("");
+                                        }}
+                                        onIonChange={(e) => {
+                                            if (formState.travelNameValue.length < 3 || formState.travelNameValue.length > 16) {
+                                                setNameError("Travel name must be between 3 and 16 characters long.");
+                                            } else {
+                                                setNameError("");
+                                            }
                                         }}
                                         errorText={nameError}
                                     />
@@ -159,7 +176,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                             <IonDatetime
                                                 id='date-picker'
                                                 preferWheel={false}
-                                                color={'secondary'}
+                                                color={'primary '}
                                                 size='cover'
                                                 presentation='date'
                                                 onIonChange={(e) => {
@@ -220,7 +237,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                             <IonDatetime
                                                 id='time-picker'
                                                 preferWheel={false}
-                                                color={'secondary'}
+                                                color={'primary'}
                                                 size='cover'
                                                 presentation='time'
                                                 onIonChange={(e) => {

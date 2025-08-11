@@ -4,10 +4,14 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import './css/fonts.css';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+// Call the element loader before the render call
 
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
+defineCustomElements(window);
 root.render(
   <React.StrictMode>
     <App />
