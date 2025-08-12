@@ -23,11 +23,12 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
         exit: { opacity: 0, x: -50 },
     };
 
-    useEffect(() => {
-        setTimeout(() => {
-            firstInput.current?.setFocus();
-        }, 100); // wait a bit to ensure modal is fully visible
-    }, []);
+    //dithced the idea of focus trapping for now, as it was lowering the ux quality
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         firstInput.current?.setFocus();
+    //     }, 100); // wait a bit to ensure modal is fully visible
+    // }, []);
 
     return (<>
 
@@ -48,14 +49,34 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     color={'secondary'}
                     ref={firstInput}
                     className='bordered'
+                    maxlength={20}
+                    minlength={3}
+                    counter={formState.name.length}
+                    counterFormatter={(value: number) => `${value}/20`}
                     value={formState.name}
 
+                    errorText={formState.nameError}
                     onIonInput={(e) => {
                         dispatch({
                             type: "UPDATE",
                             field: "name",
-                            value: e.target.value,
-                        })
+                            value: e.target.value?.toString().split("").splice(0, 20).join(""),
+                        });
+                    }}
+                    onIonChange={(e) => {
+                        if (formState.name.length < 3 || formState.name.length > 20) {
+                            dispatch({
+                                type: "UPDATE",
+                                field: "nameError",
+                                value: "Item name must be between 3 and 20 characters long.",
+                            });
+                        } else {
+                            dispatch({
+                                type: "UPDATE",
+                                field: "nameError",
+                                value: "",
+                            });
+                        }
                     }}
                 />
                 <br></br>
@@ -84,8 +105,10 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     <IonButton
                         fill='clear'
                         className='ion-no-margin number-button'
+                        onMouseDown={(e) => {
+                            e.preventDefault(); // Prevents the input from losing focus
+                        }}
                         onClick={() => {
-                            amountRef.current?.setFocus();
                             dispatch({
                                 type: "UPDATE",
                                 field: "amount",
@@ -96,6 +119,9 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     <IonButton
                         className='ion-no-margin number-button'
                         fill='clear'
+                        onMouseDown={(e) => {
+                            e.preventDefault(); // Prevents the input from losing focus
+                        }}
                         onClick={() => {
                             amountRef.current?.setFocus();
                             dispatch({

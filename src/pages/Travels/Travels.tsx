@@ -104,7 +104,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
           trigger="open-modal"
           initialBreakpoint={1}
           breakpoints={[0, 1]}
-          keepContentsMounted={true}
+          keepContentsMounted
           canDismiss={true}
           handleBehavior="none"
           id='new-travel-modal'

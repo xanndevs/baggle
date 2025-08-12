@@ -27,6 +27,7 @@ const BaggageDetails: React.FC = () => {
     | { type: "RESET" };
   interface FormState extends Item {
     progress: number;
+    nameError: string;
   }
   const defaults: FormState = {
     uuid: "",
@@ -39,6 +40,7 @@ const BaggageDetails: React.FC = () => {
     category: "",
 
     progress: 0.02,
+    nameError: "Item name must be between 3 and 20 characters long.",
   };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -257,14 +259,14 @@ const BaggageDetails: React.FC = () => {
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
                   <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided. No provided. No note provided. No note provided. "}</IonLabel>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minWidth: 'min-content' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
                     <IonCheckbox> </IonCheckbox>
                   </div>
 
                 </div>
               </div>
             </div>
-            <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '340px', }}>
+            <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '350px', }}>
 
               <IonHeader style={{ 'background': "var(--ion-card-background)", borderRadius: "15px 15px 0px 0px" }}>
                 <IonToolbar style={{ borderRadius: "14px 14px 0px 0px" }}>

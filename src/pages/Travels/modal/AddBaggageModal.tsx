@@ -28,11 +28,13 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
     };
 
     //console.log(1 - (modal.current?.initialBreakpoint || 0))
-    useEffect(() => {
-        setTimeout(() => {
-            firstInput.current?.setFocus();
-        }, 150); // wait a bit to ensure modal is fully visible
-    }, []);
+    
+    // ditch the idea of focus trapping for now, as it was lowering the UX quality
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         firstInput.current?.setFocus();
+    //     }, 150); // wait a bit to ensure modal is fully visible
+    // }, []);
 
 
     function getFormInput(): any {

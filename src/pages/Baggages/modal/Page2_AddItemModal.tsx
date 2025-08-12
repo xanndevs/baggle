@@ -1,143 +1,214 @@
 import {
-    IonButton,
-    IonIcon,
-    IonLabel,
-    IonTitle
+  IonButton,
+  IonIcon,
+  IonLabel
 } from '@ionic/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import { addSharp, cameraOutline, cameraSharp, trashBinOutline, trashOutline } from 'ionicons/icons';
+import {
+  cameraOutline,
+  trashOutline,
+  imagesOutline,
+  imageOutline
+} from 'ionicons/icons';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import './AddItemModal.css';
 
 interface ComponentTypes {
-    dispatch: any;
-    formState: any;
-    setModalPage: React.Dispatch<React.SetStateAction<number>>;
-    modal: React.RefObject<HTMLIonModalElement>;
-    videoRef: React.RefObject<HTMLVideoElement>;
-    setIsStreaming: React.Dispatch<React.SetStateAction<boolean>>;
-    isStreaming: boolean;
+  dispatch: any;
+  formState: any;
+  setModalPage: React.Dispatch<React.SetStateAction<number>>;
+  modal: React.RefObject<HTMLIonModalElement>;
+  videoRef: React.RefObject<HTMLVideoElement>;
+  setIsStreaming: React.Dispatch<React.SetStateAction<boolean>>;
+  isStreaming: boolean;
 }
 
-const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage, videoRef, setIsStreaming, isStreaming }) => {
-    const firstInput = useRef<HTMLIonInputElement>(null);
-    const [stream, setStream] = useState<MediaStream | null>(null);
+const Page2_AddItemModal: React.FC<ComponentTypes> = ({
+  dispatch,
+  formState,
+  modal,
+  setModalPage,
+  videoRef,
+  setIsStreaming,
+  isStreaming
+}) => {
+  const firstInput = useRef<HTMLIonInputElement>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
-    const pageVariants = {
-        initial: { opacity: 0, x: 50 },
-        animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: -50 }
-    };
+  const pageVariants = {
+    initial: { opacity: 0, x: 50 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 }
+  };
 
-    useEffect(() => {
-        setTimeout(() => {
-            firstInput.current?.setFocus();
-        }, 100);
-    }, []);
+  // ditch the idea of focus trapping for now, as it was lowering the UX quality
+//   useEffect(() => {
+//     setTimeout(() => {
+//       firstInput.current?.setFocus();
+//     }, 100);
+//   }, []);
 
-    const startCamera = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-                setIsStreaming(true);
-                await videoRef.current.play();
-            }
-            setStream(mediaStream);
-        } catch (err) {
-            console.error('Error accessing camera:', err);
-        }
-    };
+  const startCamera = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+        setIsStreaming(true);
+        await videoRef.current.play();
+      }
+      setStream(mediaStream);
+    } catch (err) {
+      console.error('Error accessing camera:', err);
+    }
+  };
 
-    const stopCamera = () => {
-        if (stream) {
-            setIsStreaming(false);
-            stream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        }
-    };
+  const stopCamera = () => {
+    if (stream) {
+      setIsStreaming(false);
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+  };
 
-    const takePhoto = () => {
-        if (!videoRef.current) return;
-        const canvas = document.createElement('canvas');
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-            ctx.drawImage(videoRef.current, 0, 0);
-            const dataUrl = canvas.toDataURL('image/png');
-            console.log('Captured image:', dataUrl);
-            dispatch({
-                type: 'UPDATE',
-                field: 'image',
-                value: dataUrl.split(',')[1] // Store only the base64 part
-            });
-            // You could store dataUrl in state if you want to preview it
-        }
-        stopCamera();
-    };
+  const takePhoto = () => {
+    if (!videoRef.current) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(videoRef.current, 0, 0);
+      const dataUrl = canvas.toDataURL('image/png');
+      dispatch({
+        type: 'UPDATE',
+        field: 'image',
+        value: dataUrl.split(',')[1] // only base64 part
+      });
+    }
+    stopCamera();
+  };
 
-    const removePhoto = () => {
+  const pickFromGallery = async () => {
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos
+      });
+      if (photo.base64String) {
         dispatch({
-            type: 'UPDATE',
-            field: 'image',
-            value: undefined
+          type: 'UPDATE',
+          field: 'image',
+          value: photo.base64String
         });
-    };
+      }
+    } catch (err) {
+      console.error('Error picking from gallery:', err);
+    }
+  };
 
-    return (
-        <motion.div
-            key="page2"
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={pageVariants}
-            transition={{ duration: 0.2 }}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-        >
-            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', gap: '8px' }}>
-                <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+  const removePhoto = () => {
+    dispatch({
+      type: 'UPDATE',
+      field: 'image',
+      value: undefined
+    });
+  };
 
-                    <IonButton
-                        fill="outline"
-                        color="primary"
-                        onClick={isStreaming ? takePhoto : startCamera}
-                        style={{ flexGrow: 1 }}
-                    >
-                        <IonLabel slot='end'>{isStreaming ? 'Take Photo' : 'Start Camera'}</IonLabel>
-                        <IonIcon size="default" slot="start" icon={cameraOutline} />
-                    </IonButton>
+  return (
+    <motion.div
+      key="page2"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      transition={{ duration: 0.2 }}
+      style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          width: '100%',
+          gap: '8px'
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+          <IonButton
+            fill="outline"
+            color="primary"
+            onClick={isStreaming ? takePhoto : startCamera}
+            style={{ flexGrow: 1 }}
+          >
+            <IonLabel slot="end">
+              {isStreaming ? 'Take Photo' : 'Start Camera'}
+            </IonLabel>
+            <IonIcon size="default" slot="start" icon={cameraOutline} />
+          </IonButton>
 
-                    <IonButton
-                        expand="block"
-                        fill="solid"
-                        color="danger"
-                        onClick={removePhoto}
-                        disabled={!formState.image}
-                    >
-                        <IonIcon slot="" icon={trashOutline} />
-                    </IonButton>
-                </div>
+          <IonButton
+            fill="outline"
+            color="primary"
+            onClick={pickFromGallery}
+          >
+            <IonLabel slot="end">
+              From Gallery
+            </IonLabel>
+            <IonIcon slot="start" icon={imageOutline} />
+          </IonButton>
 
-            </div>
+          <IonButton
+            expand="block"
+            fill="solid"
+            color="danger"
+            onClick={removePhoto}
+            disabled={!formState.image}
+          >
+            <IonIcon slot="" icon={trashOutline} />
+          </IonButton>
+        </div>
+      </div>
 
-            <IonButton
-                expand="block"
-                onClick={() => {
-                    setModalPage(prev => prev + 1);
-                    dispatch({
-                        type: 'UPDATE',
-                        field: 'progress',
-                        value: 0.5
-                    });
-                }}
-            >
-                Next
-            </IonButton>
-        </motion.div>
-    );
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '8px'}}>
+        <IonButton
+        expand="block"
+        fill='outline'
+        color={'secondary'}
+        style={{flexGrow: 2}}
+        onClick={() => {
+          setModalPage(prev => prev - 1);
+          dispatch({
+            type: 'UPDATE',
+            field: 'progress',
+            value: 0.5
+          });
+        }}
+      >
+        Back
+      </IonButton>
+        <IonButton
+        style={{flexGrow: 5 }}
+        expand="block"
+        onClick={() => {
+          //do nothing
+            //setModalPage(prev => prev + 1);
+          dispatch({
+            type: 'UPDATE',
+            field: 'progress',
+            value: 0.5
+          });
+        }}
+      >
+        Next
+      </IonButton>
+      </div>
+    </motion.div>
+  );
 };
 
 export default Page2_AddItemModal;

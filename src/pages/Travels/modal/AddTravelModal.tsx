@@ -29,11 +29,13 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         exit: { opacity: 0, x: -50 },
     };
 
-    useEffect(() => {
-        setTimeout(() => {
-            firstInput.current?.setFocus();
-        }, 150);
-    }, []);
+
+    // ditch the idea of focus trapping for now, as it was lowering the UX quality
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         firstInput.current?.setFocus();
+    //     }, 150);
+    // }, []);
 
     function toLocalISOString(date: Date): string {
         const pad = (n: number) => String(n).padStart(2, "0");
@@ -169,7 +171,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                                 <IonToolbar>
                                                     <IonTitle className='ion-padding-vertical'>Date Picker</IonTitle>
                                                     <IonButtons slot='end'>
-                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss(); time_modal.current?.present() }}>Next</IonButton>
+                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss(); /* not really intuitive time_modal.current?.present() */ }}>Done</IonButton>
                                                     </IonButtons>
                                                 </IonToolbar>
                                             </IonHeader>
