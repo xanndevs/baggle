@@ -1,55 +1,93 @@
-import { Camera, CameraResultType } from '@capacitor/camera';
-import { IonButton, IonButtons, IonCheckbox, IonDatetime, IonHeader, IonIcon, IonImg, IonInput, IonModal, IonTitle, IonToolbar } from '@ionic/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+    IonButton,
+    IonIcon,
+    IonLabel,
+    IonTitle
+} from '@ionic/react';
+import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
+import { addSharp, cameraOutline, cameraSharp, trashBinOutline, trashOutline } from 'ionicons/icons';
 import './AddItemModal.css';
-import { addSharp } from 'ionicons/icons';
 
 interface ComponentTypes {
-    dispatch: any,
-    formState: any,
-    setModalPage: React.Dispatch<React.SetStateAction<number>>,
-    modal: React.RefObject<HTMLIonModalElement>,
-
+    dispatch: any;
+    formState: any;
+    setModalPage: React.Dispatch<React.SetStateAction<number>>;
+    modal: React.RefObject<HTMLIonModalElement>;
+    videoRef: React.RefObject<HTMLVideoElement>;
+    setIsStreaming: React.Dispatch<React.SetStateAction<boolean>>;
+    isStreaming: boolean;
 }
 
-const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage }) => {
-
+const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage, videoRef, setIsStreaming, isStreaming }) => {
     const firstInput = useRef<HTMLIonInputElement>(null);
+    const [stream, setStream] = useState<MediaStream | null>(null);
 
     const pageVariants = {
         initial: { opacity: 0, x: 50 },
         animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: -50 },
+        exit: { opacity: 0, x: -50 }
     };
 
     useEffect(() => {
         setTimeout(() => {
             firstInput.current?.setFocus();
-        }, 100); // wait a bit to ensure modal is fully visible
+        }, 100);
     }, []);
 
+    const startCamera = async () => {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+                setIsStreaming(true);
+                await videoRef.current.play();
+            }
+            setStream(mediaStream);
+        } catch (err) {
+            console.error('Error accessing camera:', err);
+        }
+    };
 
-const [imageURL, setImageURL] = useState<string | undefined>(undefined);
+    const stopCamera = () => {
+        if (stream) {
+            setIsStreaming(false);
+            stream.getTracks().forEach(track => track.stop());
+            setStream(null);
+        }
+    };
 
-const takePicture = async () => {
-  const image = await Camera.getPhoto({
-    quality: 90,
-    resultType: CameraResultType.Uri
-  });
+    const takePhoto = () => {
+        if (!videoRef.current) return;
+        const canvas = document.createElement('canvas');
+        canvas.width = videoRef.current.videoWidth;
+        canvas.height = videoRef.current.videoHeight;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            ctx.drawImage(videoRef.current, 0, 0);
+            const dataUrl = canvas.toDataURL('image/png');
+            console.log('Captured image:', dataUrl);
+            dispatch({
+                type: 'UPDATE',
+                field: 'image',
+                value: dataUrl.split(',')[1] // Store only the base64 part
+            });
+            // You could store dataUrl in state if you want to preview it
+        }
+        stopCamera();
+    };
 
-  // image.webPath will contain a path that can be set as an image src.
-  // You can access the original file using image.path, which can be
-  // passed to the Filesystem API to read the raw data of the image,
-  // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-  const imageUrl = image.webPath;
+    const removePhoto = () => {
+        dispatch({
+            type: 'UPDATE',
+            field: 'image',
+            value: undefined
+        });
+    };
 
-  // Can be set to the src of an image now
-  setImageURL(imageUrl);
-};
-
-    return (<>
-
+    return (
         <motion.div
             key="page2"
             initial="initial"
@@ -57,104 +95,49 @@ const takePicture = async () => {
             exit="exit"
             variants={pageVariants}
             transition={{ duration: 0.2 }}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%', }}
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
         >
-            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <IonButton expand='block' fill='outline' color='secondary' onClick={() => {
-                    takePicture();
-                }}>
-                    <IonTitle>Take Photo</IonTitle>
-                    <IonIcon slot="end" icon={addSharp} />
-                </IonButton>
-                <IonImg src={imageURL}></IonImg>
-                <IonInput
-                    label="Bag Name"
-                    labelPlacement="stacked"
-                    fill="solid"
-                    color={'secondary'}
-                    ref={firstInput}
-                    className='bordered'
-                    value={formState.name}
+            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', gap: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
 
-                    onIonChange={(e) => {
-                        dispatch({
-                            type: "UPDATE",
-                            field: "name",
-                            value: e.target.value,
-                        })
-                    }}
-                />
-                <br></br>
-                <div className='number-border' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end' }}>
-                    <IonInput
-                        label="Item Amount"
-                        labelPlacement="stacked"
-                        fill="outline"
-                        className='bordered border-right-flat'
-                        color={'secondary'}
-                        value={formState.amount}
-                        min={1}
-                        max={99}
-                        type='number'
-                        onIonChange={(e) => {
-                            dispatch({
-                                type: "UPDATE",
-                                field: "amount",
-                                value: e.target.value,
-                            })
-                        }}
-                    />
-                    <IonButton fill='clear' className='ion-no-margin number-button'>-</IonButton>
                     <IonButton
-                        className='ion-no-margin number-button'
-                        fill='clear'
-                        onClick={() =>
-                            dispatch({
-                                type: "UPDATE",
-                                field: "amount",
-                                value: formState.amount + 1,
-                            })
-                        }
-                    >+</IonButton>
+                        fill="outline"
+                        color="primary"
+                        onClick={isStreaming ? takePhoto : startCamera}
+                        style={{ flexGrow: 1 }}
+                    >
+                        <IonLabel slot='end'>{isStreaming ? 'Take Photo' : 'Start Camera'}</IonLabel>
+                        <IonIcon size="default" slot="start" icon={cameraOutline} />
+                    </IonButton>
 
+                    <IonButton
+                        expand="block"
+                        fill="solid"
+                        color="danger"
+                        onClick={removePhoto}
+                        disabled={!formState.image}
+                    >
+                        <IonIcon slot="" icon={trashOutline} />
+                    </IonButton>
                 </div>
-
-                <br></br>
-
-                <IonCheckbox
-                    style={{ flexGrow: 1 }}
-                    justify='space-between'
-                    labelPlacement="start"
-                    onIonChange={(e) => {
-                        dispatch({
-                            type: "UPDATE",
-                            field: "type",
-                            value: e.detail.checked ? "store" : "ready",
-                        })
-                    }}
-                    checked={formState.type === "store"}
-                >
-                    I dont have this item yet.
-                </IonCheckbox>
-
 
             </div>
 
             <IonButton
                 expand="block"
                 onClick={() => {
-                    setModalPage((prev) => prev + 1);
-                    dispatch({ type: "UPDATE", field: "progress", value: 0.5, })
+                    setModalPage(prev => prev + 1);
+                    dispatch({
+                        type: 'UPDATE',
+                        field: 'progress',
+                        value: 0.5
+                    });
                 }}
             >
                 Next
             </IonButton>
-
-
         </motion.div>
+    );
+};
 
-    </>)
-
-}
-
-export default Page2_AddItemModal
+export default Page2_AddItemModal;

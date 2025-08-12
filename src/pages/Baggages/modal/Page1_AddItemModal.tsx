@@ -1,7 +1,8 @@
-import { IonButton, IonButtons, IonCheckbox, IonDatetime, IonHeader, IonInput, IonModal, IonTitle, IonToolbar } from '@ionic/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { IonButton, IonButtons, IonCheckbox, IonDatetime, IonHeader, IonIcon, IonInput, IonModal, IonTitle, IonToolbar } from '@ionic/react';
+import { motion, AnimatePresence, clamp } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import './AddItemModal.css';
+import { addSharp, removeSharp } from 'ionicons/icons';
 
 interface ComponentTypes {
     dispatch: any,
@@ -14,6 +15,7 @@ interface ComponentTypes {
 const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage }) => {
 
     const firstInput = useRef<HTMLIonInputElement>(null);
+    const amountRef = useRef<HTMLIonInputElement>(null);
 
     const pageVariants = {
         initial: { opacity: 0, x: 50 },
@@ -40,7 +42,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
         >
             <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                 <IonInput
-                    label="Bag Name"
+                    label="Item Name"
                     labelPlacement="stacked"
                     fill="solid"
                     color={'secondary'}
@@ -48,7 +50,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     className='bordered'
                     value={formState.name}
 
-                    onIonChange={(e) => {
+                    onIonInput={(e) => {
                         dispatch({
                             type: "UPDATE",
                             field: "name",
@@ -65,29 +67,44 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                         className='bordered border-right-flat'
                         color={'secondary'}
                         value={formState.amount}
+                        ref={amountRef}
                         min={1}
                         max={99}
                         type='number'
-                        onIonChange={(e) => {
+                        onIonInput={(e) => {
+                            const val = String(e.target.value);
+                            const parsed = val === '' ? 1 : parseInt(val, 10);
                             dispatch({
                                 type: "UPDATE",
                                 field: "amount",
-                                value: e.target.value,
+                                value: Math.max(1, Math.min(99, isNaN(parsed) ? 1 : parsed)),
                             })
                         }}
                     />
-                    <IonButton fill='clear' className='ion-no-margin number-button'>-</IonButton>
                     <IonButton
-                        className='ion-no-margin number-button'
                         fill='clear'
-                        onClick={() =>
+                        className='ion-no-margin number-button'
+                        onClick={() => {
+                            amountRef.current?.setFocus();
                             dispatch({
                                 type: "UPDATE",
                                 field: "amount",
-                                value: formState.amount + 1,
+                                value: Math.max(1, Math.min(99, formState.amount - 1)),
                             })
-                        }
-                    >+</IonButton>
+                        }}
+                    ><IonIcon size='small' icon={removeSharp} /></IonButton>
+                    <IonButton
+                        className='ion-no-margin number-button'
+                        fill='clear'
+                        onClick={() => {
+                            amountRef.current?.setFocus();
+                            dispatch({
+                                type: "UPDATE",
+                                field: "amount",
+                                value: Math.max(1, Math.min(99, formState.amount + 1)),
+                            })
+                        }}
+                    ><IonIcon size='small' icon={addSharp} /></IonButton>
 
                 </div>
 
@@ -123,7 +140,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
             </IonButton>
 
 
-        </motion.div>
+        </motion.div >
 
     </>)
 

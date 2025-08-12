@@ -1,6 +1,6 @@
-import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { IonBackButton, IonBadge, IonButtons, IonCard, IonCheckbox, IonChip, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
-import { addSharp, search } from 'ionicons/icons';
+import { addSharp, cameraOutline, filter, search } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import WalrusBucket from '../../walrus_bucket.jpg';
@@ -13,6 +13,9 @@ import Page1_AddItemModal from './modal/Page1_AddItemModal';
 const BaggageDetails: React.FC = () => {
 
 
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   const modal = useRef<HTMLIonModalElement>(null);
 
@@ -137,16 +140,14 @@ const BaggageDetails: React.FC = () => {
             </IonButtons>
             <IonTitle>{baggageData?.name || "Unnamed Baggage"}</IonTitle>
           </IonToolbar>
+          <IonToolbar>
+            <IonSearchbar debounce={250} value={searchTerm} onIonInput={(event) => handleInput(event)}></IonSearchbar>
+          </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonHeader >
-            <IonToolbar>
-              <IonSearchbar debounce={250} value={searchTerm} onIonInput={(event) => handleInput(event)}></IonSearchbar>
-            </IonToolbar>
-          </IonHeader>
           <IonList class='ion-padding-horizontal '>
             {results?.map((result, key) => (
-              <>
+              <IonCard key={key}>
                 <IonGrid key={key} >
                   <IonCheckbox justify='space-between' alignment='center' style={{ width: "100%" }}>
 
@@ -200,7 +201,7 @@ const BaggageDetails: React.FC = () => {
                   </IonCheckbox>
 
                 </IonGrid>
-              </>
+              </IonCard>
             ))}
           </IonList>
 
@@ -216,50 +217,96 @@ const BaggageDetails: React.FC = () => {
             handleBehavior="none"
             canDismiss={true}
             onWillDismiss={() => { /* Dismiss */ }}
-            
+            keepContentsMounted={true}
             initialBreakpoint={1}
             breakpoints={[0, 1]}
+            style={{ '--background': "transparent" }}
             animated
           >
-            <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
+            <div className='item-preview-card'>
+              <IonBadge className='item-preview-amount'>x{formState.amount}</IonBadge>
 
-            <IonHeader >
-              <IonToolbar>
-                <IonTitle>New Item</IonTitle>
 
-              </IonToolbar>
-              <IonProgressBar value={formState.progress}></IonProgressBar>
-            </IonHeader>
-            <IonContent className="ion-padding">
+              <video
+                ref={videoRef}
+                id="videoRef"
+                className='camera-preview'
+                muted
+                playsInline
+                style={{ display: isStreaming ? 'block' : 'none', }}
+              >
+              </video>
 
-              <AnimatePresence mode="wait">
-                {modalPage === 1 && (
-                  <Page1_AddItemModal
-                  modal={modal}
-                  dispatch={dispatch}
-                  formState={formState}
-                  setModalPage={setModalPage}
-                  />
-                )}
+              {
+                !formState.image ?
+                  <div className='camera-preview' style={{ display: isStreaming ? 'none' : 'flex', }}>
+                    <IonIcon size='large' icon={cameraOutline}></IonIcon>
 
-                {modalPage === 2 && (
-                  <Page2_AddItemModal
-                  modal={modal}
-                  dispatch={dispatch}
-                  formState={formState}
-                  setModalPage={setModalPage}
-                  />
-                )}
+                  </div> :
+                  <IonImg src={formState.image ? 'data:image/jpeg;base64,' + formState.image : ""} className='camera-preview' style={{ display: isStreaming ? 'none' : 'flex', }}>
+                  </IonImg>
+              }
 
-                {modalPage === 3 && (
-                  <></>
-                )}
-              </AnimatePresence>
-            </IonContent>
+
+
+              <div className='item-preview-details'>
+                <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
+                  <IonLabel className='item-preview-title'>{formState.name || "Item Name"}</IonLabel>
+                  <IonChip className='item-preview-price'>100₺</IonChip>
                 </div>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
+                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided. No provided. No note provided. No note provided. "}</IonLabel>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minWidth: 'min-content' }}>
+                    <IonCheckbox> </IonCheckbox>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '340px', }}>
+
+              <IonHeader style={{ 'background': "var(--ion-card-background)", borderRadius: "15px 15px 0px 0px" }}>
+                <IonToolbar style={{ borderRadius: "14px 14px 0px 0px" }}>
+                  <IonTitle>New Item</IonTitle>
+
+                </IonToolbar>
+                <IonProgressBar value={formState.progress}></IonProgressBar>
+              </IonHeader>
+              <IonContent className="ion-padding">
+
+                <AnimatePresence mode="wait">
+                  {modalPage === 1 && (
+                    <Page1_AddItemModal
+                      modal={modal}
+                      dispatch={dispatch}
+                      formState={formState}
+                      setModalPage={setModalPage}
+                    />
+                  )}
+
+                  {modalPage === 2 && (
+                    <Page2_AddItemModal
+                      modal={modal}
+                      dispatch={dispatch}
+                      formState={formState}
+                      setModalPage={setModalPage}
+                      videoRef={videoRef}
+                      setIsStreaming={setIsStreaming}
+                      isStreaming={isStreaming}
+                    />
+                  )}
+
+                  {modalPage === 3 && (
+                    <></>
+                  )}
+                </AnimatePresence>
+              </IonContent>
+            </div>
+
           </IonModal>
         </IonContent>
-      </IonPage>
+      </IonPage >
 
     </>
   );

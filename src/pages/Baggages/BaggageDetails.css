@@ -9,3 +9,87 @@ ion-toolbar .sc-ion-searchbar-ios-h {
  .md .ion-padding-horizontal {
     background-color: var(--ion-backgroun-color) !important;
 }
+
+
+.item-preview-card{
+    position: sticky;
+    background-color: var(--ion-card-background);
+    width: calc(100% - 14px);
+    height: 105px;
+    border-radius: 14px;
+    margin-bottom: 7px;
+    margin-left: 7px;
+    z-index: 999;
+    box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset;
+    
+    padding: 6px 12px 6px 6px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.camera-preview{
+    position: relative;
+    width: auto;
+    min-width: min-content;
+    aspect-ratio: 3/4;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--ion-background-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    object-fit: cover;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5) inset;
+}
+
+.item-preview-details{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 8px;
+    height: 100%;
+
+}
+
+.item-preview-amount{
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 999;
+    border-radius: 5px;
+    min-height: 16px;
+    padding: 0px 4px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item-preview-title{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ion-text-color);
+    margin-left: 0px;
+}
+.item-preview-note{
+    font-size: 12px;
+    color: var(--ion-text-color);
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    display: -webkit-box;
+    line-clamp: 3; /* number of lines to show */
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.item-preview-price{
+    font-size: 12px;
+    color: var(--ion-color-step-700);
+    padding: 0px 8px;
+    min-height: 20px;
+    
+}
