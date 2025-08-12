@@ -30,6 +30,14 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
     //     }, 100); // wait a bit to ensure modal is fully visible
     // }, []);
 
+    useEffect(() => {
+        dispatch({
+            type: "UPDATE",
+            field: "title",
+            value: "Add a new Item",
+        })
+    }, [])
+
     return (<>
 
         <motion.div

@@ -4,7 +4,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.input-bottom {
+.input-bottom, .textarea-bottom{
   border: none !important;
   position: absolute;
   right: 0px;

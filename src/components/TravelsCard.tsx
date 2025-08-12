@@ -13,15 +13,15 @@ interface ComponentProps {
 const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
   const Popover = () =>
     <>
-        <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button'  onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */}}>
-          <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-          <IonLabel color={'primary'}>Edit</IonLabel>
-        </IonButton>
+      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
+        <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
+        <IonLabel color={'primary'}>Edit</IonLabel>
+      </IonButton>
 
-        <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block'  onClick={() => { /*alert("Oh no el deletianzo!\n\nItalia Mentzionate!!!"); */ pop_uuid("travels", travel.uuid) }}>
-          <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-          <IonLabel color={'danger'}>Delete</IonLabel>
-        </IonButton>
+      <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={() => { /*alert("Oh no el deletianzo!\n\nItalia Mentzionate!!!"); */ pop_uuid("travels", travel.uuid) }}>
+        <IonIcon slot="start" color={"danger"} icon={trashSharp} />
+        <IonLabel color={'danger'}>Delete</IonLabel>
+      </IonButton>
     </>
 
   const [present, dismiss] = useIonPopover(Popover, {
@@ -34,40 +34,38 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
 
   const onStart = (e: any) => {
     pressTimeout.current = setTimeout(() => {
-      const modEvent = {
-        ...e,
-        target: (e.target as HTMLElement).id === "trap" && (e.target as HTMLElement).parentElement
+      const target =
+        (e.target as HTMLElement).id === "trap" && (e.target as HTMLElement).parentElement
           ? (e.target as HTMLElement).parentElement
-          : e.target
-      };
+          : (e.target as HTMLElement);
 
       //console.log('long press');
       if (card.current) {
 
         present({
+          event: { ...e, target }, // OR just use e but override .target
           translucent: false,
           showBackdrop: true,
           dismissOnSelect: true,
-          size: 'auto',
-          event: modEvent, // needed for positioning
+          size: 'auto'
         });
 
       }
     }, PRESS_DURATION);
   };
-const MOVE_CANCEL_THRESHOLD = 6; // px
+  const MOVE_CANCEL_THRESHOLD = 6; // px
 
   const onMove = (detail: GestureDetail) => {
-  const movedX = Math.abs(detail.deltaX);
-  const movedY = Math.abs(detail.deltaY);
+    const movedX = Math.abs(detail.deltaX);
+    const movedY = Math.abs(detail.deltaY);
 
-  if (movedX > MOVE_CANCEL_THRESHOLD || movedY > MOVE_CANCEL_THRESHOLD) {
-    if (pressTimeout.current) {
-      clearTimeout(pressTimeout.current);
-      pressTimeout.current = null;
+    if (movedX > MOVE_CANCEL_THRESHOLD || movedY > MOVE_CANCEL_THRESHOLD) {
+      if (pressTimeout.current) {
+        clearTimeout(pressTimeout.current);
+        pressTimeout.current = null;
+      }
     }
-  }
-};
+  };
 
   const onEnd = () => {
     if (pressTimeout.current) {
@@ -101,7 +99,7 @@ const MOVE_CANCEL_THRESHOLD = 6; // px
           <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> • <BaggleDaysLabel date={travel.date} /></IonCardSubtitle>
 
           <IonCardTitle className='flex-middle'>
-            {travel.name} 
+            {travel.name}
           </IonCardTitle>
 
         </IonCardHeader>

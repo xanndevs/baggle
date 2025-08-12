@@ -77,6 +77,27 @@ export async function retrive_bag(uuid: string): Promise<Bag | null> {
   return bag;
 }
 
+export async function push_item_to_bag (bag_uuid: string, item_uuid: string): Promise<void> {
+
+  await initStorage();
+
+  const baggages: Bag[] = (await store.get("baggages")) ?? [];
+
+  const bagIndex = baggages.findIndex((b) => b.uuid === bag_uuid);
+  if (bagIndex === -1) return;
+
+  // Initialize items array if missing
+  if (!Array.isArray(baggages[bagIndex].items)) {
+    baggages[bagIndex].items = [];
+  }
+
+  if (!baggages[bagIndex].items.includes(item_uuid)) {
+    baggages[bagIndex].items.push(item_uuid);
+    await store.set("baggages", baggages);
+    emitter.emit("baggages", baggages);
+  }
+}
+
 
 
 export async function remove(key: string): Promise<void> {

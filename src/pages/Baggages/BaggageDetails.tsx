@@ -1,6 +1,6 @@
 import { IonBackButton, IonBadge, IonButtons, IonCard, IonCheckbox, IonChip, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
-import { addSharp, cameraOutline, filter, search } from 'ionicons/icons';
+import { addSharp, cameraOutline, filter, imageOutline, search } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import WalrusBucket from '../../walrus_bucket.jpg';
@@ -14,21 +14,23 @@ const BaggageDetails: React.FC = () => {
 
 
 
+  const { uuid } = useParams<{ uuid: string }>();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const modal = useRef<HTMLIonModalElement>(null);
+  const [modalPage, setModalPage] = useState(1);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  const modal = useRef<HTMLIonModalElement>(null);
 
-  const [modalPage, setModalPage] = useState(1);
-
-
+  //#region Form State
   type FormAction =
     | { type: "UPDATE"; field: keyof Item; value: string | number }
     | { type: "RESET" };
   interface FormState extends Item {
     progress: number;
     nameError: string;
+    title: string;
   }
+
   const defaults: FormState = {
     uuid: "",
     name: "",
@@ -41,6 +43,7 @@ const BaggageDetails: React.FC = () => {
 
     progress: 0.02,
     nameError: "Item name must be between 3 and 20 characters long.",
+    title: "Add a new Item",
   };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -60,77 +63,88 @@ const BaggageDetails: React.FC = () => {
     ...defaults
   })
 
-
-
   const setModal = () => {
     dispatch({
       type: "RESET",
     })
   };
-
-
+  //#endregion
 
 
 
   const [baggageData, setBaggageData] = useState<Bag>();
-
-
-  const { uuid } = useParams<{ uuid: string }>();
-
-
-
   const [data, setData] = useState<Item[]>();
-  const [results, setResults] = useState<Item[]>();
+  // const [results, setResults] = useState<Item[]>();
+
+const baggageDataRef = useRef<Bag | undefined>(undefined);
+
+useEffect(() => {
+  baggageDataRef.current = baggageData;
+}, [baggageData]);
 
 
-  useEffect(() => {
-    let isMounted = true;
+  //#region Storage Initialization
+useEffect(() => {
+  let isMounted = true;
 
-    const setup = async () => {
-      const bag = await retrive_bag(uuid);
-      const items = await retrive_bag_items(uuid);
+  const setup = async () => {
+    const bag = await retrive_bag(uuid);
+    const items = await retrive_bag_items(uuid);
 
-      if (isMounted && bag) { setBaggageData(bag); }
-      if (isMounted && items) { setData(items); setResults(items); }
-    };
+    if (isMounted && bag) {
+      setBaggageData(bag);
+      baggageDataRef.current = bag; // sync ref too
+    }
+    if (isMounted && items && baggageDataRef.current) {
+      setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
+    }
+  };
 
-    setup();
+  setup();
 
-    const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
-      if (isMounted) {
-        console.log("Baggage data updated:", baggages);
-        setBaggageData(baggages.find((elem) => elem.uuid === uuid));
-      }
-    });
+  const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
+    if (isMounted) {
+      const bag = baggages.find((elem) => elem.uuid === uuid);
+      console.log("Baggage data updated:", baggages);
+      setBaggageData(bag);
+      baggageDataRef.current = bag;
+    }
+  });
 
-    const unsub_items = subscribe<Item[]>('items', (items) => {
-      if (isMounted && items) {
-        setData(items.filter((item) => baggageData?.items.includes(item.uuid)));
-        console.log("Items data updated:", items);
-      }
-    });
+  const unsub_items = subscribe<Item[]>('items', (items) => {
+    if (isMounted && items && baggageDataRef.current) {
+      setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
+      console.log("Items data updated:", items);
+    }
+  });
 
-    return () => {
-      isMounted = false;
-      unsub_baggages();
-      unsub_items();
-    };
-  }, []);
+  return () => {
+    isMounted = false;
+    unsub_baggages();
+    unsub_items();
+  };
+}, [uuid]); // also add uuid here
 
+  //#endregion
 
 
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const handleInput = (event: Event) => {
 
-    const target = event.target as HTMLIonSearchbarElement;
-    if (target) {
-      setSearchTerm(target.value!);
-      const query = target.value!.toLowerCase();
-      setResults(data?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
-    }
-  };
+
+  //#region Search Functionality
+  // const handleInput = (event: Event) => {
+
+  //   const target = event.target as HTMLIonSearchbarElement;
+  //   if (target) {
+  //     setSearchTerm(target.value!);
+  //     const query = target.value!.toLowerCase();
+  //     setResults(data?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
+  //   }
+  // };
+  //#endregion
+
 
   return (
     <>
@@ -142,68 +156,101 @@ const BaggageDetails: React.FC = () => {
             </IonButtons>
             <IonTitle>{baggageData?.name || "Unnamed Baggage"}</IonTitle>
           </IonToolbar>
-          <IonToolbar>
+          {/* <IonToolbar>
             <IonSearchbar debounce={250} value={searchTerm} onIonInput={(event) => handleInput(event)}></IonSearchbar>
-          </IonToolbar>
+          </IonToolbar> */}
         </IonHeader>
         <IonContent fullscreen>
-          <IonList class='ion-padding-horizontal '>
-            {results?.map((result, key) => (
-              <IonCard key={key}>
-                <IonGrid key={key} >
-                  <IonCheckbox justify='space-between' alignment='center' style={{ width: "100%" }}>
+          <IonList class=''>
+            {data?.map((result, key) => (
+              <div className='item-preview-card' key={key}>
+              <IonBadge className='item-preview-amount'>x{result.amount}</IonBadge>
+              {
+                !result.image ?
+                  <div className='camera-preview' style={{ display: 'flex', }}>
+                    <IonIcon size='large' icon={imageOutline}></IonIcon>
+
+                  </div> :
+                  <IonImg src={result.image ? 'data:image/jpeg;base64,' + result.image : ""} className='camera-preview' style={{ display: 'flex', }}>
+                  </IonImg>
+              }
 
 
-                    <IonRow class='ion-align-items-start' >
-                      <IonCol size='auto' >
-                        <IonImg style={{ width: "45px", aspectRatio: "0.75", objectFit: "cover" }} src={result.image ?? WalrusBucket}></IonImg>
-                        <IonBadge color={'primary'} style={{ position: "absolute", bottom: "0px", right: "0px", opacity: "0.85" }} >
-                          {result.amount ? `x${result.amount}` : undefined}
-                        </IonBadge>
-                      </IonCol>
-                      <IonCol class='ion-no-padding'>
 
-                        <IonRow class='ion-align-items-center' >
-                          <IonCol size='auto'>
-                            <IonTitle class='ion-text-start ion-no-padding' size='small'>
-                              {result.name}
-                            </IonTitle>
-                          </IonCol>
+              <div className='item-preview-details'>
+                <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
+                  <IonLabel className='item-preview-title'>{result.name || "Unnamed Item"}</IonLabel>
+                  {
+                    result.price ?
+                  <IonChip className='item-preview-price'>{result.price}₺</IonChip> : undefined
+                  }
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
+                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{result.note || "No note provided. "}</IonLabel>
 
-                          <IonCol>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
+                    <IonCheckbox> </IonCheckbox>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+              // <IonCard key={key}>
+              //   <IonGrid key={key} >
+              //     <IonCheckbox justify='space-between' alignment='center' style={{ width: "100%" }}>
 
 
-                            <IonBadge color={"success"}>
-                              {
-                                //#region WIP
-                                /**
-                                 * Add a currency provider and replace the currency with the user provided currency
-                                */
-                                //#regionend
-                              }
-                              {result.price ? `${result.price}₺` : undefined}
-                            </IonBadge>&nbsp;
+              //       <IonRow class='ion-align-items-start' >
+              //         <IonCol size='auto' >
+              //           <IonImg style={{ width: "45px", aspectRatio: "0.75", objectFit: "cover" }} src={result.image ?? WalrusBucket}></IonImg>
+              //           <IonBadge color={'primary'} style={{ position: "absolute", bottom: "0px", right: "0px", opacity: "0.85" }} >
+              //             {result.amount ? `x${result.amount}` : undefined}
+              //           </IonBadge>
+              //         </IonCol>
+              //         <IonCol class='ion-no-padding'>
 
-                          </IonCol>
-                        </IonRow>
+              //           <IonRow class='ion-align-items-center' >
+              //             <IonCol size='auto'>
+              //               <IonTitle class='ion-text-start ion-no-padding' size='small'>
+              //                 {result.name}
+              //               </IonTitle>
+              //             </IonCol>
 
-                        <IonRow>
-                          <IonCol>
-                            <IonLabel>
-                              {result.note ?? undefined}
-                            </IonLabel>
-                          </IonCol>
-                        </IonRow>
+              //             <IonCol>
 
-                      </IonCol>
-                      <IonCol size='auto' class='ion-align-self-center'>
-                      </IonCol>
-                    </IonRow>
 
-                  </IonCheckbox>
+              //               <IonBadge color={"success"}>
+              //                 {
+              //                   //#region WIP
+              //                   /**
+              //                    * Add a currency provider and replace the currency with the user provided currency
+              //                   */
+              //                   //#regionend
+              //                 }
+              //                 {result.price ? `${result.price}₺` : undefined}
+              //               </IonBadge>&nbsp;
 
-                </IonGrid>
-              </IonCard>
+              //             </IonCol>
+              //           </IonRow>
+
+              //           <IonRow>
+              //             <IonCol>
+              //               <IonLabel>
+              //                 {result.note ?? undefined}
+              //               </IonLabel>
+              //             </IonCol>
+              //           </IonRow>
+
+              //         </IonCol>
+              //         <IonCol size='auto' class='ion-align-self-center'>
+              //         </IonCol>
+              //       </IonRow>
+
+              //     </IonCheckbox>
+
+              //   </IonGrid>
+              // </IonCard>
             ))}
           </IonList>
 
@@ -257,7 +304,7 @@ const BaggageDetails: React.FC = () => {
                   <IonChip className='item-preview-price'>100₺</IonChip>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
-                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided. No provided. No note provided. No note provided. "}</IonLabel>
+                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided."}</IonLabel>
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
                     <IonCheckbox> </IonCheckbox>
@@ -270,7 +317,7 @@ const BaggageDetails: React.FC = () => {
 
               <IonHeader style={{ 'background': "var(--ion-card-background)", borderRadius: "15px 15px 0px 0px" }}>
                 <IonToolbar style={{ borderRadius: "14px 14px 0px 0px" }}>
-                  <IonTitle>New Item</IonTitle>
+                  <IonTitle>{formState.title}</IonTitle>
 
                 </IonToolbar>
                 <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -296,6 +343,7 @@ const BaggageDetails: React.FC = () => {
                       videoRef={videoRef}
                       setIsStreaming={setIsStreaming}
                       isStreaming={isStreaming}
+                      bag_uuid={uuid}
                     />
                   )}
 
