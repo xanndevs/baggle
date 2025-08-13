@@ -9,6 +9,7 @@ import './Baggages.css';
 import Page2_AddItemModal from './modal/Page2_AddItemModal';
 import { get, retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
 import Page1_AddItemModal from './modal/Page1_AddItemModal';
+import ItemCard from './ItemCard';
 
 const BaggageDetails: React.FC = () => {
 
@@ -74,46 +75,46 @@ const BaggageDetails: React.FC = () => {
     baggageDataRef.current = baggageData;
   }, [baggageData]);
   //#region Storage Init
-useEffect(() => {
-  let isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-  const setup = async () => {
-    const bag = await retrive_bag(uuid);
-    const items = await retrive_bag_items(uuid);
+    const setup = async () => {
+      const bag = await retrive_bag(uuid);
+      const items = await retrive_bag_items(uuid);
 
-    if (isMounted && bag) {
-      setBaggageData(bag);
-      baggageDataRef.current = bag; // sync ref too
-    }
-    if (isMounted && items && baggageDataRef.current) {
-      setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
-    }
-  };
+      if (isMounted && bag) {
+        setBaggageData(bag);
+        baggageDataRef.current = bag; // sync ref too
+      }
+      if (isMounted && items && baggageDataRef.current) {
+        setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
+      }
+    };
 
-  setup();
+    setup();
 
-  const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
-    if (isMounted) {
-      const bag = baggages.find((elem) => elem.uuid === uuid);
-      console.log("Baggage data updated:", baggages);
-      setBaggageData(bag);
-      baggageDataRef.current = bag;
-    }
-  });
+    const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
+      if (isMounted) {
+        const bag = baggages.find((elem) => elem.uuid === uuid);
+        console.log("Baggage data updated:", baggages);
+        setBaggageData(bag);
+        baggageDataRef.current = bag;
+      }
+    });
 
-  const unsub_items = subscribe<Item[]>('items', (items) => {
-    if (isMounted && items && baggageDataRef.current) {
-      setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
-      console.log("Items data updated:", items);
-    }
-  });
+    const unsub_items = subscribe<Item[]>('items', (items) => {
+      if (isMounted && items && baggageDataRef.current) {
+        setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
+        console.log("Items data updated:", items);
+      }
+    });
 
-  return () => {
-    isMounted = false;
-    unsub_baggages();
-    unsub_items();
-  };
-}, [uuid]); // also add uuid here
+    return () => {
+      isMounted = false;
+      unsub_baggages();
+      unsub_items();
+    };
+  }, [uuid]); // also add uuid here
 
   //#endregion
 
@@ -122,16 +123,16 @@ useEffect(() => {
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
   const [searchResults, setSearchResults] = useState<Item[]>([])
   //#region Search Functionality
-    const handleInput = () => {
-      const inputValue = searchbar.current?.value || ""
-      setSearchTerm(inputValue)
-    }
+  const handleInput = () => {
+    const inputValue = searchbar.current?.value || ""
+    setSearchTerm(inputValue)
+  }
 
-    useEffect(() => {
-      if (!data) {setSearchResults([]); return;}
-      const filtered = data.filter((elem) => elem.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-      setSearchResults(filtered);
-    }, [searchTerm, data])
+  useEffect(() => {
+    if (!data) { setSearchResults([]); return; }
+    const filtered = data.filter((elem) => elem.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+    setSearchResults(filtered);
+  }, [searchTerm, data])
   //#endregion
 
 
@@ -147,102 +148,15 @@ useEffect(() => {
           </IonToolbar>
           <IonToolbar>
             <IonSearchbar aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
-          </IonToolbar> 
+          </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
           <IonList class='items-list'>
             {searchResults?.map((result, key) => (
-              <IonCard className='item-card' key={key} button >
-
-              <div className='item-preview-card-content' >
-              <IonBadge className='item-preview-amount'>x{result.amount}</IonBadge>
-              {
-                !result.image ?
-                <div className='camera-preview' style={{ display: 'flex', }}>
-                    <IonIcon size='large' icon={imageOutline}></IonIcon>
-
-                  </div> :
-                  <IonImg src={result.image ? 'data:image/jpeg;base64,' + result.image : ""} className='camera-preview' style={{ display: 'flex', }}>
-                  </IonImg>
-              }
-
-
-
-              <div className='item-preview-details'>
-                <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
-                  <IonLabel className='item-preview-title'>{result.name || "Unnamed Item"}</IonLabel>
-                  {
-                    result.price ?
-                    <IonChip className='item-preview-price'>{result.price}₺</IonChip> : undefined
-                  }
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
-                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{result.note || "No note provided. "}</IonLabel>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
-                    <IonCheckbox> </IonCheckbox>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-                    </IonCard>
-
-              // <IonCard key={key}>
-              //   <IonGrid key={key} >
-              //     <IonCheckbox justify='space-between' alignment='center' style={{ width: "100%" }}>
-
-
-              //       <IonRow class='ion-align-items-start' >
-              //         <IonCol size='auto' >
-              //           <IonImg style={{ width: "45px", aspectRatio: "0.75", objectFit: "cover" }} src={result.image ?? WalrusBucket}></IonImg>
-              //           <IonBadge color={'primary'} style={{ position: "absolute", bottom: "0px", right: "0px", opacity: "0.85" }} >
-              //             {result.amount ? `x${result.amount}` : undefined}
-              //           </IonBadge>
-              //         </IonCol>
-              //         <IonCol class='ion-no-padding'>
-
-              //           <IonRow class='ion-align-items-center' >
-              //             <IonCol size='auto'>
-              //               <IonTitle class='ion-text-start ion-no-padding' size='small'>
-              //                 {result.name}
-              //               </IonTitle>
-              //             </IonCol>
-
-              //             <IonCol>
-
-
-              //               <IonBadge color={"success"}>
-              //                 {
-              //                   //#region WIP
-              //                   /**
-              //                    * Add a currency provider and replace the currency with the user provided currency
-              //                   */
-              //                   //#regionend
-              //                 }
-              //                 {result.price ? `${result.price}₺` : undefined}
-              //               </IonBadge>&nbsp;
-
-              //             </IonCol>
-              //           </IonRow>
-
-              //           <IonRow>
-              //             <IonCol>
-              //               <IonLabel>
-              //                 {result.note ?? undefined}
-              //               </IonLabel>
-              //             </IonCol>
-              //           </IonRow>
-
-              //         </IonCol>
-              //         <IonCol size='auto' class='ion-align-self-center'>
-              //         </IonCol>
-              //       </IonRow>
-
-              //     </IonCheckbox>
-
-              //   </IonGrid>
-              // </IonCard>
+              <ItemCard
+                key={key}
+                result={result}
+              />
             ))}
           </IonList>
 
@@ -293,7 +207,7 @@ useEffect(() => {
               <div className='item-preview-details'>
                 <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
                   <IonLabel className='item-preview-title'>{formState.name || "Item Name"}</IonLabel>
-                  <IonChip className='item-preview-price'>100₺</IonChip>
+                  <IonChip className='item-preview-price'>{`${formState.price || 0}₺`}</IonChip>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
                   <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided."}</IonLabel>
@@ -308,7 +222,7 @@ useEffect(() => {
             <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '350px', }}>
 
               <IonHeader style={{ 'background': "var(--ion-card-background)", borderRadius: "15px 15px 0px 0px" }}>
-                <IonToolbar style={{ borderRadius: "14px 14px 0px 0px" }}>
+                <IonToolbar style={{ borderRadius: "var(--ion-border-radius) var(--ion-border-radius) 0px 0px" }}>
                   <IonTitle>{formState.title}</IonTitle>
 
                 </IonToolbar>

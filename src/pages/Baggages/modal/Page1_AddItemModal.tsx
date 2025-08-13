@@ -16,6 +16,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
 
     const firstInput = useRef<HTMLIonInputElement>(null);
     const amountRef = useRef<HTMLIonInputElement>(null);
+    const priceRef = useRef<HTMLIonInputElement>(null);
 
     const pageVariants = {
         initial: { opacity: 0, x: 50 },
@@ -88,7 +89,8 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     }}
                 />
                 <br></br>
-                <div className='number-border' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'center' }}>
+                    <div className='number-border' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end' }}>
                     <IonInput
                         label="Item Amount"
                         labelPlacement="stacked"
@@ -139,6 +141,31 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                             })
                         }}
                     ><IonIcon size='small' icon={addSharp} /></IonButton>
+
+                </div>
+
+                <div className='' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end' }}>
+                    <IonInput
+                        label="Item Price"
+                        labelPlacement="stacked"
+                        fill="outline"
+                        className='bordered'
+                        color={'secondary'}
+                        value={formState.price}
+                        ref={priceRef}
+                        min={0}
+                        type='number'
+                        onIonInput={(e) => {
+                            const val = String(e.target.value);
+                            const parsed = val === '' ? 0 : parseFloat(parseFloat(val).toFixed(3));
+                            dispatch({
+                                type: "UPDATE",
+                                field: "price",
+                                value: Math.max(0,  isNaN(parsed) ? 0 : parsed),
+                            })
+                        }}
+                    />
+                </div>
 
                 </div>
 

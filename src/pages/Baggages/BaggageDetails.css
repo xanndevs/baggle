@@ -6,9 +6,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     padding-bottom: 1px;
 }
 
- .md .ion-padding-horizontal {
-    background-color: var(--ion-backgroun-color) !important;
-}
+
 
 
 .item-preview-card{
@@ -16,7 +14,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     background-color: var(--ion-card-background);
     width: calc(100% - 14px);
     height: 105px;
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
     margin: 0px;
     margin-bottom: 7px;
     margin-left: 7px;
@@ -35,7 +33,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     background-color: var(--ion-card-background);
     width: calc(100% - 14px);
     height: 105px;
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
     margin: 0px;
     margin-bottom: 7px;
     margin-left: 7px;
@@ -53,7 +51,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     background-color: var(--ion-card-background);
     width: 100%;
     height: 105px;
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
     margin: 0px;
 
     z-index: 999;
@@ -71,7 +69,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     min-width: min-content;
     aspect-ratio: 3/4;
     height: 100%;
-    border-radius: 8px;
+    border-radius: calc(var(--ion-border-radius) - 6px);
     overflow: hidden;
     background-color: var(--ion-background-color);
 

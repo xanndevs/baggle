@@ -1,6 +1,6 @@
 .number-border {
     border: 1px solid var(--ion-color-primary);
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
 
 }
 .number-button {

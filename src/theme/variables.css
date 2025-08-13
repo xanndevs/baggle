@@ -1,3 +1,8 @@
+:root{
+  --ion-border-radius: 10px;
+
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -14,12 +19,15 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 .bordered{
-  border-radius: 14px;
+  border-radius: var(--ion-border-radius);
   border: 1px solid var(--ion-color-primary);
   --padding-end: 10px;
   --padding-start: 10px;
   
 }
+
+
+
 /** Ionic CSS Variables **/
 :root {
   /** primary **/

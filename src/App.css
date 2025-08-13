@@ -1,6 +1,6 @@
 .floating-tabs {
     --background: var(--ion-card-background);
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
     margin: 0px 8px calc(4px + var(--ion-safe-area-bottom));
     padding: 6px 0px;
 }
@@ -12,6 +12,6 @@
 }
 
 ion-tab-button{
-    border-radius: 14px;
+    border-radius: var(--ion-border-radius);
 
 }
