@@ -143,7 +143,7 @@ export async function pop_uuid(key: string, value: any): Promise<void> {
   emitter.emit(key, existingData);
 }
 
-export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partial<Bag> | Partial<Travel>, push = false): Promise<void> {
+export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partial<Bag> | Partial<Travel>): Promise<void> {
   await initStorage();
 
   const [storeKey, uuid] = fullKey.split(".");
@@ -167,8 +167,7 @@ export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partia
   }
   else if (storeKey === "travels") {
     const original = existingData[index] as Travel;
-    if (push) original.bags.push(updates.uuid as string);
-    else existingData[index] = { ...original, ...(updates as Partial<Travel>) };
+    existingData[index] = { ...original, ...(updates as Partial<Travel>) };
   }
   else {
     throw new Error("Unknown storeKey: " + storeKey);
