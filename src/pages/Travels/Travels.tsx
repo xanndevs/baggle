@@ -1,21 +1,12 @@
-import React, { act, useReducer, useRef, useState } from 'react';
 import {
-  IonContent, IonFab, IonFabButton, IonFabList, IonHeader, IonIcon, IonModal, IonPage, IonTitle, IonToolbar, IonButtons,
-  IonButton,
-  IonInput,
-  IonProgressBar,
-  IonDatetime,
-  IonDatetimeButton,
-  IonFooter,
+  IonContent, IonFab, IonFabButton,
+  IonHeader, IonIcon, IonModal, IonPage, IonTitle, IonToolbar
 } from '@ionic/react';
-import TravelsCard from '../../components/TravelsCard';
-import './Travels.css';
 import { addSharp } from 'ionicons/icons';
-import { motion, AnimatePresence, number } from 'framer-motion';
-import { push } from '../../utils/storage';
+import React, { useReducer, useRef } from 'react';
+import TravelsCard from '../../components/TravelsCard';
 import AddTravelModal from './modal/AddTravelModal';
-import Page2 from './modal/page2';
-import Page3 from './modal/page3';
+import './Travels.css';
 
 interface ComponentProps { travels: Travel[] }
 
@@ -30,7 +21,7 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
     progress: number,
   };
   type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | Date }
     | { type: "RESET" };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -69,11 +60,11 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
 
 
-  const setModal = () => {
-    dispatch({
-      type: "RESET",
-    })
-  };
+  // const setModal = () => {
+  //   dispatch({
+  //     type: "RESET",
+  //   })
+  // };
 
   return (
     <IonPage>
@@ -151,7 +142,7 @@ function sortTravels(travels: Travel[]): Travel[] {
   });
 }
 
-function calculateRemainingDays(dateStr: string | null | undefined): number {
+function calculateRemainingDays(dateStr: string | Date | null | undefined): number {
   if (!dateStr) return 0;  // If the date is invalid, return 0 (or handle it however you want)
 
   const date = new Date(dateStr);

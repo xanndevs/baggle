@@ -1,15 +1,14 @@
-import { IonBackButton, IonBadge, IonButtons, IonCard, IonCheckbox, IonChip, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
-import { addSharp, cameraOutline, filter, imageOutline, search } from 'ionicons/icons';
+import { addSharp, cameraOutline } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import WalrusBucket from '../../walrus_bucket.jpg';
+import { retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
 import './BaggageDetails.css';
 import './Baggages.css';
-import Page2_AddItemModal from './modal/Page2_AddItemModal';
-import { get, retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
-import Page1_AddItemModal from './modal/Page1_AddItemModal';
 import ItemCard from './ItemCard';
+import Page1_AddItemModal from './modal/Page1_AddItemModal';
+import Page2_AddItemModal from './modal/Page2_AddItemModal';
 
 const BaggageDetails: React.FC = () => {
 
@@ -20,12 +19,12 @@ const BaggageDetails: React.FC = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   //#region Form State
   type FormAction =
-    | { type: "UPDATE"; field: keyof Item; value: string | number }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | undefined }
     | { type: "RESET" };
   interface FormState extends Item {
-    progress: number;
-    nameError: string;
-    title: string;
+    progress?: number;
+    nameError?: string;
+    title?: string;
   }
 
   const defaults: FormState = {
@@ -60,11 +59,11 @@ const BaggageDetails: React.FC = () => {
     ...defaults
   })
 
-  const setModal = () => {
-    dispatch({
-      type: "RESET",
-    })
-  };
+  // const setModal = () => {
+  //   dispatch({
+  //     type: "RESET",
+  //   })
+  // };
   //#endregion
 
   const baggageDataRef = useRef<Bag | undefined>(undefined);
@@ -86,8 +85,8 @@ const BaggageDetails: React.FC = () => {
         setBaggageData(bag);
         baggageDataRef.current = bag; // sync ref too
       }
-      if (isMounted && items && baggageDataRef.current) {
-        setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
+      if (isMounted && items && baggageDataRef.current && Array.isArray(baggageDataRef.current.items)) {
+        setData(items.filter((item) => baggageDataRef.current && baggageDataRef.current.items.includes(item.uuid)));
       }
     };
 
@@ -96,7 +95,7 @@ const BaggageDetails: React.FC = () => {
     const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
       if (isMounted) {
         const bag = baggages.find((elem) => elem.uuid === uuid);
-        console.log("Baggage data updated:", baggages);
+        //console.log("Baggage data updated:", baggages);
         setBaggageData(bag);
         baggageDataRef.current = bag;
       }
@@ -105,7 +104,7 @@ const BaggageDetails: React.FC = () => {
     const unsub_items = subscribe<Item[]>('items', (items) => {
       if (isMounted && items && baggageDataRef.current) {
         setData(items.filter((item) => baggageDataRef.current!.items.includes(item.uuid)));
-        console.log("Items data updated:", items);
+        //console.log("Items data updated:", items);
       }
     });
 
@@ -246,7 +245,6 @@ const BaggageDetails: React.FC = () => {
                 <AnimatePresence mode="wait">
                   {modalPage === 0 && (
                     <Page1_AddItemModal
-                      modal={modal}
                       dispatch={dispatch}
                       formState={formState}
                       setModalPage={setModalPage}

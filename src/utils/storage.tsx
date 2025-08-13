@@ -39,14 +39,14 @@ async function initStorage() {
   }
 }
 
-export async function set(key: string, value: any): Promise<void> {
+export async function set(key: string, value: Item | Bag | Travel): Promise<void> {
   await initStorage();
   await store.set(key, value);
   emitter.emit(key, value);
 
 }
 
-export async function get<T = any>(key: string): Promise<T | null> {
+export async function get<T = Item | Bag | Travel>(key: string): Promise<T | null> {
   await initStorage();
   return await store.get(key);
 }
@@ -77,7 +77,7 @@ export async function retrive_bag_items(uuid: string): Promise<Item[] | null> {
   if (!bag) return null;
 
   // If bag.items is string[] (UUIDs)
-  const filteredItems = items.filter((item) => bag?.items?.includes(item.uuid!));
+  const filteredItems = items.filter((item) => bag?.items?.includes(item.uuid));
 
   return filteredItems;
 }
@@ -86,7 +86,6 @@ export async function retrive_bag(uuid: string): Promise<Bag | null> {
   await initStorage();
 
   const baggages: Bag[] = (await store.get("baggages")) ?? [];
-  const items: Item[] = (await store.get("items")) ?? [];
 
   const bag = baggages.find((b) => b.uuid === uuid);
   if (!bag) return null;
@@ -122,7 +121,7 @@ export async function remove(key: string): Promise<void> {
   emitter.emit(key, null);
 }
 
-export async function push(key: string, value: any): Promise<void> {
+export async function push(key: string, value: Item | Bag | Travel): Promise<void> {
   await initStorage();
   const existingData = await store.get(key) || [];
   existingData.push(value);
@@ -130,7 +129,7 @@ export async function push(key: string, value: any): Promise<void> {
   emitter.emit(key, existingData);
 }
 
-export async function pop_uuid(key: string, value: any): Promise<void> {
+export async function pop_uuid(key: string, value: string): Promise<void> {
   await initStorage();
   const existingData = await store.get(key) || [];
 
@@ -151,7 +150,7 @@ export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partia
     throw new Error("Invalid key format. Use 'key.uuid', e.g., 'baggages.3454'");
   }
 
-  const existingData: any[] = await store.get(storeKey) || [];
+  const existingData: (Item | Bag | Travel)[] = await store.get(storeKey) || [];
 
   const index = existingData.findIndex(entry => entry.uuid === uuid);
   if (index === -1) return;

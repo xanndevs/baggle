@@ -12,7 +12,7 @@ const ItemCard: React.FC<{ result: Item }> = ({ result }, props) => {
 
 
 
-    const handleChecked = (e: React.MouseEvent<HTMLIonCardElement, MouseEvent>) => {
+    const handleChecked = () => {
 
         if (result.type === "store") return;
         edit_uuid(

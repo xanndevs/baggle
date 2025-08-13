@@ -64,7 +64,7 @@ const Page2: React.FC<ComponentTypes> = ({ dispatch, formState, setModalPage, mo
         color="success"
         style={{ flexGrow:3 }}
         onClick={() => {
-          console.log('Input value:', formState.travelNameValue);
+          //console.log('Input value:', formState.travelNameValue);
           modal.current?.dismiss();
           push("travels", getFormInput());
         }}

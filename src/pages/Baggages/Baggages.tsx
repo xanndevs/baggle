@@ -1,12 +1,9 @@
-import { IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonLabel, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar } from '@ionic/react';
-import { AnimatePresence } from 'framer-motion';
-import { addSharp } from 'ionicons/icons';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
-import './Baggages.css';
-import Page2_AddItemModal from './modal/Page2_AddItemModal';
-import { get, subscribe } from '../../utils/storage';
 import { useParams } from 'react-router';
+import { get, subscribe } from '../../utils/storage';
 import BagContainer from '../Travels/BagContainer';
+import './Baggages.css';
 
 
 
@@ -33,7 +30,7 @@ const Baggages: React.FC = () => {
 
     const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
       if (isMounted) {
-        console.log("Travel data updated:", baggages);
+        //console.log("Travel data updated:", baggages);
 
         setBaggageData(baggages);
       }

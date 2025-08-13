@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonBadge,
@@ -12,10 +10,12 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { airplaneSharp, bag, briefcaseSharp, cartSharp, chevronForwardSharp, logoAndroid, playForwardCircleSharp, pricetagSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
-import Travels from './pages/Travels/Travels';
+import { airplaneSharp, briefcaseSharp, cartSharp, settingsSharp } from 'ionicons/icons';
+import React, { useEffect } from 'react';
+import { Redirect, Route } from 'react-router-dom';
 import Baggages from './pages/Baggages/Baggages';
 import StoreItems from './pages/StoreItems';
+import Travels from './pages/Travels/Travels';
 
 import './App.css';
 /* Core CSS required for Ionic components to work properly */
@@ -27,19 +27,19 @@ import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
 
 /* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
+import '@ionic/react/css/display.css';
+import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/padding.css';
 import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
 
 /* Theme variables */
-import './theme/variables.css';
-import Settings from './pages/Settings';
 import BaggageDetails from './pages/Baggages/BaggageDetails';
-import { get, subscribe } from './utils/storage';
+import Settings from './pages/Settings';
 import TravelDetails from './pages/Travels/TravelDetails';
+import './theme/variables.css';
+import { get, subscribe } from './utils/storage';
 
 setupIonicReact({
   mode: 'ios',
@@ -66,7 +66,7 @@ const App: React.FC = () => {
 
     const unsub_travels = subscribe<Travel[]>('travels', (travels) => {
       if (isMounted) {
-        console.log("Travel data updated:", travels);
+        //console.log("Travel data updated:", travels);
 
         setTravelData(travels);
       }
@@ -75,7 +75,7 @@ const App: React.FC = () => {
 
     const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
       if (isMounted) {
-        console.log("Baggage data updated:", baggages);
+        //console.log("Baggage data updated:", baggages);
 
         setBaggageData(baggages);
       }

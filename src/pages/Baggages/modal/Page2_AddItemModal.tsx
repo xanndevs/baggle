@@ -1,27 +1,29 @@
-import {
-    IonButton,
-    IonIcon,
-    IonInput,
-    IonLabel,
-    IonTextarea
-} from '@ionic/react';
-import { motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-    cameraOutline,
-    trashOutline,
-    imagesOutline,
-    imageOutline,
-    cameraReverseOutline,
-    cameraSharp
-} from 'ionicons/icons';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import './AddItemModal.css';
-import { push, push_item_to_bag } from '../../../utils/storage';
+import { IonButton, IonIcon, IonLabel, IonTextarea } from '@ionic/react';
+import { motion } from 'framer-motion';
+import { cameraOutline, imageOutline, trashOutline } from 'ionicons/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
+import { push, push_item_to_bag } from '../../../utils/storage';
+import './AddItemModal.css';
+
+
+interface FormState extends Item {
+    progress?: number;
+    nameError?: string;
+    title?: string;
+  }
+
+type FormAction = {
+    type: "UPDATE";
+    field: keyof FormState;
+    value: string | number | undefined;
+} | {
+    type: "RESET";
+}
 interface ComponentTypes {
-    dispatch: any;
-    formState: any;
+    dispatch: React.Dispatch<FormAction>;
+    formState: FormState;
     setModalPage: React.Dispatch<React.SetStateAction<number>>;
     modal: React.RefObject<HTMLIonModalElement>;
     videoRef: React.RefObject<HTMLVideoElement>;
@@ -31,7 +33,7 @@ interface ComponentTypes {
 }
 
 const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage, videoRef, setIsStreaming, isStreaming, bag_uuid }) => {
-    const firstInput = useRef<HTMLIonInputElement>(null);
+    //const firstInput = useRef<HTMLIonInputElement>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
 
     const pageVariants = {
@@ -59,7 +61,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
             }
             setStream(mediaStream);
         } catch (err) {
-            console.error('Error accessing camera:', err);
+            //console.error('Error accessing camera:', err);
         }
     };
 
@@ -105,7 +107,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                 });
             }
         } catch (err) {
-            console.error('Error picking from gallery:', err);
+            //console.error('Error picking from gallery:', err);
         }
     };
 
@@ -192,7 +194,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                             value: e.target.value?.toString().split("").splice(0, 50).join(""),
                         })
                     }
-                    counter={formState.note.length}
+                    counter={true}
                     counterFormatter={(value: number) => `${value}/50`}
                 />
 

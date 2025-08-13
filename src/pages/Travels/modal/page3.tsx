@@ -23,7 +23,7 @@ const Page3: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalP
         exit: { opacity: 0, x: -50 },
     };
 
-    console.log(1 - (modal.current?.initialBreakpoint || 0))
+    //console.log(1 - (modal.current?.initialBreakpoint || 0))
     useEffect(() => {
         setTimeout(() => {
             firstInput.current?.setFocus();

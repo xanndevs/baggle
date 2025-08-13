@@ -1,5 +1,4 @@
-import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
-import { AnimatePresence } from 'framer-motion';
+import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonRow, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { addSharp } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
@@ -53,7 +52,7 @@ const TravelDetails: React.FC = () => {
   const [baggageData, setBaggageData] = useState<Bag[]>();
 
   const [travel, setTravel] = useState<Travel>()
-  const [baggages, setBaggages] = useState<Bag[]>()
+  //const [baggages, setBaggages] = useState<Bag[]>()
 
   const { uuid } = useParams<{ uuid: string }>();
 
@@ -72,7 +71,7 @@ const TravelDetails: React.FC = () => {
 
     const unsub_travels = subscribe<Travel[]>('travels', (travels) => {
       if (isMounted) {
-        console.log("Travel data updated:", travels);
+        //console.log("Travel data updated:", travels);
 
         setTravelData(travels);
       }
@@ -80,7 +79,7 @@ const TravelDetails: React.FC = () => {
 
     const unsub_baggages = subscribe<Bag[]>('baggages', (baggages) => {
       if (isMounted) {
-        console.log("Travel data updated:", baggages);
+        //console.log("Travel data updated:", baggages);
 
         setBaggageData(baggages);
       }
@@ -99,9 +98,9 @@ const TravelDetails: React.FC = () => {
     setTravel(travelData?.find((elem) => elem.uuid === uuid))
   }, [travelData])
 
-  useEffect(() => {
-    setBaggages(baggageData?.filter((elem) => travel?.bags?.includes(elem.uuid || "")))
-  }, [baggageData])
+  // useEffect(() => {
+  //   setBaggages(baggageData?.filter((elem) => travel?.bags?.includes(elem.uuid || "")))
+  // }, [baggageData])
 
 
   // const handleInput = (event: Event) => {
@@ -136,7 +135,7 @@ const TravelDetails: React.FC = () => {
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
                 {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
-                  <IonCol style={{ minWidth: '255px' }}  key={index}>
+                  <IonCol style={{ minWidth: '255px', maxWidth: '300px' }}  key={index}>
                   <BagContainer bag={bag} />
                   </IonCol>
                 ))}

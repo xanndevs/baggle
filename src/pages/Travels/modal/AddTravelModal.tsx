@@ -1,15 +1,21 @@
 import { IonButton, IonButtons, IonContent, IonDatetime, IonHeader, IonInput, IonModal, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
-import { time } from 'console';
-import { motion, AnimatePresence } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
-import { push } from '../../../utils/storage';
-import { v4 as uuid_v4 } from 'uuid';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
+import { v4 as uuid_v4 } from 'uuid';
+import { push } from '../../../utils/storage';
 
-
+type FormState = {
+    travelNameValue: string,
+    travelDateValue: Date,
+    progress: number,
+};
+type FormAction =
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | Date }
+    | { type: "RESET" };
 interface ComponentTypes {
-    dispatch: any,
-    formState: any,
+    dispatch: React.Dispatch<FormAction>,
+    formState: FormState,
     modal: React.RefObject<HTMLIonModalElement>,
 
 }
@@ -48,8 +54,8 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
     }
 
-    function getFormInput(): any {
-        const travel: { uuid: string; name: string; bags: string[]; date: string } = {
+    function getFormInput(): { uuid: string; name: string; bags: string[]; date: Date } {
+        const travel = {
             uuid: uuid_v4(),
             name: formState.travelNameValue,
             bags: [],
@@ -112,23 +118,23 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         className={`bordered ${nameError ? 'input-error' : ''}`}
                                         value={formState.travelNameValue}
                                         minlength={3}
-                                        counter={formState.travelNameValue.length}
+                                        counter={true}
                                         counterFormatter={(value: number) => `${value}/16`}
                                         maxlength={16}
                                         required
                                         onIonInput={(e) => {
                                             e.preventDefault();
-                                            console.log("Input Value: ", e.target.value?.toString().length);
+                                            //console.log("Input Value: ", e.target.value?.toString().length);
 
-                                            console.log("Target Object: ", e.target.attributes);
+                                            //console.log("Target Object: ", e.target.attributes);
 
                                             dispatch({
                                                 type: "UPDATE",
                                                 field: "travelNameValue",
-                                                value: e.target.value?.toString().split("").splice(0,16).join(""),
+                                                value: e.target.value?.toString().split("").splice(0, 16).join("") || "",
                                             });
                                         }}
-                                        onIonChange={(e) => {
+                                        onIonChange={() => {
                                             if (formState.travelNameValue.length < 3 || formState.travelNameValue.length > 16) {
                                                 setNameError("Travel name must be between 3 and 16 characters long.");
                                             } else {
@@ -152,7 +158,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         className='bordered'
                                         id='open-date'
                                         value={formState.travelDateValue.toISOString().split("T")[0]}
-                                        onIonFocus={(e) => date_modal.current?.present()}
+                                        onIonFocus={() => date_modal.current?.present()}
                                     ></IonInput>
 
                                     <IonModal
@@ -213,14 +219,14 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         className='bordered'
                                         id='open-time'
                                         value={toLocalISOString(formState.travelDateValue).split("T")[1].split(".")[0]}
-                                        onIonFocus={(e) => time_modal.current?.present()}
+                                        onIonFocus={() => time_modal.current?.present()}
                                     ></IonInput>
 
                                     <IonModal
                                         ref={time_modal}
                                         trigger="open-time"
                                         canDismiss={true}
-                                        onWillDismiss={() => { console.log("1"); }}
+                                        onWillDismiss={() => { /*console.log("1"); */ }}
                                         keepContentsMounted
                                         id='time-modal'
                                         breakpoints={[0, 1]}

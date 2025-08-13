@@ -1,10 +1,10 @@
+import { createGesture, GestureDetail, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonLabel, useIonPopover } from '@ionic/react';
 import React, { useEffect, useRef } from 'react';
-import { createGesture, GestureDetail, IonAccordionGroup, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonContent, IonIcon, IonItemDivider, IonLabel, IonText, useIonPopover } from '@ionic/react';
 import './TravelsCard.css';
 
-import { chevronForwardSharp, pencilSharp, prismSharp, trashBinOutline, trashBinSharp, trashSharp } from 'ionicons/icons';
-import BaggleDaysLabel from './BaggleDaysLabel';
+import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
 import { pop_uuid } from '../utils/storage';
+import BaggleDaysLabel from './BaggleDaysLabel';
 
 
 interface ComponentProps {
@@ -32,7 +32,7 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
   const pressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const PRESS_DURATION = 400; // milliseconds
 
-  const onStart = (e: any) => {
+  const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =
         (e.target as HTMLElement).id === "trap" && (e.target as HTMLElement).parentElement

@@ -9,8 +9,8 @@
 }
 
 .border-right-flat{
-    border: none;
-    border-right: 1px solid var(--ion-color-primary);
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border: none !important;
+    border-right: 1px solid var(--ion-color-primary) !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
 }

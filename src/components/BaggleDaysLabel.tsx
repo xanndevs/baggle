@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { IonLabel } from '@ionic/react';
 
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  date?: string;
+  date?: Date;
 }
 
 const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
@@ -18,7 +18,7 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
   }, [date, setInterval(() => { return }, 10000)]);
 
 
-  function calculateRemainingDays(dateStr: string | null | undefined): number {
+  function calculateRemainingDays(dateStr: string | null | undefined | Date): number {
     if (!dateStr) return 0;
 
     const date = new Date(dateStr);
@@ -34,7 +34,7 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
     return Math.round(diffMilliseconds / (1000 * 60 * 60 * 24));
   }
 
-  function calculateRemainingHours(dateStr: string | null | undefined): number {
+  function calculateRemainingHours(dateStr: string | null | undefined | Date): number {
     if (!dateStr) return 0;  // If the date is invalid, return 0 (or handle it however you want)
 
     const date = new Date(dateStr);

@@ -1,12 +1,8 @@
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonIcon, IonLabel } from '@ionic/react';
+import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pricetagSharp } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
-import { IonAccordionGroup, IonBackButton, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
-import TravelsCard from '../../components/TravelsCard';
-import './TravelDetails.css';
-import WalrusBucket from '../../walrus_bucket.jpg';
-import { useParams } from 'react-router';
 import { get, retrive_bag_items, subscribe } from '../../utils/storage';
-import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pricetagSharp, sadSharp } from 'ionicons/icons';
-import BaggageAccordionItem from '../../components/BaggageAccordionItem';
+import './TravelDetails.css';
 
 interface ComponentProps{
   bag: Bag,
@@ -19,15 +15,33 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
 
 
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const items = await retrive_bag_items(bag.uuid);
-      if (items) setItemList(items);
-      
-    }
-    fetchItems()
 
-  },[])
+    useEffect(() => {
+      let isMounted = true;
+  
+      const setup = async () => {
+        const items = await retrive_bag_items(bag.uuid);
+
+        if (isMounted && items) setItemList(items);
+      };
+
+      setup();
+
+      const unsub_items = subscribe<Item[]>('items', (items) => {
+        if (isMounted) { setItemList(items); }
+      });
+  
+
+  
+  
+  
+      return () => {
+        isMounted = false;
+        unsub_items();
+      };
+    }, []);
+  
+
 
   return (
     <>

@@ -1,13 +1,21 @@
-import { IonButton, IonButtons, IonContent, IonDatetime, IonHeader, IonInput, IonModal, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
-import { motion, AnimatePresence } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
-import { v4 as uuid_v4 } from 'uuid';
-import { edit_uuid, push, push_bag_to_travel } from '../../../utils/storage';
-import { c } from 'framer-motion/dist/types.d-Cjd591yU';
+import { IonButton, IonContent, IonHeader, IonInput, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
+import { v4 as uuid_v4 } from 'uuid';
+import { push, push_bag_to_travel } from '../../../utils/storage';
+
+
+type FormState = {
+    baggageNameValue: string,
+    progress: number,
+};
+type FormAction =
+    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "RESET" };
 interface ComponentTypes {
-    dispatch: any,
-    formState: any,
+    dispatch: React.Dispatch<FormAction>,
+    formState: FormState,
     modal: React.RefObject<HTMLIonModalElement>,
     travel: string
 
@@ -28,7 +36,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
     };
 
     //console.log(1 - (modal.current?.initialBreakpoint || 0))
-    
+
     // ditch the idea of focus trapping for now, as it was lowering the UX quality
     // useEffect(() => {
     //     setTimeout(() => {
@@ -36,11 +44,11 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
     //     }, 150); // wait a bit to ensure modal is fully visible
     // }, []);
 
-
-    function getFormInput(): any {
-        const baggage: { uuid: string; name: string; } = {
+    function getFormInput(): { uuid: string; name: string; items: string[] } {
+        const baggage = {
             uuid: uuid_v4(),
             name: formState.baggageNameValue,
+            items: [],
         };
         return baggage;
     }
@@ -50,7 +58,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
         if (e) e.preventDefault();
 
         const formInput = getFormInput();
-        console.log("Form Input: ", formInput);
+        //console.log("Form Input: ", formInput);
         // Use input validity instead of manual length check
         await push_bag_to_travel(travel, formInput.uuid);
         await push("baggages", formInput);
@@ -101,7 +109,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     type='text'
                                     color={nameError ? 'danger' : 'secondary'}
                                     className={`bordered ${nameError ? 'input-error' : ''}`}
-                                    counter={formState.baggageNameValue.length}
+                                    counter={true}
                                     counterFormatter={(value: number) => `${value}/16`}
                                     errorText={nameError}
                                     label="Bag Name"
@@ -114,17 +122,17 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     required
                                     onIonInput={(e) => {
                                         e.preventDefault();
-                                        console.log("Input Value: ", e.target.value?.toString().length);
+                                        //console.log("Input Value: ", e.target.value?.toString().length);
 
-                                        console.log("Target Object: ", e.target.attributes);
+                                        //console.log("Target Object: ", e.target.attributes);
 
                                         dispatch({
                                             type: "UPDATE",
                                             field: "baggageNameValue",
-                                            value: e.target.value?.toString().split("").splice(0, 16).join(""),
+                                            value: e.target.value?.toString().split("").splice(0, 16).join("") || "",
                                         });
                                     }}
-                                    onIonChange={(e) => {
+                                    onIonChange={() => {
                                         if (formState.baggageNameValue.length < 3 || formState.baggageNameValue.length > 16) {
                                             setNameError("Baggage name must be between 3 and 16 characters long.");
                                         } else {

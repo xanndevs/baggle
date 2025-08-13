@@ -1,6 +1,5 @@
-import React from 'react';
 import { IonContent, IonHeader, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import TravelsCard from '../components/TravelsCard';
+import React from 'react';
 import './StoreItems.css';
 
 const StoreItems: React.FC = () => {
