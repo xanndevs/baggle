@@ -17,10 +17,47 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     width: calc(100% - 14px);
     height: 105px;
     border-radius: 14px;
+    margin: 0px;
     margin-bottom: 7px;
     margin-left: 7px;
     z-index: 999;
-    box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset;
+    /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
+    
+    padding: 6px 6px 6px 6px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item-card{
+    position: sticky;
+    background-color: var(--ion-card-background);
+    width: calc(100% - 14px);
+    height: 105px;
+    border-radius: 14px;
+    margin: 0px;
+    margin-bottom: 7px;
+    margin-left: 7px;
+    z-index: 999;
+    /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
+    
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item-preview-card-content{
+    position: relative;
+    background-color: var(--ion-card-background);
+    width: 100%;
+    height: 105px;
+    border-radius: 14px;
+    margin: 0px;
+
+    z-index: 999;
+    /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
     
     padding: 6px 6px 6px 6px;
 
@@ -92,4 +129,11 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     padding: 0px 8px;
     min-height: 20px;
     
+}
+
+.items-list{
+display: flex;
+flex-direction: column;
+gap: 0px;
+padding-top: 6px;
 }

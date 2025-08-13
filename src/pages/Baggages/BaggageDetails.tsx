@@ -12,15 +12,11 @@ import Page1_AddItemModal from './modal/Page1_AddItemModal';
 
 const BaggageDetails: React.FC = () => {
 
-
-
   const { uuid } = useParams<{ uuid: string }>();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const modal = useRef<HTMLIonModalElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [modalPage, setModalPage] = useState(1);
   const [isStreaming, setIsStreaming] = useState(false);
-
-
   //#region Form State
   type FormAction =
     | { type: "UPDATE"; field: keyof Item; value: string | number }
@@ -70,20 +66,14 @@ const BaggageDetails: React.FC = () => {
   };
   //#endregion
 
-
-
+  const baggageDataRef = useRef<Bag | undefined>(undefined);
   const [baggageData, setBaggageData] = useState<Bag>();
   const [data, setData] = useState<Item[]>();
-  // const [results, setResults] = useState<Item[]>();
 
-const baggageDataRef = useRef<Bag | undefined>(undefined);
-
-useEffect(() => {
-  baggageDataRef.current = baggageData;
-}, [baggageData]);
-
-
-  //#region Storage Initialization
+  useEffect(() => {
+    baggageDataRef.current = baggageData;
+  }, [baggageData]);
+  //#region Storage Init
 useEffect(() => {
   let isMounted = true;
 
@@ -128,21 +118,20 @@ useEffect(() => {
   //#endregion
 
 
-
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-
-
+  const searchbar = useRef<HTMLIonSearchbarElement>(null);
+  const [searchResults, setSearchResults] = useState<Item[]>([])
   //#region Search Functionality
-  // const handleInput = (event: Event) => {
+    const handleInput = () => {
+      const inputValue = searchbar.current?.value || ""
+      setSearchTerm(inputValue)
+    }
 
-  //   const target = event.target as HTMLIonSearchbarElement;
-  //   if (target) {
-  //     setSearchTerm(target.value!);
-  //     const query = target.value!.toLowerCase();
-  //     setResults(data?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
-  //   }
-  // };
+    useEffect(() => {
+      if (!data) {setSearchResults([]); return;}
+      const filtered = data.filter((elem) => elem.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      setSearchResults(filtered);
+    }, [searchTerm, data])
   //#endregion
 
 
@@ -156,18 +145,20 @@ useEffect(() => {
             </IonButtons>
             <IonTitle>{baggageData?.name || "Unnamed Baggage"}</IonTitle>
           </IonToolbar>
-          {/* <IonToolbar>
-            <IonSearchbar debounce={250} value={searchTerm} onIonInput={(event) => handleInput(event)}></IonSearchbar>
-          </IonToolbar> */}
+          <IonToolbar>
+            <IonSearchbar aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
+          </IonToolbar> 
         </IonHeader>
         <IonContent fullscreen>
-          <IonList class=''>
-            {data?.map((result, key) => (
-              <div className='item-preview-card' key={key}>
+          <IonList class='items-list'>
+            {searchResults?.map((result, key) => (
+              <IonCard className='item-card' key={key} button >
+
+              <div className='item-preview-card-content' >
               <IonBadge className='item-preview-amount'>x{result.amount}</IonBadge>
               {
                 !result.image ?
-                  <div className='camera-preview' style={{ display: 'flex', }}>
+                <div className='camera-preview' style={{ display: 'flex', }}>
                     <IonIcon size='large' icon={imageOutline}></IonIcon>
 
                   </div> :
@@ -182,7 +173,7 @@ useEffect(() => {
                   <IonLabel className='item-preview-title'>{result.name || "Unnamed Item"}</IonLabel>
                   {
                     result.price ?
-                  <IonChip className='item-preview-price'>{result.price}₺</IonChip> : undefined
+                    <IonChip className='item-preview-price'>{result.price}₺</IonChip> : undefined
                   }
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
@@ -195,6 +186,7 @@ useEffect(() => {
                 </div>
               </div>
             </div>
+                    </IonCard>
 
               // <IonCard key={key}>
               //   <IonGrid key={key} >
