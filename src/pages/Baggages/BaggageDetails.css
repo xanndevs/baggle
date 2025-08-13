@@ -134,4 +134,5 @@ display: flex;
 flex-direction: column;
 gap: 0px;
 padding-top: 6px;
+background-color: transparent !important;
 }

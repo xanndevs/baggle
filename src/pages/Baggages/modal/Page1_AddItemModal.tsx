@@ -52,7 +52,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
         >
             <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                 <IonInput
-                    label="Item Name"
+                    label="Item Name *"
                     labelPlacement="stacked"
                     fill="solid"
                     color={'secondary'}
@@ -196,6 +196,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                     setModalPage((prev) => prev + 1);
                     dispatch({ type: "UPDATE", field: "progress", value: 0.5, })
                 }}
+                disabled={formState.name.length < 3 || formState.name.length > 20}
             >
                 Next
             </IonButton>

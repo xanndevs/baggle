@@ -125,7 +125,7 @@ const TravelDetails: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
 
-          <IonCard className='ion-padding-none'>
+          <IonCard className='ion-padding-none' style={{display: baggageData ? "block" : "none"}}>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
                 Baggages
@@ -135,7 +135,7 @@ const TravelDetails: React.FC = () => {
             <IonGrid>
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
-                {baggageData?.map((bag, index) => (
+                {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
                   <BagContainer bag={bag} key={index} />
                 ))}
 

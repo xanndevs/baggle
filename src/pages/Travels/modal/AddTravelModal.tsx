@@ -52,7 +52,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         const travel: { uuid: string; name: string; bags: string[]; date: string } = {
             uuid: uuid_v4(),
             name: formState.travelNameValue,
-            bags: ["uuid-best"],
+            bags: [],
             date: formState.travelDateValue,
         };
         return travel;

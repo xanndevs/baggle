@@ -52,7 +52,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
         const formInput = getFormInput();
         console.log("Form Input: ", formInput);
         // Use input validity instead of manual length check
-        await edit_uuid(`travels.${formInput.uuid}`, { bags: formInput.uuid });
+        await edit_uuid(`travels.${travel}`, { bags: formInput.uuid });
         await push("baggages", formInput);
         dispatch({
             type: "UPDATE",

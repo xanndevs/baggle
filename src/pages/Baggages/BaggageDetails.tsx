@@ -16,7 +16,7 @@ const BaggageDetails: React.FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const modal = useRef<HTMLIonModalElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [modalPage, setModalPage] = useState(1);
+  const [modalPage, setModalPage] = useState(0);
   const [isStreaming, setIsStreaming] = useState(false);
   //#region Form State
   type FormAction =
@@ -136,6 +136,16 @@ const BaggageDetails: React.FC = () => {
   //#endregion
 
 
+  const handleChecked = () => {
+    dispatch({
+      type: "UPDATE",
+      field: "type",
+      value: formState.type === "packed" ?
+        "unpacked" :
+        "packed",
+    });
+  }
+
   return (
     <>
       <IonPage>
@@ -158,11 +168,14 @@ const BaggageDetails: React.FC = () => {
                 result={result}
               />
             ))}
+            <div style={{ position: 'relative', width: '100%', height: '105px' }}>
+
+            </div>
           </IonList>
 
 
           <IonFab slot="fixed" vertical="bottom" horizontal="end" id="open-item-modal">
-            <IonFabButton onClick={setModal}>
+            <IonFabButton>
               <IonIcon icon={addSharp}></IonIcon>
             </IonFabButton>
           </IonFab>
@@ -213,7 +226,7 @@ const BaggageDetails: React.FC = () => {
                   <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided."}</IonLabel>
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
-                    <IonCheckbox> </IonCheckbox>
+                    <IonCheckbox onClick={handleChecked} disabled={formState.type === "store"} > </IonCheckbox>
                   </div>
 
                 </div>
@@ -231,7 +244,7 @@ const BaggageDetails: React.FC = () => {
               <IonContent className="ion-padding">
 
                 <AnimatePresence mode="wait">
-                  {modalPage === 1 && (
+                  {modalPage === 0 && (
                     <Page1_AddItemModal
                       modal={modal}
                       dispatch={dispatch}
@@ -240,7 +253,7 @@ const BaggageDetails: React.FC = () => {
                     />
                   )}
 
-                  {modalPage === 2 && (
+                  {modalPage === 1 && (
                     <Page2_AddItemModal
                       modal={modal}
                       dispatch={dispatch}

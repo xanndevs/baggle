@@ -149,7 +149,7 @@ export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partia
     existingData[index] = { ...original, ...(updates as Partial<Bag>) };
   } else if (storeKey === "travels") {
     const original = existingData[index] as Travel;
-    existingData[index].push( { ...original, ...(updates as Partial<Travel>) });
+    existingData[index] = { ...original, ...(updates as Partial<Travel>) };
   } else {
     throw new Error("Unknown storeKey: " + storeKey);
   }
