@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
 import { addSharp } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
@@ -104,13 +104,13 @@ const TravelDetails: React.FC = () => {
   }, [baggageData])
 
 
-  const handleInput = (event: Event) => {
-    let query = '';
-    const target = event.target as HTMLIonSearchbarElement;
-    if (target) query = target.value!.toLowerCase();
+  // const handleInput = (event: Event) => {
+  //   let query = '';
+  //   const target = event.target as HTMLIonSearchbarElement;
+  //   if (target) query = target.value!.toLowerCase();
 
-    setBaggageData(baggages?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
-  };
+  //   setBaggageData(baggages?.filter((elem) => elem.name.toLowerCase().indexOf(query) > -1));
+  // };
 
   return (
     <>
@@ -125,7 +125,7 @@ const TravelDetails: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
 
-          <IonCard className='ion-padding-none' style={{display: baggageData ? "block" : "none"}}>
+          <IonCard className='ion-padding-none' style={{display: (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || ""))?.length ?? 0) > 0 ? "block" : "none"}}>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
                 Baggages
@@ -136,7 +136,9 @@ const TravelDetails: React.FC = () => {
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
                 {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
-                  <BagContainer bag={bag} key={index} />
+                  <IonCol style={{ minWidth: '255px' }}  key={index}>
+                  <BagContainer bag={bag} />
+                  </IonCol>
                 ))}
 
               </IonRow>

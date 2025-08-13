@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonContent, IonDatetime, IonHeader, IonInput, Io
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import { edit_uuid, push } from '../../../utils/storage';
+import { edit_uuid, push, push_bag_to_travel } from '../../../utils/storage';
 import { c } from 'framer-motion/dist/types.d-Cjd591yU';
 import { useHistory } from 'react-router';
 interface ComponentTypes {
@@ -52,7 +52,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
         const formInput = getFormInput();
         console.log("Form Input: ", formInput);
         // Use input validity instead of manual length check
-        await edit_uuid(`travels.${travel}`, { bags: formInput.uuid });
+        await push_bag_to_travel(travel, formInput.uuid);
         await push("baggages", formInput);
         dispatch({
             type: "UPDATE",

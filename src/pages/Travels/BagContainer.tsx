@@ -9,10 +9,11 @@ import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pricetagSharp,
 import BaggageAccordionItem from '../../components/BaggageAccordionItem';
 
 interface ComponentProps{
-  bag: Bag
+  bag: Bag,
+  style?: React.CSSProperties
 }
 
-const BagContainer: React.FC<ComponentProps> = ({ bag }) => {
+const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
 
   const [itemList, setItemList] = useState<Item[]>([]);
 
@@ -30,19 +31,19 @@ const BagContainer: React.FC<ComponentProps> = ({ bag }) => {
 
   return (
     <>
-      <IonCol size='10' style={{ minWidth: '285px' }} >
-        <IonCard className='margin-none baggage-card' color={"light"} button routerLink={`/baggages/${bag.uuid}`} >
-          <IonCardHeader className='padding-bottom-none'>
+
+        <IonCard className='margin-none baggage-card' color={"light"} button routerLink={`/baggages/${bag.uuid}`} style={style}>
+          <IonCardHeader className='padding-bottom-none' style={{ padding: '1rem 1rem 0' }}>
             <IonCardSubtitle>Has {bag.category?.length || "No"} Categories</IonCardSubtitle>
 
-            <IonCardTitle className='flex-middle'>
+            <IonCardTitle className='flex-middle card-title-text'>
               {bag.name}
 
             </IonCardTitle>
 
           </IonCardHeader>
 
-          <IonCardContent className='flex-middle space-between'>
+          <IonCardContent className='flex-middle space-between' style={{ padding: '0 1rem 1rem ' }}>
             <div>
 
               {itemList?.filter((elem) => elem.type === 'store').length ? (
@@ -66,7 +67,6 @@ const BagContainer: React.FC<ComponentProps> = ({ bag }) => {
           </IonCardContent>
 
         </IonCard>
-      </IonCol>
 
     </>
   );

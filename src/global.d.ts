@@ -27,8 +27,8 @@ declare global {
     interface Travel {
         uuid: string,
         name: string,
-        date?: string,
-        bags?: string[],
+        date: string,
+        bags: string[],
     }
     //#endregion
 

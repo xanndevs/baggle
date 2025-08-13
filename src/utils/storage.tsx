@@ -51,6 +51,22 @@ export async function get<T = any>(key: string): Promise<T | null> {
   return await store.get(key);
 }
 
+export async function push_bag_to_travel(travel_uuid: string, bag_uuid: string): Promise<void> {
+  await initStorage();
+  const travels: Travel[] = (await store.get("travels")) ?? [];
+  const travelIndex = travels.findIndex((t) => t.uuid === travel_uuid);
+  if (travelIndex === -1) return;
+  // Initialize bags array if missing
+  if (!Array.isArray(travels[travelIndex].bags)) {
+    travels[travelIndex].bags = [];
+  }
+  if (!travels[travelIndex].bags.includes(bag_uuid)) {
+    travels[travelIndex].bags.push(bag_uuid);
+    await store.set("travels", travels);
+    emitter.emit("travels", travels);
+  }
+}
+
 export async function retrive_bag_items(uuid: string): Promise<Item[] | null> {
   await initStorage();
 
@@ -77,7 +93,7 @@ export async function retrive_bag(uuid: string): Promise<Bag | null> {
   return bag;
 }
 
-export async function push_item_to_bag (bag_uuid: string, item_uuid: string): Promise<void> {
+export async function push_item_to_bag(bag_uuid: string, item_uuid: string): Promise<void> {
 
   await initStorage();
 
@@ -127,7 +143,7 @@ export async function pop_uuid(key: string, value: any): Promise<void> {
   emitter.emit(key, existingData);
 }
 
-export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partial<Bag> | Partial<Travel>): Promise<void> {
+export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partial<Bag> | Partial<Travel>, push = false): Promise<void> {
   await initStorage();
 
   const [storeKey, uuid] = fullKey.split(".");
@@ -144,13 +160,17 @@ export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partia
   if (storeKey === "items") {
     const original = existingData[index] as Item;
     existingData[index] = { ...original, ...(updates as Partial<Item>) };
-  } else if (storeKey === "baggages") {
+  }
+  else if (storeKey === "baggages") {
     const original = existingData[index] as Bag;
     existingData[index] = { ...original, ...(updates as Partial<Bag>) };
-  } else if (storeKey === "travels") {
+  }
+  else if (storeKey === "travels") {
     const original = existingData[index] as Travel;
-    existingData[index] = { ...original, ...(updates as Partial<Travel>) };
-  } else {
+    if (push) original.bags.push(updates.uuid as string);
+    else existingData[index] = { ...original, ...(updates as Partial<Travel>) };
+  }
+  else {
     throw new Error("Unknown storeKey: " + storeKey);
   }
 
