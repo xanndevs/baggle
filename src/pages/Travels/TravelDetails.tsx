@@ -135,7 +135,7 @@ const TravelDetails: React.FC = () => {
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
                 {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
-                  <IonCol style={{ minWidth: '255px', maxWidth: '300px' }}  key={index}>
+                  <IonCol style={{ minWidth: '260px', maxWidth: '300px' }}  key={index}>
                   <BagContainer bag={bag} />
                   </IonCol>
                 ))}
