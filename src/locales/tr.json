@@ -1,0 +1,11 @@
+{
+  "tabs": {
+    "travels": "Seyahatlar",
+    "baggages": "Valizler",
+    "store": "Mağaza",
+    "settings": "Ayarlar"
+  },
+  "settings": {
+    "selectLanguage": "Dil Değiştirin"
+  }
+}

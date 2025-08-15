@@ -1,15 +1,20 @@
 import {
+  IonButton,
   IonCheckbox,
   IonContent,
   IonHeader,
+  IonIcon,
   IonLabel,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/react';
 import React, { useEffect } from 'react';
-import { get, set } from '../utils/storage';
-import { language } from 'ionicons/icons';
+import { get, set } from '../../utils/storage';
+import { language, languageOutline } from 'ionicons/icons';
+import "./Settings.css";
+import LanguageSelector from './modals/LanguageSelector';
 
 const Settings: React.FC = () => {
   
@@ -42,15 +47,15 @@ const Settings: React.FC = () => {
           <IonTitle>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent >
-
+      <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Settings</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonCheckbox labelPlacement='start'>Use system language</IonCheckbox>
-        <IonLabel>No Content</IonLabel>
+        <div className='ion-padding-horizontal'>
+          <LanguageSelector />
+        </div>
       </IonContent>
     </IonPage>
   );

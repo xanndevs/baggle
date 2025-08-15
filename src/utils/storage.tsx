@@ -176,6 +176,17 @@ export async function edit_uuid(fullKey: string, updates: Partial<Item> | Partia
   emitter.emit(storeKey, existingData);
 }
 
+export const edit_settings = async (updates: Partial<Settings>): Promise<void> => {
+  await initStorage();
+
+  let existingSettings: Settings = await store.get("settings") || {};
+  // Type-safe merge
+  existingSettings = { ...existingSettings, ...updates };
+  await store.set("settings", existingSettings);
+
+  emitter.emit("settings", existingSettings);
+}
+
 
 export async function keys(): Promise<string[]> {
   await initStorage();

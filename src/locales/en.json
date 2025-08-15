@@ -1,0 +1,12 @@
+{
+  "tabs": {
+    "travels": "Travels",
+    "baggages": "Baggages",
+    "store": "Store",
+    "settings": "Settings"
+  },
+  "settings": {
+    "selectLanguage": "Change Language"
+
+  }
+}

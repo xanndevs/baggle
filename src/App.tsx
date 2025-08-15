@@ -36,7 +36,7 @@ import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
 import BaggageDetails from './pages/Baggages/BaggageDetails';
-import Settings from './pages/Settings';
+import Settings from './pages/Settings/Settings';
 import TravelDetails from './pages/Travels/TravelDetails';
 import './theme/variables.css';
 import { get, subscribe } from './utils/storage';
