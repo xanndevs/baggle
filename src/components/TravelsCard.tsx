@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import './TravelsCard.css';
 
 import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
-import { pop_uuid } from '../utils/storage';
+import { pop_uuid, retrive_bag_items } from '../utils/storage';
 import BaggleDaysLabel from './BaggleDaysLabel';
 
 
@@ -18,7 +18,7 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
         <IonLabel color={'primary'}>Edit</IonLabel>
       </IonButton>
 
-      <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={() => { /*alert("Oh no el deletianzo!\n\nItalia Mentzionate!!!"); */ pop_uuid("travels", travel.uuid) }}>
+      <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
         <IonLabel color={'danger'}>Delete</IonLabel>
       </IonButton>
@@ -32,6 +32,18 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
   const pressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const PRESS_DURATION = 400; // milliseconds
 
+  async function handleDelete(): Promise<void> {
+    const bagUuidList = travel.bags;
+    bagUuidList.forEach(async (bagUuid) => {
+      const bagItems = await retrive_bag_items(bagUuid);
+      if (bagItems) bagItems.forEach((item) =>
+        pop_uuid("items", item.uuid)
+      )
+
+      pop_uuid("baggages", bagUuid);
+    })
+    pop_uuid("travels", travel.uuid)
+  }
   const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =
@@ -118,3 +130,4 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
 
 
 export default TravelsCard;
+

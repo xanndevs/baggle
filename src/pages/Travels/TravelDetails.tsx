@@ -124,6 +124,14 @@ const TravelDetails: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
 
+          <IonCard className='ion-padding-none'>
+            <IonCardHeader className="padding-bottom-none">
+              <IonCardTitle>
+                Details
+              </IonCardTitle>
+            </IonCardHeader>
+          </IonCard>
+
           <IonCard className='ion-padding-none' style={{display: (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || ""))?.length ?? 0) > 0 ? "block" : "none"}}>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>

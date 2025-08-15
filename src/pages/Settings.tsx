@@ -1,6 +1,9 @@
 import {
   IonContent,
   IonHeader,
+  IonItem,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
   IonPage,
   IonTitle,

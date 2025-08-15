@@ -162,10 +162,11 @@ const BaggageDetails: React.FC = () => {
         <IonContent fullscreen>
           <IonList class='items-list'>
             {searchResults?.map((result, key) => (
-              <ItemCard
-                key={key}
-                result={result}
-              />
+              <React.Fragment key={key}>
+                <ItemCard
+                  item={result}
+                />
+              </React.Fragment>
             ))}
             <div style={{ position: 'relative', width: '100%', height: '105px' }}>
 
