@@ -39,14 +39,14 @@ async function initStorage() {
   }
 }
 
-export async function set(key: string, value: Item | Bag | Travel): Promise<void> {
+export async function set(key: string, value: GeneralType): Promise<void> {
   await initStorage();
   await store.set(key, value);
   emitter.emit(key, value);
 
 }
 
-export async function get<T = Item | Bag | Travel>(key: string): Promise<T | null> {
+export async function get<T = GeneralType>(key: string): Promise<T | null> {
   await initStorage();
   return await store.get(key);
 }
@@ -121,7 +121,7 @@ export async function remove(key: string): Promise<void> {
   emitter.emit(key, null);
 }
 
-export async function push(key: string, value: Item | Bag | Travel): Promise<void> {
+export async function push(key: string, value: GeneralType): Promise<void> {
   await initStorage();
   const existingData = await store.get(key) || [];
   existingData.push(value);

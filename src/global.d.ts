@@ -32,6 +32,14 @@ declare global {
     }
     //#endregion
 
-}
+    //#region Settings
+    interface Settings {
+        theme: 'light' | 'dark' | 'system', // Theme of the app
+        language: 'en' | 'tr' | string, // Language of the app
+    }
+    //#endregion
 
+
+    type GeneralType = Item | Bag | Travel | Settings;
+}
 export {};
