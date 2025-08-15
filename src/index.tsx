@@ -5,10 +5,12 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import './css/fonts.css';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { initI18n } from './utils/i18n';
 
 // Call the element loader before the render call
 
 const container = document.getElementById('root');
+initI18n()
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 defineCustomElements(window);

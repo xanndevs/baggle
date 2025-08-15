@@ -40,6 +40,9 @@ import Settings from './pages/Settings/Settings';
 import TravelDetails from './pages/Travels/TravelDetails';
 import './theme/variables.css';
 import { get, subscribe } from './utils/storage';
+import { useTranslation } from 'react-i18next';
+
+
 
 setupIonicReact({
   mode: 'ios',
@@ -48,11 +51,11 @@ setupIonicReact({
 const App: React.FC = () => {
   const [travelData, setTravelData] = React.useState<Travel[]>([]);
   const [baggageData, setBaggageData] = React.useState<Bag[]>([]);
-
-
+  
+  
   useEffect(() => {
     let isMounted = true;
-
+    
     const setup = async () => {
       const travels = await get<Travel[]>("travels");
       const baggages = await get<Bag[]>("baggages");
@@ -89,6 +92,9 @@ const App: React.FC = () => {
       unsub_baggages();
     };
   }, []);
+
+      useTranslation("translation")
+
   return (
     <IonApp>
       <IonReactRouter>
