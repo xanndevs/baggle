@@ -1,7 +1,7 @@
 // src/utils/i18n.ts
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 import { get } from './storage'; // Your storage utility
 
 // Import translation files
@@ -16,12 +16,12 @@ const resources = {
   tr: { translation: tr },
 };
 
-export const initI18n = async () => {
+export const initI18n = async (): Promise<any> => {
   // Retrieve saved language from storage, fallback to 'en' if none
   const settings = await get<Settings>('settings');
   const savedLanguage = settings?.language || "en";
 
-  i18n
+  return i18n
     .use(LanguageDetector) // Detects browser language or storage
     .use(initReactI18next) // Bind i18next to React
     .init({
@@ -37,5 +37,8 @@ export const initI18n = async () => {
         lookupLocalStorage: 'language', // Key used in storage
         caches: ['localStorage'], // Persist language in storage
       },
+      react: {
+        useSuspense: false,
+      }
     });
 };

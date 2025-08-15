@@ -51,8 +51,8 @@ setupIonicReact({
 const App: React.FC = () => {
   const [travelData, setTravelData] = React.useState<Travel[]>([]);
   const [baggageData, setBaggageData] = React.useState<Bag[]>([]);
-  
-  
+  const { t } = useTranslation();
+
   useEffect(() => {
     let isMounted = true;
     
@@ -93,7 +93,6 @@ const App: React.FC = () => {
     };
   }, []);
 
-      useTranslation("translation")
 
   return (
     <IonApp>

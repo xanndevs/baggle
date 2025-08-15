@@ -10,15 +10,19 @@ import { initI18n } from './utils/i18n';
 // Call the element loader before the render call
 
 const container = document.getElementById('root');
-initI18n()
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
-defineCustomElements(window);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+
+
+initI18n().then(() => {
+  defineCustomElements(window);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+
+})
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
