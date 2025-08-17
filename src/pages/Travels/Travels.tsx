@@ -7,12 +7,15 @@ import React, { useReducer, useRef } from 'react';
 import TravelsCard from '../../components/TravelsCard';
 import AddTravelModal from './modal/AddTravelModal';
 import './Travels.css';
+import { useTranslation } from 'react-i18next';
 
 interface ComponentProps { travels: Travel[] }
 
 const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
+    const { t } = useTranslation(); 
+
 
 
   type FormState = {
@@ -70,13 +73,13 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Travels</IonTitle>
+          <IonTitle>{ t("tabs.travels") }</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Travels</IonTitle>
+            <IonTitle size="large">{ t("tabs.travels") }</IonTitle>
           </IonToolbar>
         </IonHeader>
         {

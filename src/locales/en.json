@@ -8,5 +8,42 @@
   "settings": {
     "selectLanguage": "Change Language"
 
+  },
+  "generic": {
+    "noContent": "No Content",
+    "datePicker": "Date Picker",
+    "timePicker": "Time Picker",
+    "done": "Done",
+    "edit": "Edit",
+    "delete": "Delete",
+    "next": "Next",
+    "details": "Details",
+    "back": "Back"
+  },
+  "travels": {
+    "new": "New Travel",
+    "add": "Add Travel",
+    "name": "Travel Name",
+    "date": "Travel Date",
+    "time": "Travel Time",
+    "nameError": "Travel name must be between 3 and 16 characters long.",
+    "day": {
+      "hoursLeft": "{{hours}} Hours Left",
+      "hoursPast": "{{hours}} Hours Past",
+      "now": "Now!",
+      "yesterday": "Yesterday",
+      "tomorrow": "Tomorrow",
+      "daysLater": "{{days}} Days Later",
+      "daysPast": "{{days}} Days Past"
+    } 
+  },
+  "baggages": {
+    "new":"New Baggage",
+    "baggages": "Baggages",
+    "unnamed": "Unnamed Baggage",
+    "name": "Bag Name",
+    "nameError": "Bag name must be between 3 and 16 characters long.",
+    "categoryCount": "Has {{count}} Categories",
+    "categoryCountEmpty": "Has No Categories"
   }
 }

@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
 import { push, push_bag_to_travel } from '../../../utils/storage';
+import { t } from 'i18next';
 
 
 type FormState = {
@@ -84,7 +85,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
         <div id='baggage-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '300px' }}>
             <IonHeader >
                 <IonToolbar>
-                    <IonTitle>New Baggage</IonTitle>
+                    <IonTitle>{t("baggages.new")}</IonTitle>
 
                 </IonToolbar>
                 <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -103,7 +104,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                             transition={{ duration: 0.2 }}
                             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
                         >
-                            <form style={{ flexGrow: 1 }} onSubmit={handleAddBaggage}>
+                            <form noValidate style={{ flexGrow: 1 }} onSubmit={handleAddBaggage}>
                                 <IonInput
 
                                     type='text'
@@ -112,7 +113,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     counter={true}
                                     counterFormatter={(value: number) => `${value}/16`}
                                     errorText={nameError}
-                                    label="Bag Name"
+                                    label={t("baggages.name")}
                                     labelPlacement="stacked"
                                     fill="solid"
                                     ref={firstInput}
@@ -134,7 +135,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     }}
                                     onIonChange={() => {
                                         if (formState.baggageNameValue.length < 3 || formState.baggageNameValue.length > 16) {
-                                            setNameError("Baggage name must be between 3 and 16 characters long.");
+                                            setNameError(t("baggages.nameError"));
                                         } else {
                                             setNameError("");
                                         }
@@ -149,7 +150,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     style={{ bottom: "10px", position: "absolute", right: "10px", left: "10px" }}
                                     type="submit"
                                 >
-                                    Next
+                                    {t("generic.next")}
                                 </IonButton>
                             </form>
 

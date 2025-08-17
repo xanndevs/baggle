@@ -52,6 +52,7 @@ const LanguageSelector: React.FC = () => {
   }, [i18n]); // Include i18n in dependencies to handle language changes
 
   const handleAction = async (detail: any) => {
+    console.log(i18n.languages)
     if (detail.role === 'cancel') return;
 
     if (detail.data?.action === 'select') {
@@ -69,7 +70,7 @@ const LanguageSelector: React.FC = () => {
     <>
       <IonButton id="open-action-sheet" expand="block">
         <ReactCountryFlag
-          countryCode={i18n.language === 'tr' ? 'tr' : i18n.language === 'es' ? 'es' : 'gb'} // Adjust for correct flag (e.g., 'gb' for English)
+          countryCode={i18n.language} // Adjust for correct flag (e.g., 'gb' for English)
           cdnSuffix="svg"
           cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/4x3/"
           style={{
@@ -82,7 +83,7 @@ const LanguageSelector: React.FC = () => {
           svg
           slot="start"
         />
-        {t('app.language').toString()} {/* Use correct key and remove .toString() */}
+        {t('settings.selectLanguage').toString()} {/* Use correct key and remove .toString() */}
       </IonButton>
       <IonActionSheet
         trigger="open-action-sheet"
@@ -90,19 +91,19 @@ const LanguageSelector: React.FC = () => {
         onDidDismiss={({ detail }) => handleAction(detail)}
         buttons={[
           {
-            text: 'Türkçe',
-            role: settings?.language === 'tr' ? 'selected' : undefined,
+            text: '中文',
+            role: settings?.language === 'cn' ? 'selected' : undefined,
             data: {
               action: 'select',
-              language: 'tr',
+              language: 'cn',
             },
           },
           {
             text: 'English',
-            role: settings?.language === 'en' ? 'selected' : undefined,
+            role: settings?.language === 'us' ? 'selected' : undefined,
             data: {
               action: 'select',
-              language: 'en',
+              language: 'us',
             },
           },
           {
@@ -111,6 +112,22 @@ const LanguageSelector: React.FC = () => {
             data: {
               action: 'select',
               language: 'es',
+            },
+          },
+          {
+            text: 'Française',
+            role: settings?.language === 'fr' ? 'selected' : undefined,
+            data: {
+              action: 'select',
+              language: 'fr',
+            },
+          },
+          {
+            text: 'Türkçe',
+            role: settings?.language === 'tr' ? 'selected' : undefined,
+            data: {
+              action: 'select',
+              language: 'tr',
             },
           },
           {

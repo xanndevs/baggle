@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import { IonLabel } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   date?: Date;
 }
 
 const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
+  const { t } = useTranslation();
+
+
   const negToPosFix = 2;
   const numOverlapFix = 3;
   const numOverlapNoFix = 0;
@@ -53,7 +57,7 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
     }
     else if (days >= 0) {
       if (hours > 0) { return "warning" }
-      if (hours === 0) { return "success" } 
+      if (hours === 0) { return "success" }
       else { return "danger" }
     }
     else {
@@ -67,12 +71,12 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
     <IonLabel color={calculateColor()} className='baggle-days-label'>
       {
         {
-          1: remainingHours <= -6 ? "Yesterday" : `${-remainingHours} Hours Past`,
-          2: remainingHours === 0 ? "Now!" : remainingHours > 0 ? `${remainingHours} Hours Left` : `${-remainingHours} Hours Past`,
-          3: remainingHours >= 17 ? "Tomorrow" : `${remainingHours} Hours Left`,
-          4: `${-remainingDays} Days Past`,
+          1: remainingHours <= -6 ? t("travels.day.yesterday") : t("travels.day.hoursPast", { hours: -remainingHours }),
+          2: remainingHours === 0 ? t("travels.day.now") : remainingHours > 0 ? t("travels.day.hoursLeft", { hours: remainingHours }) : t("travels.day.hoursPast", { hours: -remainingHours }),
+          3: remainingHours >= 17 ? t("travels.day.tomorrow") : t("travels.day.hoursLeft", { hours: remainingHours }),
+          4: t("travels.day.daysPast", { days: -remainingDays }),
           5: remainingHours,
-          6: `${remainingDays} Days Later`
+          6: t("travels.day.daysLater", { days: remainingDays })
         }[(Math.sign(remainingDays) + negToPosFix) + (Math.abs(remainingDays) > 1 ? numOverlapFix : numOverlapNoFix)]
       }
     </IonLabel>

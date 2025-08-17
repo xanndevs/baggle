@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
 import { push } from '../../../utils/storage';
+import { useTranslation } from 'react-i18next';
 
 type FormState = {
     travelNameValue: string,
@@ -22,6 +23,8 @@ interface ComponentTypes {
 
 const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }) => {
     const [modalPage, setModalPage] = useState<number>(1);
+      const { t } = useTranslation(); 
+
 
     const date_modal = useRef<HTMLIonModalElement>(null);
     const time_modal = useRef<HTMLIonModalElement>(null);
@@ -89,7 +92,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
 
                 <IonHeader >
                     <IonToolbar>
-                        <IonTitle>New Travel</IonTitle>
+                        <IonTitle>{ t("travels.new") }</IonTitle>
 
                     </IonToolbar>
                     <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -109,7 +112,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
 
                                 <form noValidate style={{ flexGrow: 1 }} onSubmit={handleAddTravel}>
                                     <IonInput
-                                        label="Travel Name *"
+                                        label={`${t("travels.name")} *`}
                                         labelPlacement="stacked"
                                         fill="solid"
                                         type='text'
@@ -136,7 +139,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         }}
                                         onIonChange={() => {
                                             if (formState.travelNameValue.length < 3 || formState.travelNameValue.length > 16) {
-                                                setNameError("Travel name must be between 3 and 16 characters long.");
+                                                setNameError(t("travels.nameError"));
                                             } else {
                                                 setNameError("");
                                             }
@@ -151,7 +154,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
 
                                     {/* Travel Date */}
                                     <IonInput
-                                        label="Travel Date"
+                                        label={t("travels.date")}
                                         labelPlacement="stacked"
                                         fill="solid"
                                         color={'secondary'}
@@ -175,9 +178,9 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         <div id='date-modal-content'>
                                             <IonHeader>
                                                 <IonToolbar>
-                                                    <IonTitle className='ion-padding-vertical'>Date Picker</IonTitle>
+                                                    <IonTitle className='ion-padding-vertical'>{ t("generic.datePicker") }</IonTitle>
                                                     <IonButtons slot='end'>
-                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss(); /* not really intuitive time_modal.current?.present() */ }}>Done</IonButton>
+                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss();  }}>{t("generic.done")}</IonButton>
                                                     </IonButtons>
                                                 </IonToolbar>
                                             </IonHeader>
@@ -212,7 +215,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
 
                                     {/* Travel Time */}
                                     <IonInput
-                                        label="Travel Time"
+                                        label={t("travels.time")}
                                         labelPlacement="stacked"
                                         fill="solid"
                                         color={'secondary'}
@@ -236,9 +239,9 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         <div id='time-modal-content'>
                                             <IonHeader>
                                                 <IonToolbar>
-                                                    <IonTitle className='ion-padding-vertical'>Time Picker</IonTitle>
+                                                    <IonTitle className='ion-padding-vertical'>{t("generic.timePicker")}</IonTitle>
                                                     <IonButtons slot='end'>
-                                                        <IonButton size='small' onClick={() => { time_modal.current?.dismiss() }}>Done</IonButton>
+                                                        <IonButton size='small' onClick={() => { time_modal.current?.dismiss() }}>{t("generic.done")}</IonButton>
                                                     </IonButtons>
                                                 </IonToolbar>
                                             </IonHeader>
@@ -279,7 +282,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         style={{ position: "absolute", bottom: "10px", left: "10px", right: "10px" }}
                                         type="submit"
                                     >
-                                        Add Travel
+                                        {t("travels.add")}
                                     </IonButton>
                                 </form>
                             </motion.div>

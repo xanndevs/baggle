@@ -15,6 +15,7 @@ import { get, set } from '../../utils/storage';
 import { language, languageOutline } from 'ionicons/icons';
 import "./Settings.css";
 import LanguageSelector from './modals/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {
   
@@ -25,7 +26,7 @@ const Settings: React.FC = () => {
       language: 'en',
     };
   }
-
+  const { t } = useTranslation(); 
   useEffect(() => {
     const initializeSettings = async () => {
       // Initialize settings if needed
@@ -44,13 +45,13 @@ const Settings: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Settings</IonTitle>
+          <IonTitle>{ t("tabs.settings") }</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Settings</IonTitle>
+            <IonTitle size="large">{ t("tabs.settings") }</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div className='ion-padding-horizontal'>

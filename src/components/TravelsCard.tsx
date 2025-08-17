@@ -5,22 +5,24 @@ import './TravelsCard.css';
 import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
 import { pop_uuid, retrive_bag_items } from '../utils/storage';
 import BaggleDaysLabel from './BaggleDaysLabel';
+import { useTranslation } from 'react-i18next';
 
 
 interface ComponentProps {
   travel: Travel
 }
 const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
+  const { t } = useTranslation();
   const Popover = () =>
     <>
       <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>Edit</IonLabel>
+        <IonLabel color={'primary'}>{t("generic.edit")}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>Delete</IonLabel>
+        <IonLabel color={'danger'}>{t("generic.delete")}</IonLabel>
       </IonButton>
     </>
 

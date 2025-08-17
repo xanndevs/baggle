@@ -1,11 +1,48 @@
 {
   "tabs": {
-    "travels": "Seyahatlar",
-    "baggages": "Valizler",
+    "travels": "Seyahatler",
+    "baggages": "Bagajlar",
     "store": "Mağaza",
     "settings": "Ayarlar"
   },
   "settings": {
-    "selectLanguage": "Dil Değiştirin"
+    "selectLanguage": "Dili Değiştir"
+  },
+  "generic": {
+    "noContent": "İçerik Yok",
+    "datePicker": "Tarih Seçici",
+    "timePicker": "Saat Seçici",
+    "done": "Bitti",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "next": "Sonraki",
+    "details": "Detaylar",
+    "back": "Geri"
+  },
+  "travels": {
+    "new": "Yeni Seyahat",
+    "add": "Seyahat Ekle",
+    "name": "Seyahat Adı",
+    "date": "Seyahat Tarihi",
+    "time": "Seyahat Saati",
+    "nameError": "Seyahat adı 3 ile 16 karakter arasında olmalıdır.",
+    "day": {
+      "hoursLeft": "{{hours}} Saat Kaldı",
+      "hoursPast": "{{hours}} Saat Geçti",
+      "now": "Şimdi!",
+      "yesterday": "Dün",
+      "tomorrow": "Yarın",
+      "daysLater": "{{days}} Gün Sonra",
+      "daysPast": "{{days}} Gün Önce"
+    }
+  },
+  "baggages": {
+    "new": "Yeni Bagaj",
+    "baggages": "Bagajlar",
+    "unnamed": "İsimsiz Bagaj",
+    "name": "Çanta Adı",
+    "nameError": "Çanta adı 3 ile 16 karakter arasında olmalıdır.",
+    "categoryCount": "{{count}} Kategori Var",
+    "categoryCountEmpty": "Kategori Yok"
   }
 }

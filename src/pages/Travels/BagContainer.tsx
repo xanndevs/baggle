@@ -3,6 +3,7 @@ import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pencilSharp, p
 import React, { useEffect, useRef, useState } from 'react';
 import { get, pop_uuid, retrive_bag_items, subscribe } from '../../utils/storage';
 import './TravelDetails.css';
+import { t } from 'i18next';
 
 interface ComponentProps {
   bag: Bag,
@@ -16,12 +17,12 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
     <>
       <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>Edit</IonLabel>
+        <IonLabel color={'primary'}>{t("generic.edit")}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>Delete</IonLabel>
+        <IonLabel color={'danger'}>{t("generic.delete")}</IonLabel>
       </IonButton>
     </>
 
@@ -154,7 +155,12 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
 
       <IonCard className='margin-none baggage-card' color={"light"} routerLink={`/baggages/${bag.uuid}`} style={style} ref={card}>
         <IonCardHeader className='padding-bottom-none' style={{ padding: '1rem 1rem 0' }}>
-          <IonCardSubtitle>Has {bag.category?.length || "No"} Categories</IonCardSubtitle>
+          <IonCardSubtitle>{
+            bag.category?
+              t("baggages.categoryCount", {count:bag.category.length} ) : 
+              t("baggages.categoryCountEmpty")
+      
+          }</IonCardSubtitle>
 
           <IonCardTitle className='flex-middle card-title-text'>
             {bag.name}

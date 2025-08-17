@@ -8,12 +8,16 @@ import { get } from './storage'; // Your storage utility
 import en from '../locales/en.json';
 import es from '../locales/es.json';
 import tr from '../locales/tr.json';
+import fr from '../locales/fr.json';
+import zh from '../locales/zh.json';
 
 // Define supported languages
 const resources = {
-  en: { translation: en },
+  us: { translation: en },
   es: { translation: es },
   tr: { translation: tr },
+  fr: { translation: fr },
+  cn: { translation: zh },
 };
 
 export const initI18n = async (): Promise<any> => {

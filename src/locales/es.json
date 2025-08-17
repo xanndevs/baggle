@@ -1,12 +1,48 @@
 {
   "tabs": {
-    "travels": "Travels",
-    "baggages": "Baggages",
-    "store": "Store",
-    "settings": "Settings"
+    "travels": "Viajes",
+    "baggages": "Equipajes",
+    "store": "Tienda",
+    "settings": "Configuraciones"
   },
   "settings": {
-    "selectLanguage": "Cambiar idioma"
-
+    "selectLanguage": "Cambiar Idioma"
+  },
+  "generic": {
+    "noContent": "Sin Contenido",
+    "datePicker": "Selector de Fecha",
+    "timePicker": "Selector de Hora",
+    "done": "Hecho",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "next": "Siguiente",
+    "details": "Detalles",
+    "back": "Atrás"
+  },
+  "travels": {
+    "new": "Nuevo Viaje",
+    "add": "Agregar Viaje",
+    "name": "Nombre del Viaje",
+    "date": "Fecha del Viaje",
+    "time": "Hora del Viaje",
+    "nameError": "El nombre del viaje debe tener entre 3 y 16 caracteres.",
+    "day": {
+      "hoursLeft": "{{hours}} Horas Restantes",
+      "hoursPast": "{{hours}} Horas Pasadas",
+      "now": "¡Ahora!",
+      "yesterday": "Ayer",
+      "tomorrow": "Mañana",
+      "daysLater": "{{days}} Días Después",
+      "daysPast": "{{days}} Días Pasados"
+    }
+  },
+  "baggages": {
+    "new": "Nuevo Equipaje",
+    "baggages": "Equipajes",
+    "unnamed": "Equipaje Sin Nombre",
+    "name": "Nombre de la Bolsa",
+    "nameError": "El nombre de la bolsa debe tener entre 3 y 16 caracteres.",
+    "categoryCount": "Tiene {{count}} Categorías",
+    "categoryCountEmpty": "No Tiene Categorías"
   }
 }

@@ -6,9 +6,10 @@ import { get, subscribe } from '../../utils/storage';
 import BagContainer from './BagContainer';
 import './TravelDetails.css';
 import AddBaggageModal from './modal/AddBaggageModal';
+import { useTranslation } from 'react-i18next';
 
 const TravelDetails: React.FC = () => {
-
+  const { t } = useTranslation();
 
 
 
@@ -117,9 +118,9 @@ const TravelDetails: React.FC = () => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton text={isPlatform('ios') ? "Back" : undefined} />
+              <IonBackButton text={isPlatform('ios') ? t("generic.back") : undefined} />
             </IonButtons>
-            <IonTitle>{travel?.name || "Unnamed Baggage"}</IonTitle>
+            <IonTitle>{travel?.name || t("baggages.unnamed")}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
@@ -127,7 +128,7 @@ const TravelDetails: React.FC = () => {
           <IonCard className='ion-padding-none'>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
-                Details
+                {t("generic.details")}
               </IonCardTitle>
             </IonCardHeader>
           </IonCard>
@@ -135,7 +136,7 @@ const TravelDetails: React.FC = () => {
           <IonCard className='ion-padding-none' style={{display: (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || ""))?.length ?? 0) > 0 ? "block" : "none"}}>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
-                Baggages
+                {t("baggages.baggages")}
               </IonCardTitle>
             </IonCardHeader >
 
@@ -143,7 +144,7 @@ const TravelDetails: React.FC = () => {
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
                 {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
-                  <IonCol style={{ minWidth: '260px', maxWidth: '300px' }}  key={index}>
+                  <IonCol style={{ minWidth: '285px', maxWidth: '310px' }}  key={index}>
                   <BagContainer bag={bag} />
                   </IonCol>
                 ))}
