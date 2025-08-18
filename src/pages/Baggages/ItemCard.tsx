@@ -5,9 +5,11 @@ import { imageOutline, pencilSharp, trashSharp } from 'ionicons/icons';
 import React, { useEffect, useRef } from 'react';
 import { edit_uuid, pop_uuid } from '../../utils/storage';
 import './ItemCard.css';
+import { useTranslation } from 'react-i18next';
+import { presentDeleteConfirmation } from '../Settings/modals/DeleteActionSheet';
 
 const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
-
+    const { t } = useTranslation();
 
 
 
@@ -16,12 +18,12 @@ const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
     <>
       <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>Edit</IonLabel>
+        <IonLabel color={'primary'}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>Delete</IonLabel>
+        <IonLabel color={'danger'}>{t("generic.delete") as string}</IonLabel>
       </IonButton>
     </>
 
@@ -34,19 +36,12 @@ const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
   const PRESS_DURATION = 400; // milliseconds
 
   async function handleDelete(): Promise<void> {
+    const isConfirmed = await presentDeleteConfirmation();
+    if(!isConfirmed) return;
+
     pop_uuid("items", item.uuid);
-
-    // const bagUuidList = travel.bags;
-    // bagUuidList.forEach(async (bagUuid) => {
-    //   const bagItems = await retrive_bag_items(bagUuid);
-    //   if (bagItems) bagItems.forEach((item) =>
-    //     pop_uuid("items", item.uuid)
-    //   )
-
-    //   pop_uuid("baggages", bagUuid);
-    // })
-    // pop_uuid("travels", travel.uuid)
   }
+  
   const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =
@@ -166,14 +161,14 @@ const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
 
                 <div className='item-details'>
                     <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
-                        <IonLabel className='item-title'>{item.name || "Unnamed Item"}</IonLabel>
+                        <IonLabel className='item-title'>{item.name || t("items.unnamed") as string}</IonLabel>
                         {
                             item.price ?
                                 <IonChip className='item-price'>{item.price}₺</IonChip> : undefined
                         }
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
-                        <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-note'>{item.note || "No note provided. "}</IonLabel>
+                        <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-note'>{item.note || t("items.noteNotProvided") as string}</IonLabel>
 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
                             <IonCheckbox checked={item.type === "packed"} ></IonCheckbox>

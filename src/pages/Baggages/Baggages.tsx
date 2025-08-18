@@ -4,12 +4,13 @@ import { useParams } from 'react-router';
 import { get, subscribe } from '../../utils/storage';
 import BagContainer from '../Travels/BagContainer';
 import './Baggages.css';
+import { useTranslation } from 'react-i18next';
 
 
 
 
 const Baggages: React.FC = () => {
-
+  const {t} = useTranslation();
 
   const [baggageData, setBaggageData] = useState<Bag[]>();
 
@@ -51,13 +52,13 @@ const Baggages: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Baggages</IonTitle>
+          <IonTitle>{t("baggages.baggages") as string}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Baggages</IonTitle>
+            <IonTitle size="large">{t("baggages.baggages") as string}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div style={{ padding: "0 10px 0", display: "flex", flexDirection: "column", gap: "5px" }}>

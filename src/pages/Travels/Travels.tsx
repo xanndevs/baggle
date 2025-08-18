@@ -14,7 +14,7 @@ interface ComponentProps { travels: Travel[] }
 const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
-    const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
 
 
@@ -22,9 +22,12 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
     travelNameValue: string,
     travelDateValue: Date,
     progress: number,
+
+    uuid?: string,
+    isEdit: boolean,
   };
   type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number | Date }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | Date | boolean | undefined }
     | { type: "RESET" };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -43,6 +46,8 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
 
 
           progress: 0.02,
+          uuid: undefined,
+          isEdit: false,
         };
       default:
         return state;
@@ -58,7 +63,9 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
       6, 30, 0, 0
     ),
 
-    progress: 0.02
+    progress: 0.02,
+    uuid: undefined,
+    isEdit: false,
   })
 
 
@@ -73,18 +80,18 @@ const Travels: React.FC<ComponentProps> = ({ travels }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{ t("tabs.travels") }</IonTitle>
+          <IonTitle>{t("tabs.travels") as string}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{ t("tabs.travels") }</IonTitle>
+            <IonTitle size="large">{t("tabs.travels") as string}</IonTitle>
           </IonToolbar>
         </IonHeader>
         {
           sortTravels(travels).map((elem, index) =>
-            <TravelsCard key={index} travel={elem} />
+            <TravelsCard key={index} travel={elem} dispatch={dispatch} modal={modal} />
           )
         }
 

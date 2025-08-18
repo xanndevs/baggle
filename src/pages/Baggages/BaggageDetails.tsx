@@ -9,9 +9,11 @@ import './Baggages.css';
 import ItemCard from './ItemCard';
 import Page1_AddItemModal from './modal/Page1_AddItemModal';
 import Page2_AddItemModal from './modal/Page2_AddItemModal';
+import { useTranslation } from 'react-i18next';
 
 const BaggageDetails: React.FC = () => {
 
+  const { t } = useTranslation();   
   const { uuid } = useParams<{ uuid: string }>();
   const modal = useRef<HTMLIonModalElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -38,8 +40,8 @@ const BaggageDetails: React.FC = () => {
     category: "",
 
     progress: 0.02,
-    nameError: "Item name must be between 3 and 20 characters long.",
-    title: "Add a new Item",
+    nameError: t("items.nameError"),
+    title: t("items.new"),
   };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -145,24 +147,83 @@ const BaggageDetails: React.FC = () => {
     });
   }
 
+
+
+
+
+  //#region Camera Functionality
+      const [stream, setStream] = useState<MediaStream | null>(null);
+
+      const startCamera = async () => {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+                setIsStreaming(true);
+                await videoRef.current.play();
+            }
+            setStream(mediaStream);
+        } catch (err) {
+            //console.error('Error accessing camera:', err);
+        }
+    };
+
+    const stopCamera = () => {
+        if (stream) {
+            setIsStreaming(false);
+            stream.getTracks().forEach(track => track.stop());
+            setStream(null);
+        }
+    };
+
+    const takePhoto = () => {
+        if (!videoRef.current) return;
+        const canvas = document.createElement('canvas');
+        canvas.width = videoRef.current.videoWidth;
+        canvas.height = videoRef.current.videoHeight;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            ctx.drawImage(videoRef.current, 0, 0);
+            const dataUrl = canvas.toDataURL('image/png');
+            dispatch({
+                type: 'UPDATE',
+                field: 'image',
+                value: dataUrl.split(',')[1] // only base64 part
+            });
+        }
+        stopCamera();
+    };
+        const removePhoto = () => {
+            dispatch({
+                type: 'UPDATE',
+                field: 'image',
+                value: undefined
+            });
+        };
+
   return (
     <>
       <IonPage>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton text={isPlatform('ios') ? "Back" : undefined} />
+              <IonBackButton text={t("generic.back") as string} />
             </IonButtons>
-            <IonTitle>{baggageData?.name || "Unnamed Baggage"}</IonTitle>
+            <IonTitle>{baggageData?.name || t("baggages.unnamed") as string}</IonTitle>
           </IonToolbar>
           <IonToolbar>
-            <IonSearchbar aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
+            <IonSearchbar placeholder={t("generic.search") as string} aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
           <IonList class='items-list'>
             {searchResults?.map((result, key) => (
               <React.Fragment key={key}>
+                {
+                  //#region HEREEEEEEEEEEEEEEEE
+                }
                 <ItemCard
                   item={result}
                 />
@@ -200,6 +261,7 @@ const BaggageDetails: React.FC = () => {
                 id="videoRef"
                 className='camera-preview'
                 muted
+                onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera}
                 playsInline
                 style={{ display: isStreaming ? 'block' : 'none', }}
               >
@@ -207,11 +269,11 @@ const BaggageDetails: React.FC = () => {
 
               {
                 !formState.image ?
-                  <div className='camera-preview' style={{ display: isStreaming ? 'none' : 'flex', }}>
+                  <div className='camera-preview' onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
                     <IonIcon size='large' icon={cameraOutline}></IonIcon>
 
                   </div> :
-                  <IonImg src={formState.image ? 'data:image/jpeg;base64,' + formState.image : ""} className='camera-preview' style={{ display: isStreaming ? 'none' : 'flex', }}>
+                  <IonImg src={formState.image ? 'data:image/jpeg;base64,' + formState.image : ""} className='camera-preview' onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
                   </IonImg>
               }
 
@@ -219,11 +281,11 @@ const BaggageDetails: React.FC = () => {
 
               <div className='item-preview-details'>
                 <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
-                  <IonLabel className='item-preview-title'>{formState.name || "Item Name"}</IonLabel>
+                  <IonLabel className='item-preview-title'>{formState.name || t("items.name") as string}</IonLabel>
                   <IonChip className='item-preview-price'>{`${formState.price || 0}₺`}</IonChip>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
-                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || "No note provided."}</IonLabel>
+                  <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || t("items.noteNotProvided") as string}</IonLabel>
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
                     <IonCheckbox onClick={handleChecked} disabled={formState.type === "store"} > </IonCheckbox>
@@ -258,10 +320,11 @@ const BaggageDetails: React.FC = () => {
                       dispatch={dispatch}
                       formState={formState}
                       setModalPage={setModalPage}
-                      videoRef={videoRef}
-                      setIsStreaming={setIsStreaming}
                       isStreaming={isStreaming}
                       bag_uuid={uuid}
+                      startCamera={startCamera}
+                      takePhoto={takePhoto}
+                      removePhoto={removePhoto}
                     />
                   )}
 

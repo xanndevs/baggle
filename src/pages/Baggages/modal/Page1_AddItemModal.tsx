@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { addSharp, removeSharp } from 'ionicons/icons';
 import React, { useEffect, useRef } from 'react';
 import './AddItemModal.css';
+import { useTranslation } from 'react-i18next';
 
 interface FormState extends Item {
     progress?: number;
@@ -26,6 +27,7 @@ interface ComponentTypes {
 
 const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, setModalPage }) => {
 
+    const { t } = useTranslation();
     const firstInput = useRef<HTMLIonInputElement>(null);
     const amountRef = useRef<HTMLIonInputElement>(null);
     const priceRef = useRef<HTMLIonInputElement>(null);
@@ -64,7 +66,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
         >
             <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                 <IonInput
-                    label="Item Name *"
+                    label={`${t("items.name") as string} *`}
                     labelPlacement="stacked"
                     fill="solid"
                     color={'secondary'}
@@ -89,7 +91,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
                             dispatch({
                                 type: "UPDATE",
                                 field: "nameError",
-                                value: "Item name must be between 3 and 20 characters long.",
+                                value: t("items.nameError") as string,
                             });
                         } else {
                             dispatch({
@@ -105,7 +107,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
 
                     <div className='' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end', flexGrow: 1 }}>
                         <IonInput
-                            label="Item Price"
+                            label={t("items.price") as string}
                             labelPlacement="stacked"
                             fill="outline"
                             className='bordered'
@@ -127,7 +129,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
                     </div>
                     <div className='number-border' style={{ display: 'flex', flexDirection: 'row', gap: '0px', alignItems: 'flex-end' }}>
                         <IonInput
-                            label="Item Amount"
+                            label={t("items.amount") as string}
                             labelPlacement="stacked"
                             fill="outline"
                             className='bordered border-right-flat'
@@ -198,7 +200,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
                     }}
                     checked={formState.type === "store"}
                 >
-                    I dont have this item yet.
+                    {t("items.dontHaveYet") as string}
                 </IonCheckbox>
 
 
@@ -212,7 +214,7 @@ const Page1_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, set
                 }}
                 disabled={formState.name.length < 3 || formState.name.length > 20}
             >
-                Next
+                {t("generic.next") as string}
             </IonButton>
 
 

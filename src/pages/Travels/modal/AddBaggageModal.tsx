@@ -3,16 +3,18 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
-import { push, push_bag_to_travel } from '../../../utils/storage';
-import { t } from 'i18next';
+import { edit_uuid, push, push_bag_to_travel } from '../../../utils/storage';
+import { useTranslation } from 'react-i18next';
 
 
 type FormState = {
+    uuid?: string,
     baggageNameValue: string,
+    isEdit: boolean,
     progress: number,
 };
 type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | boolean | undefined }
     | { type: "RESET" };
 interface ComponentTypes {
     dispatch: React.Dispatch<FormAction>,
@@ -23,6 +25,7 @@ interface ComponentTypes {
 }
 
 const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, travel }) => {
+    const { t } = useTranslation();
 
     const firstInput = useRef<HTMLIonInputElement>(null);
     const [modalPage, setModalPage] = useState(1);
@@ -44,11 +47,15 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
     //         firstInput.current?.setFocus();
     //     }, 150); // wait a bit to ensure modal is fully visible
     // }, []);
+    interface FormInputType {
+        uuid: string; name: string; items: string[], isEdit: boolean
+    }
 
-    function getFormInput(): { uuid: string; name: string; items: string[] } {
+    function getFormInput(): FormInputType {
         const baggage = {
-            uuid: uuid_v4(),
+            uuid: formState.uuid ?? uuid_v4(),
             name: formState.baggageNameValue,
+            isEdit: formState.isEdit,
             items: [],
         };
         return baggage;
@@ -59,6 +66,10 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
         if (e) e.preventDefault();
 
         const formInput = getFormInput();
+        if (formInput.isEdit) {
+            handleEdit(formInput);
+            return
+        }
         //console.log("Form Input: ", formInput);
         // Use input validity instead of manual length check
         await push_bag_to_travel(travel, formInput.uuid);
@@ -79,13 +90,32 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
 
     }
 
+
+    async function handleEdit(formInput: FormInputType) {
+        await edit_uuid(`baggages.${formInput.uuid}`, { name: formInput.name })
+        dispatch({
+            type: "UPDATE",
+            field: "progress",
+            value: 1,
+        });
+        setTimeout(() => {
+            modal.current?.dismiss();
+
+            dispatch({
+                type: "RESET",
+            })
+            //history.push(`/travels/${formInput.uuid}`);
+        }, 350);
+    }
+
+
     return (<>
 
 
         <div id='baggage-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '300px' }}>
             <IonHeader >
                 <IonToolbar>
-                    <IonTitle>{t("baggages.new")}</IonTitle>
+                    <IonTitle>{t("baggages.new") as string}</IonTitle>
 
                 </IonToolbar>
                 <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -150,7 +180,7 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                     style={{ bottom: "10px", position: "absolute", right: "10px", left: "10px" }}
                                     type="submit"
                                 >
-                                    {t("generic.next")}
+                                    {t("generic.next") as string}
                                 </IonButton>
                             </form>
 

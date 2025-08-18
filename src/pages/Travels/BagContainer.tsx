@@ -3,26 +3,40 @@ import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pencilSharp, p
 import React, { useEffect, useRef, useState } from 'react';
 import { get, pop_uuid, retrive_bag_items, subscribe } from '../../utils/storage';
 import './TravelDetails.css';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { presentDeleteConfirmation } from '../Settings/modals/DeleteActionSheet';
 
 interface ComponentProps {
   bag: Bag,
   style?: React.CSSProperties
+  dispatch?: React.Dispatch<FormAction>,
+  modal?: React.RefObject<HTMLIonModalElement>
 }
+type FormAction =
+  | { type: "UPDATE"; field: keyof FormState; value: string | number| boolean | undefined }
+  | { type: "RESET" };
 
-const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
+type FormState = {
+  uuid?: string,
+  baggageNameValue: string,
+  isEdit: boolean,
+  progress: number,
+};
 
+
+const BagContainer: React.FC<ComponentProps> = ({ bag, style, dispatch, modal }) => {
+  const { t } = useTranslation();
 
   const Popover = () =>
     <>
-      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
+      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleEdit}>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>{t("generic.edit")}</IonLabel>
+        <IonLabel color={'primary'}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>{t("generic.delete")}</IonLabel>
+        <IonLabel color={'danger'}>{t("generic.delete") as string}</IonLabel>
       </IonButton>
     </>
 
@@ -35,21 +49,28 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
   const PRESS_DURATION = 400; // milliseconds
 
   async function handleDelete(): Promise<void> {
+    const isConfirmed = await presentDeleteConfirmation()
+    if (!isConfirmed) return;
+
     const itemsUuidList = bag.items;
     itemsUuidList.forEach(async (item) => await pop_uuid("items", item));
     await pop_uuid("baggages", bag.uuid);
-
-    // const bagUuidList = travel.bags;
-    // bagUuidList.forEach(async (bagUuid) => {
-    //   const bagItems = await retrive_bag_items(bagUuid);
-    //   if (bagItems) bagItems.forEach((item) =>
-    //     pop_uuid("items", item.uuid)
-    //   )
-
-    //   pop_uuid("baggages", bagUuid);
-    // })
-    // pop_uuid("travels", travel.uuid)
   }
+
+  async function handleEdit(): Promise<void> {
+    if(!dispatch || !modal)return
+    await dispatch({ type: "RESET" })
+
+    await dispatch({ type: "UPDATE", field: "uuid",             value: bag.uuid, });
+
+    await dispatch({ type: "UPDATE", field: "isEdit",           value: true, });
+
+    await dispatch({ type: "UPDATE", field: "baggageNameValue", value: bag.name, });
+
+    modal.current?.present()
+
+  }
+
   const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =
@@ -111,16 +132,7 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
   }, []);
 
 
-
-
-
-
-
-
-
   const [itemList, setItemList] = useState<Item[]>([]);
-
-
 
 
   useEffect(() => {
@@ -149,17 +161,16 @@ const BagContainer: React.FC<ComponentProps> = ({ bag, style }) => {
   }, []);
 
 
-
   return (
     <>
 
       <IonCard className='margin-none baggage-card' color={"light"} routerLink={`/baggages/${bag.uuid}`} style={style} ref={card}>
         <IonCardHeader className='padding-bottom-none' style={{ padding: '1rem 1rem 0' }}>
           <IonCardSubtitle>{
-            bag.category?
-              t("baggages.categoryCount", {count:bag.category.length} ) : 
-              t("baggages.categoryCountEmpty")
-      
+            bag.category ?
+              t("baggages.categoryCount", { count: bag.category.length }) as string :
+              t("baggages.categoryCountEmpty") as string
+
           }</IonCardSubtitle>
 
           <IonCardTitle className='flex-middle card-title-text'>

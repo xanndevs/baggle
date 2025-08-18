@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
 import { push, push_item_to_bag } from '../../../utils/storage';
 import './AddItemModal.css';
+import { useTranslation } from 'react-i18next';
 
 
 interface FormState extends Item {
@@ -26,15 +27,17 @@ interface ComponentTypes {
     formState: FormState;
     setModalPage: React.Dispatch<React.SetStateAction<number>>;
     modal: React.RefObject<HTMLIonModalElement>;
-    videoRef: React.RefObject<HTMLVideoElement>;
-    setIsStreaming: React.Dispatch<React.SetStateAction<boolean>>;
+
     isStreaming: boolean;
     bag_uuid: string;
+    startCamera: () => Promise<void>;
+    takePhoto: () => void;
+    removePhoto: () => void;
 }
 
-const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage, videoRef, setIsStreaming, isStreaming, bag_uuid }) => {
+const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal, setModalPage, isStreaming, bag_uuid, startCamera, takePhoto, removePhoto }) => {
     //const firstInput = useRef<HTMLIonInputElement>(null);
-    const [stream, setStream] = useState<MediaStream | null>(null);
+    const { t } = useTranslation(); 
 
     const pageVariants = {
         initial: { opacity: 0, x: 50 },
@@ -49,47 +52,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
     //     }, 100);
     //   }, []);
 
-    const startCamera = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-                setIsStreaming(true);
-                await videoRef.current.play();
-            }
-            setStream(mediaStream);
-        } catch (err) {
-            //console.error('Error accessing camera:', err);
-        }
-    };
 
-    const stopCamera = () => {
-        if (stream) {
-            setIsStreaming(false);
-            stream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        }
-    };
-
-    const takePhoto = () => {
-        if (!videoRef.current) return;
-        const canvas = document.createElement('canvas');
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-            ctx.drawImage(videoRef.current, 0, 0);
-            const dataUrl = canvas.toDataURL('image/png');
-            dispatch({
-                type: 'UPDATE',
-                field: 'image',
-                value: dataUrl.split(',')[1] // only base64 part
-            });
-        }
-        stopCamera();
-    };
 
     const pickFromGallery = async () => {
         try {
@@ -111,19 +74,13 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
         }
     };
 
-    const removePhoto = () => {
-        dispatch({
-            type: 'UPDATE',
-            field: 'image',
-            value: undefined
-        });
-    };
+
 
     useEffect(() => {
         dispatch({
             type: "UPDATE",
             field: "title",
-            value: "Add more details",
+            value: t("items.moreDetails") as string,
         })
 
     }, [modal])
@@ -179,7 +136,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                 <IonTextarea
                     color={'primary'}
                     className='bordered'
-                    label='Item Note'
+                    label={t("items.note") as string}
                     labelPlacement='stacked'
 
 
@@ -206,7 +163,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                         style={{ flexGrow: 1 }}
                     >
                         <IonLabel slot="end">
-                            {isStreaming ? 'Take Photo' : 'From Camera'}
+                            {t(isStreaming ? "generic.cameraTake" : 'generic.camera') as string}
                         </IonLabel>
                         <IonIcon size="default" slot="start" icon={cameraOutline} />
                     </IonButton>
@@ -217,7 +174,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                         onClick={pickFromGallery}
                     >
                         <IonLabel slot="end">
-                            From Gallery
+                            {t("generic.gallery") as string}
                         </IonLabel>
                         <IonIcon slot="start" icon={imageOutline} />
                     </IonButton>
@@ -249,7 +206,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                         });
                     }}
                 >
-                    Back
+                    {t("generic.back") as string}
                 </IonButton>
                 <IonButton
                     style={{ flexGrow: 5 }}
@@ -265,7 +222,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
                         await addItem()
                     }}
                 >
-                    Next
+                    {t("generic.next") as string}
                 </IonButton>
             </div>
         </motion.div>

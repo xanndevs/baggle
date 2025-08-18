@@ -3,13 +3,16 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
-import { push } from '../../../utils/storage';
+import { edit_uuid, push } from '../../../utils/storage';
 import { useTranslation } from 'react-i18next';
 
 type FormState = {
     travelNameValue: string,
     travelDateValue: Date,
     progress: number,
+
+    isEdit: boolean,
+    uuid?: string,
 };
 type FormAction =
     | { type: "UPDATE"; field: keyof FormState; value: string | number | Date }
@@ -23,7 +26,7 @@ interface ComponentTypes {
 
 const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }) => {
     const [modalPage, setModalPage] = useState<number>(1);
-      const { t } = useTranslation(); 
+    const { t } = useTranslation();
 
 
     const date_modal = useRef<HTMLIonModalElement>(null);
@@ -57,12 +60,17 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
     }
 
-    function getFormInput(): { uuid: string; name: string; bags: string[]; date: Date } {
+    interface FormInputType {
+        uuid: string; name: string; bags: string[]; date: Date, isEdit: boolean
+    }
+
+    function getFormInput(): FormInputType {
         const travel = {
-            uuid: uuid_v4(),
+            uuid: formState.uuid?? uuid_v4(),
             name: formState.travelNameValue,
             bags: [],
             date: formState.travelDateValue,
+            isEdit: formState.isEdit
         };
         return travel;
     }
@@ -71,6 +79,10 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         if (e) e.preventDefault();
         // Use input validity instead of manual length check
         const formInput = getFormInput();
+        if (formInput.isEdit) {
+            handleEdit(formInput);
+            return
+        }
         await push("travels", formInput);
         dispatch({
             type: "UPDATE",
@@ -86,13 +98,29 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
         }, 350);
     }
 
+    async function handleEdit(formInput: FormInputType) {
+        await edit_uuid(`travels.${formInput.uuid}`, { name: formInput.name, date: formInput.date })
+        dispatch({
+            type: "UPDATE",
+            field: "progress",
+            value: 1,
+        });
+        setTimeout(() => {
+            modal.current?.dismiss();
+
+            dispatch({
+                type: "RESET",
+            })  
+            //history.push(`/baggages/${formInput.uuid}`);
+        }, 350);
+    }
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', height: '466px' }}>
 
                 <IonHeader >
                     <IonToolbar>
-                        <IonTitle>{ t("travels.new") }</IonTitle>
+                        <IonTitle>{t("travels.new") as string}</IonTitle>
 
                     </IonToolbar>
                     <IonProgressBar value={formState.progress}></IonProgressBar>
@@ -178,9 +206,9 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         <div id='date-modal-content'>
                                             <IonHeader>
                                                 <IonToolbar>
-                                                    <IonTitle className='ion-padding-vertical'>{ t("generic.datePicker") }</IonTitle>
+                                                    <IonTitle className='ion-padding-vertical'>{t("generic.datePicker") as string}</IonTitle>
                                                     <IonButtons slot='end'>
-                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss();  }}>{t("generic.done")}</IonButton>
+                                                        <IonButton size='small' onClick={() => { date_modal.current?.dismiss(); }}>{t("generic.done") as string}</IonButton>
                                                     </IonButtons>
                                                 </IonToolbar>
                                             </IonHeader>
@@ -239,9 +267,9 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         <div id='time-modal-content'>
                                             <IonHeader>
                                                 <IonToolbar>
-                                                    <IonTitle className='ion-padding-vertical'>{t("generic.timePicker")}</IonTitle>
+                                                    <IonTitle className='ion-padding-vertical'>{t("generic.timePicker") as string}</IonTitle>
                                                     <IonButtons slot='end'>
-                                                        <IonButton size='small' onClick={() => { time_modal.current?.dismiss() }}>{t("generic.done")}</IonButton>
+                                                        <IonButton size='small' onClick={() => { time_modal.current?.dismiss() }}>{t("generic.done") as string}</IonButton>
                                                     </IonButtons>
                                                 </IonToolbar>
                                             </IonHeader>
@@ -282,7 +310,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                         style={{ position: "absolute", bottom: "10px", left: "10px", right: "10px" }}
                                         type="submit"
                                     >
-                                        {t("travels.add")}
+                                        {t("travels.add") as string}
                                     </IonButton>
                                 </form>
                             </motion.div>
@@ -292,10 +320,6 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                         {/* 
                         
                         {modalPage === 2 && (
-                            <></>
-                        )}
-
-                        {modalPage === 3 && (
                             <></>
                         )}
 

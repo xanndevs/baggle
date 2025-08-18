@@ -22,10 +22,12 @@ const TravelDetails: React.FC = () => {
 
   type FormState = {
     baggageNameValue: string,
+    isEdit: boolean
     progress: number,
+    uuid?: string,
   };
   type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | boolean | undefined }
     | { type: "RESET" };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -35,7 +37,9 @@ const TravelDetails: React.FC = () => {
       case "RESET":
         return {
           baggageNameValue: "",
+          isEdit: false,
           progress: 0.02,
+          uuid: undefined,
         };
       default:
         return state;
@@ -44,7 +48,9 @@ const TravelDetails: React.FC = () => {
 
   const [formState, dispatch] = useReducer(formReducer, {
     baggageNameValue: "",
-    progress: 0.02
+    isEdit: false,
+    progress: 0.02,
+    uuid: undefined
   })
 
 
@@ -120,7 +126,7 @@ const TravelDetails: React.FC = () => {
             <IonButtons slot="start">
               <IonBackButton text={isPlatform('ios') ? t("generic.back") : undefined} />
             </IonButtons>
-            <IonTitle>{travel?.name || t("baggages.unnamed")}</IonTitle>
+            <IonTitle>{travel?.name || t("baggages.unnamed") as string}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
@@ -128,15 +134,15 @@ const TravelDetails: React.FC = () => {
           <IonCard className='ion-padding-none'>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
-                {t("generic.details")}
+                {t("generic.details") as string}
               </IonCardTitle>
             </IonCardHeader>
           </IonCard>
 
-          <IonCard className='ion-padding-none' style={{display: (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || ""))?.length ?? 0) > 0 ? "block" : "none"}}>
+          <IonCard className='ion-padding-none' style={{ display: (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || ""))?.length ?? 0) > 0 ? "block" : "none" }}>
             <IonCardHeader className="padding-bottom-none">
               <IonCardTitle>
-                {t("baggages.baggages")}
+                {t("baggages.baggages") as string}
               </IonCardTitle>
             </IonCardHeader >
 
@@ -144,8 +150,8 @@ const TravelDetails: React.FC = () => {
               <IonRow className="baggle-horizontal-slider " key={travel?.uuid}>
 
                 {baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).map((bag, index) => (
-                  <IonCol style={{ minWidth: '285px', maxWidth: '310px' }}  key={index}>
-                  <BagContainer bag={bag} />
+                  <IonCol style={{ minWidth: '285px', maxWidth: '310px' }} key={index}>
+                    <BagContainer bag={bag} dispatch={dispatch} modal={modal} />
                   </IonCol>
                 ))}
 
