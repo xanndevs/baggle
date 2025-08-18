@@ -8,15 +8,32 @@ import './ItemCard.css';
 import { useTranslation } from 'react-i18next';
 import { presentDeleteConfirmation } from '../Settings/modals/DeleteActionSheet';
 
-const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
-    const { t } = useTranslation();
+interface ContainerProps {
+  item: Item;
+  dispatch?: React.Dispatch<FormAction>,
+  modal?: React.RefObject<HTMLIonModalElement>
+}
+
+type FormAction =
+  | { type: "UPDATE"; field: keyof FormState; value: string | number | undefined | boolean }
+  | { type: "RESET" };
+interface FormState extends Item {
+  progress?: number;
+  nameError?: string;
+  title?: string;
+
+  isEdit: boolean
+}
+
+const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
+  const { t } = useTranslation();
 
 
 
 
-      const Popover = () =>
+  const Popover = () =>
     <>
-      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
+      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleEdit}>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
         <IonLabel color={'primary'}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
@@ -37,11 +54,29 @@ const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
 
   async function handleDelete(): Promise<void> {
     const isConfirmed = await presentDeleteConfirmation();
-    if(!isConfirmed) return;
+    if (!isConfirmed) return;
 
     pop_uuid("items", item.uuid);
   }
-  
+
+  async function handleEdit(): Promise<void> {
+    if (!dispatch || !modal) return
+    await dispatch({ type: "RESET" })
+    await dispatch({ type: "UPDATE", field: "isEdit", value: true });
+    await dispatch({ type: "UPDATE", field: "uuid", value: item.uuid });
+    
+    await dispatch({ type: "UPDATE", field: "amount", value: item.amount });
+    await dispatch({ type: "UPDATE", field: "category", value: item.category });
+    await dispatch({ type: "UPDATE", field: "image", value: item.image });
+    await dispatch({ type: "UPDATE", field: "name", value: item.name });
+    await dispatch({ type: "UPDATE", field: "note", value: item.note });
+    await dispatch({ type: "UPDATE", field: "price", value: item.price });
+    await dispatch({ type: "UPDATE", field: "type", value: item.type });
+
+    modal.current?.present()
+
+  }
+
   const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =
@@ -108,77 +143,77 @@ const ItemCard: React.FC<{ item: Item }> = ({ item }) => {
 
 
 
-      const [presentActionSheet] = useIonActionSheet();
+  const [presentActionSheet] = useIonActionSheet();
 
-    const handleChecked = () => {
-        presentActionSheet({
-            header: 'Item Actions',
-            buttons: [
-                {
-                    text: item.type === "packed" ? "unpack" : "pack",
-                    handler: () => alert(1),
-                },
-                {
-                    text: 'Delete',
-                    role: 'destructive',
-                    handler: () => alert(2),
-                },
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                }
-            ],
-            cssClass: 'my-custom-class',
-        });
+  const handleChecked = () => {
+    presentActionSheet({
+      header: 'Item Actions',
+      buttons: [
+        {
+          text: item.type === "packed" ? "unpack" : "pack",
+          handler: () => alert(1),
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => alert(2),
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        }
+      ],
+      cssClass: 'my-custom-class',
+    });
 
-        if (item.type === "store") return;
-        edit_uuid(
-            `items.${item.uuid}`,
-            {
-                ...item,
-                type: item.type === "packed" ? "ready" : "packed"
-            }
-        );
-    }
-
-
-    return (
-        <IonCard className='item-card' onClick={handleChecked} ref={card} button>
-
-            <div className='item-card-content' >
-                <IonBadge className='item-amount'>x{item.amount}</IonBadge>
-                {
-                    !item.image ?
-                        <div className='item-image' style={{ display: 'flex', }}>
-                            <IonIcon size='large' icon={imageOutline}></IonIcon>
-
-                        </div> :
-                        <IonImg src={item.image ? 'data:image/jpeg;base64,' + item.image : ""} className='item-image' style={{ display: 'flex', }}>
-                        </IonImg>
-                }
-
-
-
-                <div className='item-details'>
-                    <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
-                        <IonLabel className='item-title'>{item.name || t("items.unnamed") as string}</IonLabel>
-                        {
-                            item.price ?
-                                <IonChip className='item-price'>{item.price}₺</IonChip> : undefined
-                        }
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
-                        <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-note'>{item.note || t("items.noteNotProvided") as string}</IonLabel>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
-                            <IonCheckbox checked={item.type === "packed"} ></IonCheckbox>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </IonCard>
+    if (item.type === "store") return;
+    edit_uuid(
+      `items.${item.uuid}`,
+      {
+        ...item,
+        type: item.type === "packed" ? "ready" : "packed"
+      }
     );
+  }
+
+
+  return (
+    <IonCard className='item-card' onClick={handleChecked} ref={card} button>
+
+      <div className='item-card-content' >
+        <IonBadge className='item-amount'>x{item.amount}</IonBadge>
+        {
+          !item.image ?
+            <div className='item-image' style={{ display: 'flex', }}>
+              <IonIcon size='large' icon={imageOutline}></IonIcon>
+
+            </div> :
+            <IonImg src={item.image ? 'data:image/jpeg;base64,' + item.image : ""} className='item-image' style={{ display: 'flex', }}>
+            </IonImg>
+        }
+
+
+
+        <div className='item-details'>
+          <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
+            <IonLabel className='item-title'>{item.name || t("items.unnamed") as string}</IonLabel>
+            {
+              item.price ?
+                <IonChip className='item-price'>{item.price}₺</IonChip> : undefined
+            }
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
+            <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-note'>{item.note || t("items.noteNotProvided") as string}</IonLabel>
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', justifyContent: 'flex-end', height: '100%', minWidth: 'min-content' }}>
+              <IonCheckbox checked={item.type === "packed"} ></IonCheckbox>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </IonCard>
+  );
 
 }
 

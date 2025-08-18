@@ -21,12 +21,14 @@ const BaggageDetails: React.FC = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   //#region Form State
   type FormAction =
-    | { type: "UPDATE"; field: keyof FormState; value: string | number | undefined }
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | undefined | boolean }
     | { type: "RESET" };
   interface FormState extends Item {
     progress?: number;
     nameError?: string;
     title?: string;
+
+    isEdit: boolean
   }
 
   const defaults: FormState = {
@@ -42,6 +44,8 @@ const BaggageDetails: React.FC = () => {
     progress: 0.02,
     nameError: t("items.nameError"),
     title: t("items.new"),
+
+    isEdit: false,
   };
 
   const formReducer = (state: FormState, action: FormAction) => {
@@ -49,6 +53,7 @@ const BaggageDetails: React.FC = () => {
       case "UPDATE":
         return { ...state, [action.field]: action.value };
       case "RESET":
+        setModalPage(0);
         return {
           ...defaults
         };
@@ -226,6 +231,8 @@ const BaggageDetails: React.FC = () => {
                 }
                 <ItemCard
                   item={result}
+                  dispatch={dispatch}
+                  modal={modal}
                 />
               </React.Fragment>
             ))}

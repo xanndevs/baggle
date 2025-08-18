@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { cameraOutline, imageOutline, trashOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import { push, push_item_to_bag } from '../../../utils/storage';
+import { edit_uuid, push, push_item_to_bag } from '../../../utils/storage';
 import './AddItemModal.css';
 import { useTranslation } from 'react-i18next';
 
@@ -13,12 +13,14 @@ interface FormState extends Item {
     progress?: number;
     nameError?: string;
     title?: string;
+
+    isEdit?: boolean
   }
 
 type FormAction = {
     type: "UPDATE";
     field: keyof FormState;
-    value: string | number | undefined;
+    value: string | number | undefined| boolean;
 } | {
     type: "RESET";
 }
@@ -90,11 +92,18 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
     });
     async function addItem() {
 
-        const formValues = { ...formState, uuid: uuid_v4() };
-
+        const formValues = { ...formState, uuid: formState.uuid === ""? uuid_v4() : formState.uuid } as FormState;
         delete formValues.title;
         delete formValues.progress;
         delete formValues.nameError;
+        if(formValues.isEdit){
+            delete formValues.isEdit;
+
+            handleEdit(formValues);
+            return
+        }
+        delete formValues.isEdit;
+
 
         setModalPage(0);
         if (modal.current) {
@@ -113,6 +122,25 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
             setModalPage(0);
         }, 350);
     }
+
+        async function handleEdit(formInput: Item) {
+            alert(1)
+
+            await edit_uuid(`items.${formInput.uuid}`, formInput)
+            dispatch({
+                type: "UPDATE",
+                field: "progress",
+                value: 1,
+            });
+            setTimeout(() => {
+                modal.current?.dismiss();
+    
+                dispatch({
+                    type: "RESET",
+                })
+                //history.push(`/travels/${formInput.uuid}`);
+            }, 350);
+        }
 
     return (
         <motion.div

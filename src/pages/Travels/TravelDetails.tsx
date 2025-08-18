@@ -22,8 +22,8 @@ const TravelDetails: React.FC = () => {
 
   type FormState = {
     baggageNameValue: string,
-    isEdit: boolean
     progress: number,
+    isEdit: boolean,
     uuid?: string,
   };
   type FormAction =
