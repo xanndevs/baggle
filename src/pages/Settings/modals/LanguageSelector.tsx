@@ -29,7 +29,7 @@ const LanguageSelector: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching settings:', error);
+        //console.error('Error fetching settings:', error);
       }
     };
 
@@ -61,7 +61,7 @@ const LanguageSelector: React.FC = () => {
         await edit_settings({ language: newLanguage });
         await i18n.changeLanguage(newLanguage);
       } catch (error) {
-        console.error('Error updating language:', error);
+        //console.error('Error updating language:', error);
       }
     }
   };
@@ -83,11 +83,11 @@ const LanguageSelector: React.FC = () => {
           svg
           slot="start"
         />
-        {t('settings.selectLanguage').toString()} {/* Use correct key and remove .toString() */}
+        {t('settings.selectLanguage') as string} {/* Use correct key and remove .toString() */}
       </IonButton>
       <IonActionSheet
         trigger="open-action-sheet"
-        header={t('app.language')} // Use correct key
+        header={t('settings.selectLanguage') as string} // Use correct key
         onDidDismiss={({ detail }) => handleAction(detail)}
         buttons={[
           {

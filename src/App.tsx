@@ -128,24 +128,24 @@ const App: React.FC = () => {
 
             <IonTabButton tab="travels" href="/travels">
               <IonIcon aria-hidden="true" icon={airplaneSharp} />
-              <IonLabel>{ t("tabs.travels") }</IonLabel>
+              <IonLabel>{ t("tabs.travels") as string }</IonLabel>
               {travelData.length ? <IonBadge color={'warning'}>{travelData.length}</IonBadge> : undefined}
             </IonTabButton>
 
             <IonTabButton tab="baggages" href="/baggages">
               <IonIcon aria-hidden="true" icon={briefcaseSharp} />
-              <IonLabel>{ t("tabs.baggages") }</IonLabel>
+              <IonLabel>{ t("tabs.baggages") as string }</IonLabel>
               {baggageData.length ? <IonBadge color={'warning'}>{baggageData.length}</IonBadge> : undefined}
             </IonTabButton>
 
             <IonTabButton tab="store-items" href="/store-items">
               <IonIcon aria-hidden="true" icon={cartSharp} />
-              <IonLabel>{ t("tabs.store") }</IonLabel>
+              <IonLabel>{ t("tabs.store") as string }</IonLabel>
             </IonTabButton>
 
             <IonTabButton tab="settings" href="/settings">
               <IonIcon aria-hidden="true" icon={settingsSharp} />
-              <IonLabel>{ t("tabs.settings") }</IonLabel>
+              <IonLabel>{ t("tabs.settings") as string }</IonLabel>
             </IonTabButton>
 
           </IonTabBar>

@@ -6,23 +6,41 @@ import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
 import { pop_uuid, retrive_bag_items } from '../utils/storage';
 import BaggleDaysLabel from './BaggleDaysLabel';
 import { useTranslation } from 'react-i18next';
+import { presentDeleteConfirmation } from '../pages/Settings/modals/DeleteActionSheet';
 
 
 interface ComponentProps {
   travel: Travel
+
+  modal: React.RefObject<HTMLIonModalElement>
+  dispatch: React.Dispatch<FormAction>,
 }
-const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
+
+  type FormState = {
+    travelNameValue: string,
+    travelDateValue: Date,
+    progress: number,
+
+    uuid?: string,
+    isEdit: boolean,
+  };
+  type FormAction =
+    | { type: "UPDATE"; field: keyof FormState; value: string | number | Date | boolean | undefined }
+    | { type: "RESET" };
+
+
+const TravelsCard: React.FC<ComponentProps> = ({ travel, modal, dispatch }) => {
   const { t } = useTranslation();
   const Popover = () =>
     <>
-      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={() => { /*alert("Editioriique espaganzo!\n\nMekanic (/-_-)/")  */ }}>
+      <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={ handleEdit }>
         <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>{t("generic.edit")}</IonLabel>
+        <IonLabel color={'primary'}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
         <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>{t("generic.delete")}</IonLabel>
+        <IonLabel color={'danger'}>{t("generic.delete") as string}</IonLabel>
       </IonButton>
     </>
 
@@ -35,6 +53,9 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
   const PRESS_DURATION = 400; // milliseconds
 
   async function handleDelete(): Promise<void> {
+    const isConfirmed = await presentDeleteConfirmation();
+    if(!isConfirmed) return
+     
     const bagUuidList = travel.bags;
     bagUuidList.forEach(async (bagUuid) => {
       const bagItems = await retrive_bag_items(bagUuid);
@@ -46,6 +67,25 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel }) => {
     })
     pop_uuid("travels", travel.uuid)
   }
+
+  async function handleEdit(): Promise<void> {
+    if(!dispatch || !modal)return
+    await dispatch({ type: "RESET" })
+
+    await dispatch({ type: "UPDATE", field: "uuid",             value: travel.uuid, });
+
+    await dispatch({ type: "UPDATE", field: "isEdit",           value: true, });
+
+    await dispatch({ type: "UPDATE", field: "travelNameValue",  value: travel.name, });
+
+    await dispatch({ type: "UPDATE", field: "travelDateValue",  value: travel.date, });
+    
+    modal.current?.present()
+  }
+
+
+
+
   const onStart = (e: Event) => {
     pressTimeout.current = setTimeout(() => {
       const target =

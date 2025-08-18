@@ -45,13 +45,13 @@ const Settings: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{ t("tabs.settings") }</IonTitle>
+          <IonTitle>{ t("tabs.settings") as string }</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{ t("tabs.settings") }</IonTitle>
+            <IonTitle size="large">{ t("tabs.settings") as string }</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div className='ion-padding-horizontal'>

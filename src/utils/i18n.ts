@@ -2,7 +2,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import { get } from './storage'; // Your storage utility
+import { edit_settings, get } from './storage'; // Your storage utility
 
 // Import translation files
 import en from '../locales/en.json';
@@ -10,6 +10,7 @@ import es from '../locales/es.json';
 import tr from '../locales/tr.json';
 import fr from '../locales/fr.json';
 import zh from '../locales/zh.json';
+import { language } from 'ionicons/icons';
 
 // Define supported languages
 const resources = {
@@ -22,8 +23,12 @@ const resources = {
 
 export const initI18n = async (): Promise<any> => {
   // Retrieve saved language from storage, fallback to 'en' if none
+  let savedLanguage = "us";
   const settings = await get<Settings>('settings');
-  const savedLanguage = settings?.language || "en";
+  if (!settings || !settings.language) {
+    await edit_settings({ language: "us" });
+  }
+  else savedLanguage = settings.language;
 
   return i18n
     .use(LanguageDetector) // Detects browser language or storage
@@ -31,7 +36,7 @@ export const initI18n = async (): Promise<any> => {
     .init({
       resources,
       lng: savedLanguage, // Use saved language or fallback
-      fallbackLng: 'en', // Fallback language if translation is missing
+      fallbackLng: 'us', // Fallback language if translation is missing
       interpolation: {
         escapeValue: false, // React already escapes values
       },

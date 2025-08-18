@@ -10,16 +10,16 @@ const StoreItems: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{ t("tabs.store") }</IonTitle>
+          <IonTitle>{ t("tabs.store") as string }</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{ t("tabs.store") }</IonTitle>
+            <IonTitle size="large">{ t("tabs.store") as string }</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonLabel>{ t("generic.noContent") }</IonLabel>
+        <IonLabel>{ t("generic.noContent") as string }</IonLabel>
       </IonContent>
     </IonPage>
   );
