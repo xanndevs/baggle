@@ -9,26 +9,32 @@
     "selectLanguage": "更改语言"
   },
   "generic": {
-    "noContent": "无内容",
-    "datePicker": "日期选择器",
-    "timePicker": "时间选择器",
+    "noContent": "暂无内容",
+    "datePicker": "选择日期",
+    "timePicker": "选择时间",
     "done": "完成",
     "edit": "编辑",
     "delete": "删除",
+    "cancel": "取消",
     "next": "下一步",
     "details": "详情",
-    "back": "返回"
+    "search": "搜索",
+    "back": "返回",
+    "camera": "拍照",
+    "cameraTake": "拍摄照片",
+    "gallery": "从相册选择",
+    "deleteConfirmationText": "确定要删除吗？"
   },
   "travels": {
-    "new": "新旅行",
-    "add": "添加旅行",
-    "name": "旅行名称",
-    "date": "旅行日期",
-    "time": "旅行时间",
-    "nameError": "旅行名称必须在3到16个字符之间。",
+    "new": "新建行程",
+    "add": "添加行程",
+    "name": "行程名称",
+    "date": "出发日期",
+    "time": "出发时间",
+    "nameError": "行程名称长度须为3到16个字符。",
     "day": {
-      "hoursLeft": "剩余 {{hours}} 小时",
-      "hoursPast": "已过 {{hours}} 小时",
+      "hoursLeft": "还剩 {{hours}} 小时",
+      "hoursPast": "{{hours}} 小时前",
       "now": "现在！",
       "yesterday": "昨天",
       "tomorrow": "明天",
@@ -40,9 +46,21 @@
     "new": "新行李",
     "baggages": "行李",
     "unnamed": "未命名行李",
-    "name": "包名称",
-    "nameError": "包名称必须在3到16个字符之间。",
-    "categoryCount": "有 {{count}} 个类别",
-    "categoryCountEmpty": "没有类别"
+    "name": "行李名称",
+    "nameError": "行李名称长度须为3到16个字符。",
+    "categoryCount": "有 {{count}} 个分类",
+    "categoryCountEmpty": "暂无分类"
+  },
+  "items": {
+    "name": "物品名称",
+    "price": "物品价格",
+    "amount": "数量",
+    "new": "添加新物品",
+    "note": "备注",
+    "noteNotProvided": "未提供备注。",
+    "dontHaveYet": "我还没有该物品。",
+    "nameError": "物品名称长度须为3到20个字符。",
+    "moreDetails": "添加更多信息",
+    "unnamed": "未命名物品"
   }
 }

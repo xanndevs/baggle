@@ -16,9 +16,15 @@
     "done": "Done",
     "edit": "Edit",
     "delete": "Delete",
+    "cancel": "Cancel",
     "next": "Next",
     "details": "Details",
-    "back": "Back"
+    "search": "Search",
+    "back": "Back",
+    "camera": "From Camera",
+    "cameraTake": "TakePhoto",
+    "gallery": "From Gallery",
+    "deleteConfirmationText": "Are you sure?"
   },
   "travels": {
     "new": "New Travel",
@@ -45,5 +51,17 @@
     "nameError": "Bag name must be between 3 and 16 characters long.",
     "categoryCount": "Has {{count}} Categories",
     "categoryCountEmpty": "Has No Categories"
+  },
+  "items": {
+    "name": "Item Name",
+    "price": "Item Price",
+    "amount": "Item Amount",
+    "new":"Add a new Item",
+    "note": "Item Note",
+    "noteNotProvided": "No note provided.",
+    "dontHaveYet": "I dont have this item yet.",
+    "nameError":"Item name must be between 3 and 20 characters long.",
+    "moreDetails": "Add more details",
+    "unnamed":"Unnamed Item"
   }
 }

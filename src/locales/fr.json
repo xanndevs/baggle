@@ -2,47 +2,65 @@
   "tabs": {
     "travels": "Voyages",
     "baggages": "Bagages",
-    "store": "Magasin",
+    "store": "Boutique",
     "settings": "Paramètres"
   },
   "settings": {
-    "selectLanguage": "Changer de Langue"
+    "selectLanguage": "Changer la langue"
   },
   "generic": {
-    "noContent": "Aucun Contenu",
-    "datePicker": "Sélecteur de Date",
-    "timePicker": "Sélecteur d'Heure",
+    "noContent": "Aucun contenu",
+    "datePicker": "Sélectionner la date",
+    "timePicker": "Sélectionner l'heure",
     "done": "Terminé",
     "edit": "Modifier",
     "delete": "Supprimer",
+    "cancel": "Annuler",
     "next": "Suivant",
     "details": "Détails",
-    "back": "Retour"
+    "search": "Rechercher",
+    "back": "Retour",
+    "camera": "Depuis la caméra",
+    "cameraTake": "Prendre une photo",
+    "gallery": "Depuis la galerie",
+    "deleteConfirmationText": "Voulez-vous vraiment supprimer ?"
   },
   "travels": {
-    "new": "Nouveau Voyage",
-    "add": "Ajouter un Voyage",
-    "name": "Nom du Voyage",
-    "date": "Date du Voyage",
-    "time": "Heure du Voyage",
+    "new": "Nouveau voyage",
+    "add": "Ajouter un voyage",
+    "name": "Nom du voyage",
+    "date": "Date du voyage",
+    "time": "Heure du voyage",
     "nameError": "Le nom du voyage doit comporter entre 3 et 16 caractères.",
     "day": {
-      "hoursLeft": "{{hours}} Heures Restantes",
-      "hoursPast": "{{hours}} Heures Passées",
-      "now": "Maintenant!",
+      "hoursLeft": "Il reste {{hours}} heures",
+      "hoursPast": "Il y a {{hours}} heures",
+      "now": "Maintenant !",
       "yesterday": "Hier",
       "tomorrow": "Demain",
-      "daysLater": "{{days}} Jours Plus Tard",
-      "daysPast": "{{days}} Jours Passés"
+      "daysLater": "Dans {{days}} jours",
+      "daysPast": "Il y a {{days}} jours"
     }
   },
   "baggages": {
-    "new": "Nouveau Bagage",
+    "new": "Nouveau bagage",
     "baggages": "Bagages",
-    "unnamed": "Bagage Sans Nom",
-    "name": "Nom du Sac",
-    "nameError": "Le nom du sac doit comporter entre 3 et 16 caractères.",
-    "categoryCount": "A {{count}} Catégories",
-    "categoryCountEmpty": "N'a Pas de Catégories"
+    "unnamed": "Bagage sans nom",
+    "name": "Nom du bagage",
+    "nameError": "Le nom du bagage doit comporter entre 3 et 16 caractères.",
+    "categoryCount": "Contient {{count}} catégories",
+    "categoryCountEmpty": "Aucune catégorie"
+  },
+  "items": {
+    "name": "Nom de l'article",
+    "price": "Prix",
+    "amount": "Quantité",
+    "new": "Ajouter un article",
+    "note": "Remarque",
+    "noteNotProvided": "Aucune remarque fournie.",
+    "dontHaveYet": "Je n'ai pas encore cet article.",
+    "nameError": "Le nom de l'article doit comporter entre 3 et 20 caractères.",
+    "moreDetails": "Ajouter plus de détails",
+    "unnamed": "Article sans nom"
   }
 }

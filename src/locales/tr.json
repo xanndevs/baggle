@@ -6,43 +6,61 @@
     "settings": "Ayarlar"
   },
   "settings": {
-    "selectLanguage": "Dili Değiştir"
+    "selectLanguage": "Dili değiştir"
   },
   "generic": {
-    "noContent": "İçerik Yok",
-    "datePicker": "Tarih Seçici",
-    "timePicker": "Saat Seçici",
+    "noContent": "İçerik yok",
+    "datePicker": "Tarih seç",
+    "timePicker": "Saat seç",
     "done": "Bitti",
     "edit": "Düzenle",
     "delete": "Sil",
-    "next": "Sonraki",
+    "cancel": "İptal",
+    "next": "İleri",
     "details": "Detaylar",
-    "back": "Geri"
+    "search": "Ara",
+    "back": "Geri",
+    "camera": "Kameradan",
+    "cameraTake": "Fotoğraf çek",
+    "gallery": "Galeriden",
+    "deleteConfirmationText": "Emin misiniz?"
   },
   "travels": {
-    "new": "Yeni Seyahat",
-    "add": "Seyahat Ekle",
-    "name": "Seyahat Adı",
-    "date": "Seyahat Tarihi",
-    "time": "Seyahat Saati",
+    "new": "Yeni seyahat",
+    "add": "Seyahat ekle",
+    "name": "Seyahat adı",
+    "date": "Seyahat tarihi",
+    "time": "Seyahat saati",
     "nameError": "Seyahat adı 3 ile 16 karakter arasında olmalıdır.",
     "day": {
-      "hoursLeft": "{{hours}} Saat Kaldı",
-      "hoursPast": "{{hours}} Saat Geçti",
+      "hoursLeft": "{{hours}} saat kaldı",
+      "hoursPast": "{{hours}} saat geçti",
       "now": "Şimdi!",
       "yesterday": "Dün",
       "tomorrow": "Yarın",
-      "daysLater": "{{days}} Gün Sonra",
-      "daysPast": "{{days}} Gün Önce"
+      "daysLater": "{{days}} gün sonra",
+      "daysPast": "{{days}} gün geçti"
     }
   },
   "baggages": {
-    "new": "Yeni Bagaj",
+    "new": "Yeni bagaj",
     "baggages": "Bagajlar",
-    "unnamed": "İsimsiz Bagaj",
-    "name": "Çanta Adı",
-    "nameError": "Çanta adı 3 ile 16 karakter arasında olmalıdır.",
-    "categoryCount": "{{count}} Kategori Var",
-    "categoryCountEmpty": "Kategori Yok"
+    "unnamed": "İsimsiz bagaj",
+    "name": "Bagaj adı",
+    "nameError": "Bagaj adı 3 ile 16 karakter arasında olmalıdır.",
+    "categoryCount": "{{count}} kategori içeriyor",
+    "categoryCountEmpty": "Kategori yok"
+  },
+  "items": {
+    "name": "Eşya adı",
+    "price": "Fiyat",
+    "amount": "Adet",
+    "new": "Yeni eşya ekle",
+    "note": "Not",
+    "noteNotProvided": "Not belirtilmedi.",
+    "dontHaveYet": "Henüz bu eşyaya sahip değilim.",
+    "nameError": "Eşya adı 3 ile 20 karakter arasında olmalıdır.",
+    "moreDetails": "Daha fazla detay ekle",
+    "unnamed": "İsimsiz eşya"
   }
 }
