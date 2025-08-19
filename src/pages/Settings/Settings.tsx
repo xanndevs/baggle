@@ -14,7 +14,7 @@ import React, { useEffect } from 'react';
 import { get, set } from '../../utils/storage';
 import { language, languageOutline } from 'ionicons/icons';
 import "./Settings.css";
-import LanguageSelector from './modals/LanguageSelector';
+import LanguageSelector from './modal/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
 const Settings: React.FC = () => {

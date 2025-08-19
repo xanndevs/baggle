@@ -20,8 +20,8 @@
     "details": "详情",
     "search": "搜索",
     "back": "返回",
-    "camera": "拍照",
-    "cameraTake": "拍摄照片",
+    "camera": "从相机",
+    "cameraTake": "拍照",
     "gallery": "从相册选择",
     "deleteConfirmationText": "确定要删除吗？"
   },
@@ -31,15 +31,15 @@
     "name": "行程名称",
     "date": "出发日期",
     "time": "出发时间",
-    "nameError": "行程名称长度须为3到16个字符。",
+    "nameError": "行程名称长度必须在3到16个字符之间。",
     "day": {
       "hoursLeft": "还剩 {{hours}} 小时",
-      "hoursPast": "{{hours}} 小时前",
+      "hoursPast": "{{hours}} 小时已过",
       "now": "现在！",
       "yesterday": "昨天",
       "tomorrow": "明天",
       "daysLater": "{{days}} 天后",
-      "daysPast": "{{days}} 天前"
+      "daysPast": "{{days}} 天已过"
     }
   },
   "baggages": {
@@ -47,20 +47,30 @@
     "baggages": "行李",
     "unnamed": "未命名行李",
     "name": "行李名称",
-    "nameError": "行李名称长度须为3到16个字符。",
-    "categoryCount": "有 {{count}} 个分类",
-    "categoryCountEmpty": "暂无分类"
+    "nameError": "行李名称长度必须在3到16个字符之间。",
+    "categoryCount": "有 {{count}} 类别",
+    "categoryCountEmpty": "暂无类别"
   },
   "items": {
     "name": "物品名称",
     "price": "物品价格",
-    "amount": "数量",
+    "amount": "物品数量",
     "new": "添加新物品",
-    "note": "备注",
+    "note": "物品备注",
     "noteNotProvided": "未提供备注。",
-    "dontHaveYet": "我还没有该物品。",
-    "nameError": "物品名称长度须为3到20个字符。",
-    "moreDetails": "添加更多信息",
-    "unnamed": "未命名物品"
+    "dontHaveYet": "我还没有这个物品。",
+    "nameError": "物品名称长度必须在3到20个字符之间。",
+    "moreDetails": "添加更多详情",
+    "unnamed": "未命名物品",
+    "unboughtPrice": "总计：{{amount}}",
+    "iDontHaveYet": "缺少",
+    "store": "商店商品",
+    "ready": "已准备物品",
+    "packed": "已打包物品",
+    "actionSheet": {
+      "checkUserActionTitle": "您想对该物品做什么？",
+      "asPacked": "标记为已打包",
+      "asReady": "标记为已准备"
+    }
   }
 }

@@ -6,7 +6,7 @@ import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
 import { pop_uuid, retrive_bag_items } from '../utils/storage';
 import BaggleDaysLabel from './BaggleDaysLabel';
 import { useTranslation } from 'react-i18next';
-import { presentDeleteConfirmation } from '../pages/Settings/modals/DeleteActionSheet';
+import { presentDeleteConfirmation } from '../pages/Settings/modal/DeleteActionSheet';
 
 
 interface ComponentProps {

@@ -1,12 +1,12 @@
 
 
 import { createGesture, GestureDetail, IonBadge, IonButton, IonCard, IonCheckbox, IonChip, IonIcon, IonImg, IonLabel, useIonActionSheet, useIonPopover } from '@ionic/react';
-import { imageOutline, pencilSharp, trashSharp } from 'ionicons/icons';
+import { bagAddOutline, bagAddSharp, bagOutline, imageOutline, pencilSharp, pricetag, pricetagOutline, trashSharp } from 'ionicons/icons';
 import React, { useEffect, useRef } from 'react';
 import { edit_uuid, pop_uuid } from '../../utils/storage';
 import './ItemCard.css';
 import { useTranslation } from 'react-i18next';
-import { presentDeleteConfirmation } from '../Settings/modals/DeleteActionSheet';
+import { presentDeleteConfirmation, presentReadyOrPackedSelection } from '../Settings/modal/DeleteActionSheet';
 
 interface ContainerProps {
   item: Item;
@@ -33,19 +33,27 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
 
   const Popover = () =>
     <>
+      { item.type !== "store" &&
+        <IonButton expand='block' size='default' fill='clear'  color={'light'} className='popover-button' onClick={handleNeeded}>
+        <IonIcon slot="start" color={"primary"} style={{position: 'absolute', left: '8px'}} icon={pricetag} />
+        <IonLabel color={'primary'} style={{position: 'absolute', left: '32px'}}>{t("items.iDontHaveYet") as string}</IonLabel>
+      </IonButton>
+      }
+
       <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleEdit}>
-        <IonIcon slot="start" color={"primary"} icon={pencilSharp} />
-        <IonLabel color={'primary'}>{t("generic.edit") as string}</IonLabel>
+        <IonIcon slot="start" color={"primary"} style={{position: 'absolute', left: '8px'}} icon={pencilSharp} />
+        <IonLabel color={'primary'} style={{position: 'absolute', left: '32px'}}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
 
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
-        <IonIcon slot="start" color={"danger"} icon={trashSharp} />
-        <IonLabel color={'danger'}>{t("generic.delete") as string}</IonLabel>
+        <IonIcon slot="start" color={"danger"} style={{position: 'absolute', left: '8px'}} icon={trashSharp} />
+        <IonLabel color={'danger'} style={{position: 'absolute', left: '32px'}}>{t("generic.delete") as string}</IonLabel>
       </IonButton>
     </>
 
   const [present, dismiss] = useIonPopover(Popover, {
     onDismiss: (data: any, role: string) => dismiss(data, role),
+
   });
 
   const card = useRef<HTMLIonCardElement | null>(null);
@@ -143,30 +151,23 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
 
 
 
-  const [presentActionSheet] = useIonActionSheet();
 
-  const handleChecked = () => {
-    presentActionSheet({
-      header: 'Item Actions',
-      buttons: [
+  const handleChecked = async () => {
+    if (item.type === "store") {
+      const status = await presentReadyOrPackedSelection();
+      if (!status) return;
+
+      edit_uuid(
+        `items.${item.uuid}`,
         {
-          text: item.type === "packed" ? "unpack" : "pack",
-          handler: () => alert(1),
-        },
-        {
-          text: 'Delete',
-          role: 'destructive',
-          handler: () => alert(2),
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
+          ...item,
+          type: status
         }
-      ],
-      cssClass: 'my-custom-class',
-    });
+      );
+      return;
+    }
 
-    if (item.type === "store") return;
+
     edit_uuid(
       `items.${item.uuid}`,
       {
@@ -174,6 +175,21 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
         type: item.type === "packed" ? "ready" : "packed"
       }
     );
+    return;
+
+  }
+
+  const handleNeeded = () => {
+
+    edit_uuid(
+      `items.${item.uuid}`,
+      {
+        ...item,
+        type: "store"
+      }
+    );
+    return;
+
   }
 
 

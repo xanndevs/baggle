@@ -124,7 +124,7 @@ const Page2_AddItemModal: React.FC<ComponentTypes> = ({ dispatch, formState, mod
     }
 
         async function handleEdit(formInput: Item) {
-            alert(1)
+
 
             await edit_uuid(`items.${formInput.uuid}`, formInput)
             dispatch({

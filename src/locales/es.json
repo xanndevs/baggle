@@ -6,12 +6,12 @@
     "settings": "Ajustes"
   },
   "settings": {
-    "selectLanguage": "Cambiar idioma"
+    "selectLanguage": "Cambiar Idioma"
   },
   "generic": {
-    "noContent": "Sin contenido",
-    "datePicker": "Selector de fecha",
-    "timePicker": "Selector de hora",
+    "noContent": "Sin Contenido",
+    "datePicker": "Selector de Fecha",
+    "timePicker": "Selector de Hora",
     "done": "Listo",
     "edit": "Editar",
     "delete": "Eliminar",
@@ -20,47 +20,57 @@
     "details": "Detalles",
     "search": "Buscar",
     "back": "Atrás",
-    "camera": "Desde la cámara",
-    "cameraTake": "Tomar foto",
-    "gallery": "Desde la galería",
-    "deleteConfirmationText": "¿Seguro que quieres eliminar esto?"
+    "camera": "Desde la Cámara",
+    "cameraTake": "Tomar Foto",
+    "gallery": "Desde la Galería",
+    "deleteConfirmationText": "¿Estás seguro?"
   },
   "travels": {
-    "new": "Nuevo viaje",
-    "add": "Agregar viaje",
-    "name": "Nombre del viaje",
-    "date": "Fecha del viaje",
-    "time": "Hora del viaje",
+    "new": "Nuevo Viaje",
+    "add": "Agregar Viaje",
+    "name": "Nombre del Viaje",
+    "date": "Fecha del Viaje",
+    "time": "Hora del Viaje",
     "nameError": "El nombre del viaje debe tener entre 3 y 16 caracteres.",
     "day": {
-      "hoursLeft": "Quedan {{hours}} horas",
-      "hoursPast": "Hace {{hours}} horas",
+      "hoursLeft": "Quedan {{hours}} Horas",
+      "hoursPast": "Han pasado {{hours}} Horas",
       "now": "¡Ahora!",
       "yesterday": "Ayer",
       "tomorrow": "Mañana",
-      "daysLater": "En {{days}} días",
-      "daysPast": "Hace {{days}} días"
+      "daysLater": "En {{days}} Días",
+      "daysPast": "Han pasado {{days}} Días"
     }
   },
   "baggages": {
-    "new": "Nuevo equipaje",
+    "new": "Nuevo Equipaje",
     "baggages": "Equipaje",
-    "unnamed": "Equipaje sin nombre",
-    "name": "Nombre del equipaje",
+    "unnamed": "Equipaje Sin Nombre",
+    "name": "Nombre del Equipaje",
     "nameError": "El nombre del equipaje debe tener entre 3 y 16 caracteres.",
-    "categoryCount": "Tiene {{count}} categorías",
-    "categoryCountEmpty": "No tiene categorías"
+    "categoryCount": "Tiene {{count}} Categorías",
+    "categoryCountEmpty": "No Tiene Categorías"
   },
   "items": {
-    "name": "Nombre del artículo",
-    "price": "Precio",
+    "name": "Nombre del Artículo",
+    "price": "Precio del Artículo",
     "amount": "Cantidad",
-    "new": "Agregar un artículo",
-    "note": "Nota",
+    "new": "Agregar un Nuevo Artículo",
+    "note": "Nota del Artículo",
     "noteNotProvided": "No se proporcionó nota.",
     "dontHaveYet": "Aún no tengo este artículo.",
     "nameError": "El nombre del artículo debe tener entre 3 y 20 caracteres.",
-    "moreDetails": "Agregar más detalles",
-    "unnamed": "Artículo sin nombre"
+    "moreDetails": "Agregar Más Detalles",
+    "unnamed": "Artículo Sin Nombre",
+    "unboughtPrice": "Total: {{amount}}",
+    "iDontHaveYet": "Falta",
+    "store": "Artículos en Tienda",
+    "ready": "Artículos Listos",
+    "packed": "Artículos Empacados",
+    "actionSheet": {
+      "checkUserActionTitle": "¿Qué quieres hacer con este artículo?",
+      "asPacked": "Marcar Como Empacado",
+      "asReady": "Marcar Como Listo"
+    }
   }
 }

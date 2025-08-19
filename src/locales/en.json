@@ -62,6 +62,16 @@
     "dontHaveYet": "I dont have this item yet.",
     "nameError":"Item name must be between 3 and 20 characters long.",
     "moreDetails": "Add more details",
-    "unnamed":"Unnamed Item"
+    "unnamed":"Unnamed Item",
+    "unboughtPrice":"Total: {{amount}}",
+    "iDontHaveYet":"Needed",
+    "store": "Stored Items",
+    "ready": "Ready Items",
+    "packed": "Packed Items",
+    "actionSheet": {
+      "checkUserActionTitle": "What do you want to do with this item?",
+      "asPacked": "Mark as Packed",
+      "asReady": "Mark as Ready"
+    }
   }
 }

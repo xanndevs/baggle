@@ -2,16 +2,16 @@
   "tabs": {
     "travels": "Seyahatler",
     "baggages": "Bagajlar",
-    "store": "Mağaza",
+    "store": "Market",
     "settings": "Ayarlar"
   },
   "settings": {
-    "selectLanguage": "Dili değiştir"
+    "selectLanguage": "Dili Değiştir"
   },
   "generic": {
-    "noContent": "İçerik yok",
-    "datePicker": "Tarih seç",
-    "timePicker": "Saat seç",
+    "noContent": "İçerik Yok",
+    "datePicker": "Tarih Seç",
+    "timePicker": "Saat Seç",
     "done": "Bitti",
     "edit": "Düzenle",
     "delete": "Sil",
@@ -21,46 +21,56 @@
     "search": "Ara",
     "back": "Geri",
     "camera": "Kameradan",
-    "cameraTake": "Fotoğraf çek",
+    "cameraTake": "Fotoğraf Çek",
     "gallery": "Galeriden",
     "deleteConfirmationText": "Emin misiniz?"
   },
   "travels": {
-    "new": "Yeni seyahat",
-    "add": "Seyahat ekle",
-    "name": "Seyahat adı",
-    "date": "Seyahat tarihi",
-    "time": "Seyahat saati",
+    "new": "Yeni Seyahat",
+    "add": "Seyahat Ekle",
+    "name": "Seyahat Adı",
+    "date": "Seyahat Tarihi",
+    "time": "Seyahat Saati",
     "nameError": "Seyahat adı 3 ile 16 karakter arasında olmalıdır.",
     "day": {
-      "hoursLeft": "{{hours}} saat kaldı",
-      "hoursPast": "{{hours}} saat geçti",
+      "hoursLeft": "{{hours}} Saat Kaldı",
+      "hoursPast": "{{hours}} Saat Geçti",
       "now": "Şimdi!",
       "yesterday": "Dün",
       "tomorrow": "Yarın",
-      "daysLater": "{{days}} gün sonra",
-      "daysPast": "{{days}} gün geçti"
+      "daysLater": "{{days}} Gün Sonra",
+      "daysPast": "{{days}} Gün Geçti"
     }
   },
   "baggages": {
-    "new": "Yeni bagaj",
+    "new": "Yeni Bagaj",
     "baggages": "Bagajlar",
-    "unnamed": "İsimsiz bagaj",
-    "name": "Bagaj adı",
-    "nameError": "Bagaj adı 3 ile 16 karakter arasında olmalıdır.",
-    "categoryCount": "{{count}} kategori içeriyor",
-    "categoryCountEmpty": "Kategori yok"
+    "unnamed": "İsimsiz Bagaj",
+    "name": "Bag Adı",
+    "nameError": "Bag adı 3 ile 16 karakter arasında olmalıdır.",
+    "categoryCount": "{{count}} Kategori Var",
+    "categoryCountEmpty": "Kategori Yok"
   },
   "items": {
-    "name": "Eşya adı",
-    "price": "Fiyat",
-    "amount": "Adet",
-    "new": "Yeni eşya ekle",
-    "note": "Not",
+    "name": "Eşya Adı",
+    "price": "Eşya Fiyatı",
+    "amount": "Eşya Adedi",
+    "new": "Yeni Eşya Ekle",
+    "note": "Eşya Notu",
     "noteNotProvided": "Not belirtilmedi.",
     "dontHaveYet": "Henüz bu eşyaya sahip değilim.",
     "nameError": "Eşya adı 3 ile 20 karakter arasında olmalıdır.",
-    "moreDetails": "Daha fazla detay ekle",
-    "unnamed": "İsimsiz eşya"
+    "moreDetails": "Daha Fazla Detay Ekle",
+    "unnamed": "İsimsiz Eşya",
+    "unboughtPrice": "Toplam: {{amount}}",
+    "iDontHaveYet": "Eksik",
+    "store": "Market Ürünleri",
+    "ready": "Hazır Eşyalar",
+    "packed": "Paketlenmiş Eşyalar",
+    "actionSheet": {
+      "checkUserActionTitle": "Bu eşya ile ne yapmak istiyorsunuz?",
+      "asPacked": "Paketlendi Olarak İşaretle",
+      "asReady": "Hazır Olarak İşaretle"
+    }
   }
 }

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { get, pop_uuid, retrive_bag_items, subscribe } from '../../utils/storage';
 import './TravelDetails.css';
 import { useTranslation } from 'react-i18next';
-import { presentDeleteConfirmation } from '../Settings/modals/DeleteActionSheet';
+import { presentDeleteConfirmation } from '../Settings/modal/DeleteActionSheet';
 
 interface ComponentProps {
   bag: Bag,

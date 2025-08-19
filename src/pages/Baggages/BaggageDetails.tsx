@@ -1,4 +1,4 @@
-import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonSearchbar, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
 import { addSharp, cameraOutline } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const BaggageDetails: React.FC = () => {
 
-  const { t } = useTranslation();   
+  const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const modal = useRef<HTMLIonModalElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -128,6 +128,9 @@ const BaggageDetails: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
   const [searchResults, setSearchResults] = useState<Item[]>([])
+  const [searchResultsStore, setSearchResultsStore] = useState<Item[]>([])
+  const [searchResultsPacked, setSearchResultsPacked] = useState<Item[]>([])
+  const [searchResultsReady, setSearchResultsReady] = useState<Item[]>([])
   //#region Search Functionality
   const handleInput = () => {
     const inputValue = searchbar.current?.value || ""
@@ -138,6 +141,10 @@ const BaggageDetails: React.FC = () => {
     if (!data) { setSearchResults([]); return; }
     const filtered = data.filter((elem) => elem.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
     setSearchResults(filtered);
+    setSearchResultsStore(filtered.filter(item => item.type === 'store'));
+    setSearchResultsPacked(filtered.filter(item => item.type === 'packed'));
+    setSearchResultsReady(filtered.filter(item => item.type === 'ready'));
+
   }, [searchTerm, data])
   //#endregion
 
@@ -157,56 +164,56 @@ const BaggageDetails: React.FC = () => {
 
 
   //#region Camera Functionality
-      const [stream, setStream] = useState<MediaStream | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
-      const startCamera = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-                setIsStreaming(true);
-                await videoRef.current.play();
-            }
-            setStream(mediaStream);
-        } catch (err) {
-            //console.error('Error accessing camera:', err);
-        }
-    };
+  const startCamera = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+        setIsStreaming(true);
+        await videoRef.current.play();
+      }
+      setStream(mediaStream);
+    } catch (err) {
+      //console.error('Error accessing camera:', err);
+    }
+  };
 
-    const stopCamera = () => {
-        if (stream) {
-            setIsStreaming(false);
-            stream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        }
-    };
+  const stopCamera = () => {
+    if (stream) {
+      setIsStreaming(false);
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+  };
 
-    const takePhoto = () => {
-        if (!videoRef.current) return;
-        const canvas = document.createElement('canvas');
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-            ctx.drawImage(videoRef.current, 0, 0);
-            const dataUrl = canvas.toDataURL('image/png');
-            dispatch({
-                type: 'UPDATE',
-                field: 'image',
-                value: dataUrl.split(',')[1] // only base64 part
-            });
-        }
-        stopCamera();
-    };
-        const removePhoto = () => {
-            dispatch({
-                type: 'UPDATE',
-                field: 'image',
-                value: undefined
-            });
-        };
+  const takePhoto = () => {
+    if (!videoRef.current) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(videoRef.current, 0, 0);
+      const dataUrl = canvas.toDataURL('image/png');
+      dispatch({
+        type: 'UPDATE',
+        field: 'image',
+        value: dataUrl.split(',')[1] // only base64 part
+      });
+    }
+    stopCamera();
+  };
+  const removePhoto = () => {
+    dispatch({
+      type: 'UPDATE',
+      field: 'image',
+      value: undefined
+    });
+  };
 
   return (
     <>
@@ -224,18 +231,45 @@ const BaggageDetails: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
           <IonList class='items-list'>
-            {searchResults?.map((result, key) => (
-              <React.Fragment key={key}>
-                {
-                  //#region HEREEEEEEEEEEEEEEEE
-                }
-                <ItemCard
+            {searchResultsStore.length !== 0 && (
+              <IonItemDivider style={{ backgroundColor: "transparent" }}>
+                <IonText slot='start'>{t("items.store") as string}</IonText>
+                <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.price || 0), 0) }) as string}</IonChip>
+              </IonItemDivider>
+            )}
+            {
+              searchResultsStore.map((result, key) => (
+                <React.Fragment key={key}> <ItemCard
                   item={result}
                   dispatch={dispatch}
                   modal={modal}
-                />
-              </React.Fragment>
-            ))}
+                /> </React.Fragment>
+              ))
+            }
+
+            {(searchResultsReady.length !== 0) && ( <IonItemDivider style={{ backgroundColor: "transparent", borderTop: searchResultsStore.length !== 0 ? "1px solid var(--ion-color-secondary)" : "none", minHeight: "32px",  paddingTop:"5px",paddingBottom:"2px" }} >{t("items.ready") as string}</IonItemDivider>)}
+
+            {
+              searchResultsReady.map((result, key) => (
+                <React.Fragment key={key}> <ItemCard
+                  item={result}
+                  dispatch={dispatch}
+                  modal={modal}
+                /> </React.Fragment>
+              ))
+            }
+
+            {(searchResultsPacked.length !== 0) && ( <IonItemDivider style={{ backgroundColor: "transparent", borderTop: (searchResultsReady.length !== 0 || searchResultsStore.length !== 0) ?"1px solid var(--ion-color-secondary)" : "none", minHeight: "32px", paddingTop:"5px",paddingBottom:"2px" }} >{t("items.packed") as string}</IonItemDivider> )}
+
+            {
+              searchResultsPacked.map((result, key) => (
+                <React.Fragment key={key}> <ItemCard
+                  item={result}
+                  dispatch={dispatch}
+                  modal={modal}
+                /> </React.Fragment>
+              ))
+            }
             <div style={{ position: 'relative', width: '100%', height: '105px' }}>
 
             </div>
@@ -268,7 +302,7 @@ const BaggageDetails: React.FC = () => {
                 id="videoRef"
                 className='camera-preview'
                 muted
-                onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera}
+                onClick={isStreaming ? takePhoto : formState.image ? removePhoto : startCamera}
                 playsInline
                 style={{ display: isStreaming ? 'block' : 'none', }}
               >
@@ -276,11 +310,11 @@ const BaggageDetails: React.FC = () => {
 
               {
                 !formState.image ?
-                  <div className='camera-preview' onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
+                  <div className='camera-preview' onClick={isStreaming ? takePhoto : formState.image ? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
                     <IonIcon size='large' icon={cameraOutline}></IonIcon>
 
                   </div> :
-                  <IonImg src={formState.image ? 'data:image/jpeg;base64,' + formState.image : ""} className='camera-preview' onClick={isStreaming? takePhoto : formState.image? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
+                  <IonImg src={formState.image ? 'data:image/jpeg;base64,' + formState.image : ""} className='camera-preview' onClick={isStreaming ? takePhoto : formState.image ? removePhoto : startCamera} style={{ display: isStreaming ? 'none' : 'flex', }}>
                   </IonImg>
               }
 
