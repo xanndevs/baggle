@@ -24,7 +24,9 @@
     "camera": "Desde la Cámara",
     "cameraTake": "Tomar Foto",
     "gallery": "Desde la Galería",
-    "deleteConfirmationText": "¿Estás seguro?"
+    "deleteConfirmationText": "¿Estás seguro?",
+    "add": "Nuevo",
+    "categoryName": "Categoría"
   },
   "travels": {
     "new": "Nuevo Viaje",

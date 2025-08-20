@@ -24,7 +24,9 @@
     "camera": "从相机",
     "cameraTake": "拍照",
     "gallery": "从相册选择",
-    "deleteConfirmationText": "确定要删除吗？"
+    "deleteConfirmationText": "确定要删除吗？",
+    "add": "新建",
+    "categoryName": "类别名称"
   },
   "travels": {
     "new": "新建行程",

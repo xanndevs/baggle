@@ -9,6 +9,9 @@ const config: CapacitorConfig = {
       resize: "body",
       style: "DARK",
       resizeOnFullScreen: true
+    },
+    StatusBar: {
+      overlaysWebView: false,
     }
   }
 };

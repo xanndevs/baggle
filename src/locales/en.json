@@ -24,7 +24,9 @@
     "camera": "From Camera",
     "cameraTake": "TakePhoto",
     "gallery": "From Gallery",
-    "deleteConfirmationText": "Are you sure?"
+    "deleteConfirmationText": "Are you sure?",
+    "add": "New",
+    "categoryName": "Category Name"
   },
   "travels": {
     "new": "New Travel",

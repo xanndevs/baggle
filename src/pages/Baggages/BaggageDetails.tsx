@@ -1,15 +1,16 @@
-import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonSearchbar, IonText, IonTitle, IonToolbar, isPlatform } from '@ionic/react';
+import { IonBackButton, IonBadge, IonButtons, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonSearchbar, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { AnimatePresence } from 'framer-motion';
-import { addSharp, cameraOutline } from 'ionicons/icons';
+import { addSharp, bag, bagOutline, cameraOutline, checkmark, checkmarkDone } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { get, retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
 import './BaggageDetails.css';
 import './Baggages.css';
 import ItemCard from './ItemCard';
+import CategoriesBar from './modal/CategoriesBar';
 import Page1_AddItemModal from './modal/Page1_AddItemModal';
 import Page2_AddItemModal from './modal/Page2_AddItemModal';
-import { useTranslation } from 'react-i18next';
 
 const BaggageDetails: React.FC = () => {
 
@@ -242,13 +243,21 @@ const BaggageDetails: React.FC = () => {
           </IonToolbar>
           <IonToolbar>
             <IonSearchbar placeholder={t("generic.search") as string} aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
+            <IonRow className='horizontal-slider seperator-top'>
+
+              <CategoriesBar></CategoriesBar>
+
+            </IonRow>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
           <IonList class='items-list'>
             {searchResultsStore.length !== 0 && (
               <IonItemDivider style={{ backgroundColor: "transparent" }}>
-                <IonText slot='start'>{t("items.store") as string}</IonText>
+                <IonLabel style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <IonIcon icon={bagOutline} />
+                  {t("items.store") as string}
+                </IonLabel>
                 <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.amount * (item.price || 0)), 0) }) as string}</IonChip>
               </IonItemDivider>
             )}
@@ -262,7 +271,13 @@ const BaggageDetails: React.FC = () => {
               ))
             }
 
-            {(searchResultsReady.length !== 0) && ( <IonItemDivider style={{ backgroundColor: "transparent", borderTop: searchResultsStore.length !== 0 ? "1px solid var(--ion-color-secondary)" : "none", minHeight: "32px",  paddingTop:"5px",paddingBottom:"2px" }} >{t("items.ready") as string}</IonItemDivider>)}
+            {(searchResultsReady.length !== 0) && (
+              <IonItemDivider style={{ backgroundColor: "transparent", borderTop: searchResultsStore.length !== 0 ? "1px solid var(--ion-color-secondary)" : "none", minHeight: "32px", paddingTop: "5px", paddingBottom: "2px" }} >
+                <IonLabel style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <IonIcon icon={checkmark} />
+                  {t("items.ready") as string}
+                </IonLabel>
+              </IonItemDivider>)}
 
             {
               searchResultsReady.map((result, key) => (
@@ -274,7 +289,14 @@ const BaggageDetails: React.FC = () => {
               ))
             }
 
-            {(searchResultsPacked.length !== 0) && ( <IonItemDivider style={{ backgroundColor: "transparent", borderTop: (searchResultsReady.length !== 0 || searchResultsStore.length !== 0) ?"1px solid var(--ion-color-secondary)" : "none", minHeight: "32px", paddingTop:"5px",paddingBottom:"2px" }} >{t("items.packed") as string}</IonItemDivider> )}
+            {(searchResultsPacked.length !== 0) && (
+              <IonItemDivider style={{ backgroundColor: "transparent", borderTop: (searchResultsReady.length !== 0 || searchResultsStore.length !== 0) ? "1px solid var(--ion-color-secondary)" : "none", minHeight: "32px", paddingTop: "5px", paddingBottom: "2px" }} >
+                <IonLabel style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <IonIcon icon={checkmarkDone} />
+                  {t("items.packed") as string}
+                </IonLabel>
+              </IonItemDivider>
+            )}
 
             {
               searchResultsPacked.map((result, key) => (

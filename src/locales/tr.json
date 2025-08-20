@@ -24,7 +24,9 @@
     "camera": "Kameradan",
     "cameraTake": "Fotoğraf Çek",
     "gallery": "Galeriden",
-    "deleteConfirmationText": "Emin misiniz?"
+    "deleteConfirmationText": "Emin misiniz?",
+    "add": "Yeni",
+    "categoryName": "Kategori Adı"
   },
   "travels": {
     "new": "Yeni Seyahat",

@@ -95,7 +95,7 @@ const App: React.FC = () => {
 
 
   return (
-    <IonApp>
+    <IonApp className='statusBar-padding'>
       <IonReactRouter>
         <IonTabs >
           <IonRouterOutlet>

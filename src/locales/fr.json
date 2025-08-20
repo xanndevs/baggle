@@ -24,7 +24,10 @@
     "camera": "Depuis la caméra",
     "cameraTake": "Prendre une photo",
     "gallery": "Depuis la galerie",
-    "deleteConfirmationText": "Êtes-vous sûr ?"
+    "deleteConfirmationText": "Êtes-vous sûr ?",
+    "add": "Nouveau",
+    "categoryName": "Catégorie" 
+
   },
   "travels": {
     "new": "Nouveau Voyage",

@@ -3,13 +3,14 @@ ion-img::part(image) {
 }
 
 ion-toolbar .sc-ion-searchbar-ios-h {
-    padding-bottom: 1px;
+    padding: 4px 4px;
+    min-height: auto;
 }
 
 
 
 
-.item-preview-card{
+.item-preview-card {
     position: sticky;
     background-color: var(--ion-card-background);
     width: calc(100% - 14px);
@@ -20,7 +21,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     margin-left: 7px;
     z-index: 999;
     /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
-    
+
     padding: 6px 6px 6px 6px;
 
     display: flex;
@@ -28,7 +29,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     align-items: center;
 }
 
-.item-card{
+.item-card {
     position: sticky;
     background-color: var(--ion-card-background);
     width: calc(100% - 14px);
@@ -39,14 +40,14 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     margin-left: 7px;
     z-index: 999;
     /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
-    
+
 
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.item-preview-card-content{
+.item-preview-card-content {
     position: relative;
     background-color: var(--ion-card-background);
     width: 100%;
@@ -56,14 +57,15 @@ ion-toolbar .sc-ion-searchbar-ios-h {
 
     z-index: 999;
     /* box-shadow: rgba(18, 20, 16, 0.5) 2px 2px 5px 0px inset, rgba(18, 20, 16, 0.5) -2px -2px 5px 1px inset; */
-    
+
     padding: 6px 6px 6px 6px;
 
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.camera-preview{
+
+.camera-preview {
     position: relative;
     width: auto;
     min-width: min-content;
@@ -78,10 +80,10 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     align-items: center;
 
     object-fit: cover;
-    box-shadow: 0 0 12px rgba(0,0,0,0.5) inset;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5) inset;
 }
 
-.item-preview-details{
+.item-preview-details {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -90,7 +92,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
 
 }
 
-.item-preview-amount{
+.item-preview-amount {
     position: absolute;
     top: 6px;
     left: 6px;
@@ -103,13 +105,15 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     justify-content: center;
     align-items: center;
 }
-.item-preview-title{
+
+.item-preview-title {
     font-size: 14px;
     font-weight: 600;
     color: var(--ion-text-color);
     margin-left: 0px;
 }
-.item-preview-note{
+
+.item-preview-note {
     font-size: 12px;
     color: var(--ion-text-color);
     flex-grow: 1;
@@ -117,22 +121,65 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     text-overflow: ellipsis;
     word-break: break-word;
     display: -webkit-box;
-    line-clamp: 3; /* number of lines to show */
-    -webkit-line-clamp: 3; /* number of lines to show */
+    line-clamp: 3;
+    /* number of lines to show */
+    -webkit-line-clamp: 3;
+    /* number of lines to show */
     -webkit-box-orient: vertical;
 }
-.item-preview-price{
+
+.item-preview-price {
     font-size: 12px;
     color: var(--ion-color-step-700);
     padding: 0px 8px;
     min-height: 20px;
-    
+
 }
 
-.items-list{
-display: flex;
-flex-direction: column;
-gap: 0px;
-padding-top: 6px;
-background-color: transparent !important;
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding-top: 6px;
+    background-color: transparent !important;
+}
+
+.horizontal-slider {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0px;
+    gap: 0px;
+    flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.seperator-top {
+    border-top: 1px solid var(--ion-color-secondary);
+}
+
+.categories-button {
+    width: auto;
+    min-height: 16px;
+    padding: 6px 12px;
+    font-size: 11px;
+    background-color: var(--ion-color-step-150);
+    transition: all 0.15s ease-in-out;
+}
+
+.categories-button:active {
+    background-color: var(--ion-color-step-100);
+}
+
+.categories-add-button {
+    position: absolute;
+    right: 4px;
+    display: flex;
+    justify-content: last baseline;
+    align-items: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
