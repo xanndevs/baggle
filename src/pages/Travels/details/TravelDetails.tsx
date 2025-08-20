@@ -2,10 +2,10 @@ import { IonBackButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonCol
 import { addSharp } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { get, subscribe } from '../../utils/storage';
+import { get, subscribe } from '../../../utils/storage';
 import BagContainer from './BagContainer';
 import './TravelDetails.css';
-import AddBaggageModal from './modal/AddBaggageModal';
+import AddBaggageModal from '../modal/AddBaggageModal';
 import { useTranslation } from 'react-i18next';
 
 const TravelDetails: React.FC = () => {

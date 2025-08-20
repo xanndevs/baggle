@@ -2,7 +2,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { get, subscribe } from '../../utils/storage';
-import BagContainer from '../Travels/BagContainer';
+import BagContainer from '../Travels/details/BagContainer';
 import './Baggages.css';
 import { useTranslation } from 'react-i18next';
 

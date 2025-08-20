@@ -1,10 +1,10 @@
 import { createGesture, GestureDetail, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonIcon, IonLabel, useIonPopover } from '@ionic/react';
 import { checkmarkDoneSharp, checkmarkSharp, chevronForwardSharp, pencilSharp, pricetagSharp, trashSharp } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { get, pop_uuid, retrive_bag_items, subscribe } from '../../utils/storage';
+import { get, pop_uuid, retrive_bag_items, subscribe } from '../../../utils/storage';
 import './TravelDetails.css';
 import { useTranslation } from 'react-i18next';
-import { presentDeleteConfirmation } from '../Settings/modal/DeleteActionSheet';
+import { presentDeleteConfirmation } from '../../Settings/modal/DeleteActionSheet';
 
 interface ComponentProps {
   bag: Bag,

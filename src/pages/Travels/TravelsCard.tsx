@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import './TravelsCard.css';
 
 import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
-import { pop_uuid, retrive_bag_items } from '../utils/storage';
-import BaggleDaysLabel from './BaggleDaysLabel';
 import { useTranslation } from 'react-i18next';
-import { presentDeleteConfirmation } from '../pages/Settings/modal/DeleteActionSheet';
+import { pop_uuid, retrive_bag_items } from '../../utils/storage';
+import { presentDeleteConfirmation } from '../Settings/modal/DeleteActionSheet';
+import BaggleDaysLabel from './BaggleDaysLabel';
 
 
 interface ComponentProps {
