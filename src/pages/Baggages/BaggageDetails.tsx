@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { addSharp, cameraOutline } from 'ionicons/icons';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
+import { get, retrive_bag, retrive_bag_items, subscribe } from '../../utils/storage';
 import './BaggageDetails.css';
 import './Baggages.css';
 import ItemCard from './ItemCard';
@@ -77,6 +77,8 @@ const BaggageDetails: React.FC = () => {
   const [baggageData, setBaggageData] = useState<Bag>();
   const [data, setData] = useState<Item[]>();
 
+  const [settings, setSettings] = useState<Settings | undefined>();
+
   useEffect(() => {
     baggageDataRef.current = baggageData;
   }, [baggageData]);
@@ -85,8 +87,9 @@ const BaggageDetails: React.FC = () => {
     let isMounted = true;
 
     const setup = async () => {
-      const bag = await retrive_bag(uuid);
-      const items = await retrive_bag_items(uuid);
+      const bag = await retrive_bag(uuid) as Bag;
+      const items = await retrive_bag_items(uuid) as Item[];
+      const settings = await get("settings") as Settings;
 
       if (isMounted && bag) {
         setBaggageData(bag);
@@ -95,6 +98,10 @@ const BaggageDetails: React.FC = () => {
       if (isMounted && items && baggageDataRef.current && Array.isArray(baggageDataRef.current.items)) {
         setData(items.filter((item) => baggageDataRef.current && baggageDataRef.current.items.includes(item.uuid)));
       }
+      if (isMounted && settings) {
+        setSettings(settings);
+      }
+
     };
 
     setup();
@@ -115,12 +122,20 @@ const BaggageDetails: React.FC = () => {
       }
     });
 
+    const unsub_settings = subscribe<Settings>('settings', (settings) => {
+      if (isMounted) {
+        setSettings(settings);
+        //console.log("Settings data updated:", settings);
+      }
+    });
+
     return () => {
       isMounted = false;
       unsub_baggages();
       unsub_items();
+      unsub_settings();
     };
-  }, [uuid]); // also add uuid here
+  }, [uuid]);
 
   //#endregion
 
@@ -234,7 +249,7 @@ const BaggageDetails: React.FC = () => {
             {searchResultsStore.length !== 0 && (
               <IonItemDivider style={{ backgroundColor: "transparent" }}>
                 <IonText slot='start'>{t("items.store") as string}</IonText>
-                <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.price || 0), 0) }) as string}</IonChip>
+                <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.amount * (item.price || 0)), 0) }) as string}</IonChip>
               </IonItemDivider>
             )}
             {
@@ -323,7 +338,7 @@ const BaggageDetails: React.FC = () => {
               <div className='item-preview-details'>
                 <div style={{ display: 'flex', gap: "4px", alignItems: 'center' }}>
                   <IonLabel className='item-preview-title'>{formState.name || t("items.name") as string}</IonLabel>
-                  <IonChip className='item-preview-price'>{`${formState.price || 0}₺`}</IonChip>
+                  <IonChip className='item-preview-price'>{`${formState.price || 0}${settings?.currency}`}</IonChip>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>
                   <IonLabel style={{ flexGrow: 1 }} color={'primary'} className='item-preview-note'>{formState.note || t("items.noteNotProvided") as string}</IonLabel>

@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import './TravelsCard.css';
 
 import { chevronForwardSharp, pencilSharp, trashSharp } from 'ionicons/icons';
-import { useTranslation } from 'react-i18next';
 import { pop_uuid, retrive_bag_items } from '../../utils/storage';
-import { presentDeleteConfirmation } from '../Settings/modal/DeleteActionSheet';
 import BaggleDaysLabel from './BaggleDaysLabel';
+import { useTranslation } from 'react-i18next';
+import { presentDeleteConfirmation } from '../Settings/modal/DeleteActionSheet';
 
 
 interface ComponentProps {
@@ -150,7 +150,7 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel, modal, dispatch }) => {
     <>
       <IonCard ref={card} className='card-margin' color={"light"} button routerLink={`/travels/${travel.uuid}`} >
         <IonCardHeader className='padding-bottom-none padding-small'>
-          <IonCardSubtitle><IonLabel color={'medium'}>{travel.date?.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel> • <BaggleDaysLabel date={travel.date} /></IonCardSubtitle>
+          <IonCardSubtitle><BaggleDaysLabel date={travel.date} withFullDate={true} /></IonCardSubtitle>
 
           <IonCardTitle className='flex-middle'>
             {travel.name}

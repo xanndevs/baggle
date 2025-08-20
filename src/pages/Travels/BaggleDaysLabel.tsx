@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   date?: Date;
+  withFullDate?: boolean;
+  withRemainingDays?: boolean;
 }
 
-const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
+const BaggleDaysLabel: React.FC<ContainerProps> = ({ date, withFullDate = false, withRemainingDays = true }) => {
   const { t } = useTranslation();
 
 
@@ -67,8 +69,15 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
 
   if (!date) return null;
 
-  return (
-    <IonLabel color={calculateColor()} className='baggle-days-label'>
+  return (<>
+    {withFullDate && (
+      <>
+        <IonLabel className='baggle-days-label' color={'medium'}>{date.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel>
+        {withFullDate && withRemainingDays &&(<> • </>)}
+      </>
+    )}
+    
+    {withRemainingDays && <IonLabel color={calculateColor()} className='baggle-days-label'>
       {
         {
           1: remainingHours <= -6 ? t("travels.day.yesterday") : t("travels.day.hoursPast", { hours: -remainingHours }),
@@ -79,7 +88,8 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date }) => {
           6: t("travels.day.daysLater", { days: remainingDays })
         }[(Math.sign(remainingDays) + negToPosFix) + (Math.abs(remainingDays) > 1 ? numOverlapFix : numOverlapNoFix)]
       }
-    </IonLabel>
+    </IonLabel>}
+      </>
   );
 };
 

@@ -5,7 +5,7 @@ import {
 import { addSharp } from 'ionicons/icons';
 import React, { useReducer, useRef } from 'react';
 import TravelsCard from './TravelsCard';
-import AddTravelModal from './modal/AddTravelModal';
+import AddTravelModal from './details/modal/AddTravelModal';
 import './Travels.css';
 import { useTranslation } from 'react-i18next';
 

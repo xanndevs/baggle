@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
-import { edit_uuid, push, push_bag_to_travel } from '../../../utils/storage';
+import { edit_uuid, push, push_bag_to_travel } from '../../../../utils/storage';
 import { useTranslation } from 'react-i18next';
 
 
@@ -176,8 +176,9 @@ const AddBaggageModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal,
                                 <IonButton
                                     expand="block"
                                     className="ion-margin-top"
+                                    disabled={formState.baggageNameValue.length < 3 || formState.baggageNameValue.length > 16}
 
-                                    style={{ bottom: "10px", position: "absolute", right: "10px", left: "10px" }}
+                                    style={{ bottom: "10px", position: "absolute", right: "100px", left: "10px", width: "calc(100% - 20px)" }}
                                     type="submit"
                                 >
                                     {t("generic.next") as string}

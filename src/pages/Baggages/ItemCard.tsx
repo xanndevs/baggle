@@ -3,10 +3,11 @@
 import { createGesture, GestureDetail, IonBadge, IonButton, IonCard, IonCheckbox, IonChip, IonIcon, IonImg, IonLabel, useIonActionSheet, useIonPopover } from '@ionic/react';
 import { bagAddOutline, bagAddSharp, bagOutline, imageOutline, pencilSharp, pricetag, pricetagOutline, trashSharp } from 'ionicons/icons';
 import React, { useEffect, useRef } from 'react';
-import { edit_uuid, pop_uuid } from '../../utils/storage';
+import { edit_uuid, get, pop_uuid, subscribe } from '../../utils/storage';
 import './ItemCard.css';
 import { useTranslation } from 'react-i18next';
 import { presentDeleteConfirmation, presentReadyOrPackedSelection } from '../Settings/modal/DeleteActionSheet';
+import { settings } from 'cluster';
 
 interface ContainerProps {
   item: Item;
@@ -145,6 +146,33 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
     }
   }, []);
 
+    const [settings, setSettings] = React.useState<Settings>();
+    useEffect(() => {
+      let isMounted = true;
+  
+      const setup = async () => {
+        const settings = await get("settings") as Settings;
+  
+        if (isMounted && settings) { setSettings(settings); }
+  
+      };
+  
+      setup();
+  
+
+      const unsub_settings = subscribe<Settings>('settings', (settings) => {
+        if (isMounted) {
+          setSettings(settings);
+          //console.log("Settings data updated:", settings);
+        }
+      });
+  
+      return () => {
+        isMounted = false;
+        unsub_settings();
+      };
+    }, []);
+
 
 
 
@@ -215,7 +243,7 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
             <IonLabel className='item-title'>{item.name || t("items.unnamed") as string}</IonLabel>
             {
               item.price ?
-                <IonChip className='item-price'>{item.price}₺</IonChip> : undefined
+                <IonChip className='item-price'>{item.price}{settings?.currency}</IonChip> : undefined
             }
           </div>
           <div style={{ display: 'flex', flexDirection: 'row', gap: '4px', alignItems: 'flex-start', height: '100%' }}>

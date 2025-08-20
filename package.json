@@ -58,6 +58,7 @@
     "@typescript-eslint/parser": "^5.59.2",
     "eslint": "^8.35.0",
     "eslint-plugin-react": "^7.32.2",
+    "iso-country-currency": "^0.7.2",
     "react-i18next": "^11.8.15"
   },
   "scripts": {

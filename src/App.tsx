@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { airplaneSharp, briefcaseSharp, cartSharp, settingsSharp } from 'ionicons/icons';
+import { airplaneOutline, bagOutline, briefcaseOutline, settingsOutline } from 'ionicons/icons';
 import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Baggages from './pages/Baggages/Baggages';
@@ -35,12 +35,12 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
+import { useTranslation } from 'react-i18next';
 import BaggageDetails from './pages/Baggages/BaggageDetails';
 import Settings from './pages/Settings/Settings';
 import TravelDetails from './pages/Travels/details/TravelDetails';
 import './theme/variables.css';
 import { get, subscribe } from './utils/storage';
-import { useTranslation } from 'react-i18next';
 
 
 
@@ -127,24 +127,24 @@ const App: React.FC = () => {
           <IonTabBar slot="bottom" className='floating-tabs glow-border'>
 
             <IonTabButton tab="travels" href="/travels">
-              <IonIcon aria-hidden="true" icon={airplaneSharp} />
+              <IonIcon aria-hidden="true" icon={airplaneOutline} />
               <IonLabel>{ t("tabs.travels") as string }</IonLabel>
               {travelData.length ? <IonBadge color={'warning'}>{travelData.length}</IonBadge> : undefined}
             </IonTabButton>
 
             <IonTabButton tab="baggages" href="/baggages">
-              <IonIcon aria-hidden="true" icon={briefcaseSharp} />
+              <IonIcon aria-hidden="true" icon={briefcaseOutline} />
               <IonLabel>{ t("tabs.baggages") as string }</IonLabel>
               {baggageData.length ? <IonBadge color={'warning'}>{baggageData.length}</IonBadge> : undefined}
             </IonTabButton>
 
             <IonTabButton tab="store-items" href="/store-items">
-              <IonIcon aria-hidden="true" icon={cartSharp} />
+              <IonIcon aria-hidden="true" icon={bagOutline} />
               <IonLabel>{ t("tabs.store") as string }</IonLabel>
             </IonTabButton>
 
             <IonTabButton tab="settings" href="/settings">
-              <IonIcon aria-hidden="true" icon={settingsSharp} />
+              <IonIcon aria-hidden="true" icon={settingsOutline} />
               <IonLabel>{ t("tabs.settings") as string }</IonLabel>
             </IonTabButton>
 

@@ -37,7 +37,8 @@ declare global {
     //#region Settings
     interface Settings {
         theme: 'light' | 'dark' | 'system', // Theme of the app
-        language: 'en' | 'tr' | string, // Language of the app
+        language: 'tr' | 'fr' | 'es' | 'us' | string, // Language of the app
+        currency: 'USD' | 'EUR' | 'TRY' | string, // Currency of the app
     }
     //#endregion
 

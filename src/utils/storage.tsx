@@ -92,6 +92,31 @@ export async function retrive_bag(uuid: string): Promise<Bag | null> {
   return bag;
 }
 
+export async function retrive_travel_total_price(uuid: string): Promise<number | 0> {
+  await initStorage();
+
+  const travels: Travel[] = (await store.get("travels")) ?? [];
+  const travel = travels.find((t) => t.uuid === uuid);
+  if (!travel) return 0;
+
+  const baggages: Bag[] = (await store.get("baggages")) ?? [];
+  if (!travel.bags || travel.bags.length === 0) return 0;
+
+  const items: Item[] = (await store.get("items")) ?? [];
+  if (!items || items.length === 0) return 0;
+
+  const total = travel.bags.reduce((acc, bag_uuid) => {
+    const bag = baggages.find((b) => b.uuid === bag_uuid);
+    if (!bag) return acc;
+
+    const bagItems = items.filter((item) => bag.items.includes(item.uuid) && item.type === 'store');
+    const bagTotal = bagItems.reduce((sum, item) => sum + (item.price || 0) * (item.amount || 0), 0);
+    return acc + bagTotal;
+  }, 0);
+
+  return total;
+}
+
 export async function push_item_to_bag(bag_uuid: string, item_uuid: string): Promise<void> {
 
   await initStorage();

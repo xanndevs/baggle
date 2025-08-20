@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid_v4 } from 'uuid';
-import { edit_uuid, push } from '../../../utils/storage';
+import { edit_uuid, push } from '../../../../utils/storage';
 import { useTranslation } from 'react-i18next';
 
 type FormState = {
@@ -307,7 +307,7 @@ const AddTravelModal: React.FC<ComponentTypes> = ({ dispatch, formState, modal }
                                     <IonButton
                                         expand="block"
                                         className="ion-margin-top"
-                                        style={{ position: "absolute", bottom: "10px", left: "10px", right: "10px" }}
+                                        style={{ position: "absolute", bottom: "10px", left: "10px", right: "10px", width: "calc(100% - 20px)" }}
                                         type="submit"
                                     >
                                         {t("travels.add") as string}

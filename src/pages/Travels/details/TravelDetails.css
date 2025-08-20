@@ -67,3 +67,10 @@ ion-modal {
     white-space: nowrap;
     
 }
+
+
+.details-inner-card{
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
