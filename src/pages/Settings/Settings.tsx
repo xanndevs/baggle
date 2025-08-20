@@ -17,28 +17,9 @@ import CurrencySelector from './modal/CurrencySelector';
 
 const Settings: React.FC = () => {
 
-  function defaultSettings(): Settings {
-    // Example default settings object
-    return {
-      theme: 'dark',
-      language: 'en',
-      currency: 'USD',
-    };
-  }
+
   const { t } = useTranslation();
-  useEffect(() => {
-    const initializeSettings = async () => {
-      // Initialize settings if needed
-      const settings = await get("settings");
-      if (!settings) {
 
-
-        await set("settings", defaultSettings());
-      }
-    }
-
-    initializeSettings();
-  }, []);
 
   return (
     <IonPage>

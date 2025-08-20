@@ -172,7 +172,7 @@ const TravelDetails: React.FC = () => {
                   </IonCol>
 
                   <IonCol style={{ maxWidth: '100px' }}>
-                    <IonCard className='margin-none ion-padding details-inner-card' ><IonIcon icon={cube}></IonIcon>{" × " + baggageData?.reduce((acc, bag) => acc + (bag.items.length || 0), 0) || 0}</IonCard>
+                    <IonCard className='margin-none ion-padding details-inner-card' ><IonIcon icon={cube}></IonIcon>{" × " + (baggageData?.filter((bag) => travel?.bags?.includes(bag.uuid || "")).reduce((acc, bag) => acc + (bag.items.length || 0), 0) || 0)}</IonCard>
                   </IonCol>
 
                   <IonCol style={{  }}>

@@ -35,6 +35,16 @@ async function initStorage() {
     //   { uuid: "bag-uuid", type: 'ready', name: "Ayakkabı", amount: 3 },
     //   { uuid: "bag-uuid", type: 'store', name: "Balık", amount: 3, price: 300 }
     // ])
+    get("settings").then((settings) => {
+      if (!settings) {
+        set("settings", {
+          theme: 'dark',
+          language: 'us',
+          currency: 'USD',
+    
+        });
+      }
+    });
     storageReady = true;
   }
 }
