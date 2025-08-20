@@ -150,8 +150,8 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding: 0px;
-    gap: 0px;
+    padding: 8px 4px;
+    gap: 6px;
     flex-wrap: nowrap;
     display: flex;
     align-items: center;
@@ -166,9 +166,9 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     width: auto;
     min-height: 16px;
     padding: 6px 12px;
-    font-size: 11px;
     background-color: var(--ion-color-step-150);
     transition: all 0.15s ease-in-out;
+    margin: 0px;
 }
 
 .categories-button:active {
@@ -177,9 +177,9 @@ ion-toolbar .sc-ion-searchbar-ios-h {
 
 .categories-add-button {
     position: absolute;
-    right: 4px;
-    display: flex;
-    justify-content: last baseline;
-    align-items: center;
+    right: 10px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

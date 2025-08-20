@@ -245,7 +245,7 @@ const BaggageDetails: React.FC = () => {
             <IonSearchbar placeholder={t("generic.search") as string} aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
             <IonRow className='horizontal-slider seperator-top'>
 
-              <CategoriesBar></CategoriesBar>
+              <CategoriesBar travel={"travel"} ></CategoriesBar>
 
             </IonRow>
           </IonToolbar>
