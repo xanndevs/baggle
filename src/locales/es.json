@@ -6,7 +6,8 @@
     "settings": "Ajustes"
   },
   "settings": {
-    "selectLanguage": "Cambiar Idioma"
+    "selectLanguage": "Cambiar Idioma",
+    "selectCurrency": "Cambiar Moneda"
   },
   "generic": {
     "noContent": "Sin Contenido",

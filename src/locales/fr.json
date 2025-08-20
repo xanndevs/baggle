@@ -6,7 +6,8 @@
     "settings": "Paramètres"
   },
   "settings": {
-    "selectLanguage": "Changer de langue"
+    "selectLanguage": "Changer de langue",
+    "selectCurrency": "Changer de devise"
   },
   "generic": {
     "noContent": "Aucun contenu",

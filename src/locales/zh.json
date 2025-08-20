@@ -6,7 +6,8 @@
     "settings": "设置"
   },
   "settings": {
-    "selectLanguage": "更改语言"
+    "selectLanguage": "更改语言",
+    "selectCurrency": "更改货币"
   },
   "generic": {
     "noContent": "暂无内容",

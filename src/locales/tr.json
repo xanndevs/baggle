@@ -6,7 +6,8 @@
     "settings": "Ayarlar"
   },
   "settings": {
-    "selectLanguage": "Dili Değiştir"
+    "selectLanguage": "Dili Değiştir",
+    "selectCurrency": "Para Birimini Değiştir"
   },
   "generic": {
     "noContent": "İçerik Yok",
