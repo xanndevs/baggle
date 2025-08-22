@@ -158,4 +158,4 @@ For significant architectural changes, open an issue first to discuss the approa
 
 ## License
 
-MIT.
+GNU General Public License v3.0
