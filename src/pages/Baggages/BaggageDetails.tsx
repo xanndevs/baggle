@@ -243,11 +243,11 @@ const BaggageDetails: React.FC = () => {
           </IonToolbar>
           <IonToolbar>
             <IonSearchbar placeholder={t("generic.search") as string} aria-autocomplete='none' autocomplete='off' ref={searchbar} debounce={250} onIonInput={handleInput}></IonSearchbar>
-            <IonRow className='horizontal-slider seperator-top'>
+            {/* <IonRow className='horizontal-slider seperator-top'>
 
               <CategoriesBar travel={"travel"} ></CategoriesBar>
 
-            </IonRow>
+            </IonRow> */}
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
@@ -258,7 +258,7 @@ const BaggageDetails: React.FC = () => {
                   <IonIcon icon={bagOutline} />
                   {t("items.store") as string}
                 </IonLabel>
-                <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.amount * (item.price || 0)), 0) }) as string}</IonChip>
+                <IonChip color={'primary'} slot='end'>{t("items.unboughtPrice", { amount: searchResultsStore.reduce((acc, item) => acc + (item.amount * (item.price || 0)), 0) }) as string}{settings?.currency}</IonChip>
               </IonItemDivider>
             )}
             {
