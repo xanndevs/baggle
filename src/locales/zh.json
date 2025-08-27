@@ -7,7 +7,9 @@
   },
   "settings": {
     "selectLanguage": "更改语言",
-    "selectCurrency": "更改货币"
+    "selectCurrency": "更改货币",
+    "exportTravels":  "导出行程",
+    "selectTravelsToExport": "选择行程"
   },
   "generic": {
     "noContent": "暂无内容",
@@ -26,7 +28,8 @@
     "gallery": "从相册选择",
     "deleteConfirmationText": "确定要删除吗？",
     "add": "新建",
-    "categoryName": "类别名称"
+    "categoryName": "类别名称",
+    "export": "导出"
   },
   "travels": {
     "new": "新建行程",

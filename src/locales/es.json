@@ -7,7 +7,9 @@
   },
   "settings": {
     "selectLanguage": "Cambiar Idioma",
-    "selectCurrency": "Cambiar Moneda"
+    "selectCurrency": "Cambiar Moneda",
+    "exportTravels":  "Exportar Viajes",
+    "selectTravelsToExport": "Seleccionar Viajes"
   },
   "generic": {
     "noContent": "Sin Contenido",
@@ -26,7 +28,8 @@
     "gallery": "Desde la Galería",
     "deleteConfirmationText": "¿Estás seguro?",
     "add": "Nuevo",
-    "categoryName": "Categoría"
+    "categoryName": "Categoría",
+    "export": "Exportar"
   },
   "travels": {
     "new": "Nuevo Viaje",

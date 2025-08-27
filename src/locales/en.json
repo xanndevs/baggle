@@ -7,7 +7,9 @@
   },
   "settings": {
     "selectLanguage": "Change Language",
-    "selectCurrency": "Change Currency"
+    "selectCurrency": "Change Currency",
+    "exportTravels":  "Export Travels",
+    "selectTravelsToExport": "Select Travels"
   },
   "generic": {
     "noContent": "No Content",
@@ -26,7 +28,8 @@
     "gallery": "From Gallery",
     "deleteConfirmationText": "Are you sure?",
     "add": "New",
-    "categoryName": "Category Name"
+    "categoryName": "Category Name",
+    "export": "Export"
   },
   "travels": {
     "new": "New Travel",
