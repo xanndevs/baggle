@@ -7,7 +7,9 @@
   },
   "settings": {
     "selectLanguage": "Dili Değiştir",
-    "selectCurrency": "Para Birimini Değiştir"
+    "selectCurrency": "Para Birimini Değiştir",
+    "exportTravels":  "Seyahatleri Dışa Aktar",
+    "selectTravelsToExport": "Seyahatleri Seçin"
   },
   "generic": {
     "noContent": "İçerik Yok",
@@ -26,7 +28,8 @@
     "gallery": "Galeriden",
     "deleteConfirmationText": "Emin misiniz?",
     "add": "Yeni",
-    "categoryName": "Kategori Adı"
+    "categoryName": "Kategori Adı",
+    "export": "Dışa Aktar"
   },
   "travels": {
     "new": "Yeni Seyahat",

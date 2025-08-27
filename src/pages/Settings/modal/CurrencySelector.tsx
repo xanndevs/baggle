@@ -6,6 +6,7 @@ import ReactCountryFlag from 'react-country-flag';
 import { edit_settings, get, subscribe } from '../../../utils/storage';
 
 import { getAllISOCodes } from 'iso-country-currency';
+import { TFunction } from 'i18next';
 
 
 
@@ -16,9 +17,14 @@ interface Settings {
   // Add other settings properties as needed
 }
 
-const CurrencySelector: React.FC = () => {
-  const { t } = useTranslation(); // Specify namespace
-  const [settings, setSettings] = useState<Settings | undefined>(undefined);
+interface ContainerProps {
+  translations: TFunction;
+  settings?: Settings ;
+}
+
+
+const CurrencySelector: React.FC<ContainerProps> = ({translations, settings}) => {
+  const t = translations // Specify namespace
 
   const [buttonValues, setButtonValues] = useState<{ text: string; value: string }[]>([]);
 
@@ -38,36 +44,6 @@ const CurrencySelector: React.FC = () => {
   }, []);
 
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const setup = async () => {
-      try {
-        const storedSettings = await get<Settings>('settings');
-        if (isMounted && storedSettings) {
-          setSettings(storedSettings);
-
-        }
-      } catch (error) {
-        //console.error('Error fetching settings:', error);
-      }
-    };
-
-    setup();
-
-    const unsub_settings = subscribe<Settings>('settings', (newSettings) => {
-      if (isMounted) {
-        setSettings(newSettings);
-
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      unsub_settings();
-    };
-  }, []); // Include i18n in dependencies to handle language changes
-
   const handleAction = async (currency: string) => {
     if (currency) {
       try {
@@ -80,15 +56,14 @@ const CurrencySelector: React.FC = () => {
 
   return (
     <>
-      <IonButton id='open-picker'>{settings?.currency} • {t("settings.selectCurrency") as string}</IonButton>
       <IonPicker
         trigger="open-picker"
         columns={[
           {
             name: 'currencies',
-            selectedIndex: buttonValues.findIndex((item) => item.value === settings?.currency),
+            selectedIndex: 0,
             options: [
-              ...buttonValues
+              { text: "defg", value: '' },
             ],
           },
         ]}
@@ -105,6 +80,7 @@ const CurrencySelector: React.FC = () => {
           },
         ]}
       ></IonPicker>
+      <IonButton id='open-picker'>{settings?.currency} • {t("settings.selectCurrency") as string}</IonButton>
     </>
   );
 };

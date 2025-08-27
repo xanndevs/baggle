@@ -11,45 +11,14 @@ interface Settings {
   // Add other settings properties as needed
 }
 
-const LanguageSelector: React.FC = () => {
-  const { t, i18n } = useTranslation('translation'); // Specify namespace
-  const [settings, setSettings] = useState<Settings | undefined>(undefined);
+interface ContainerProps {
+  i18n?: any;
+  translations?: any; 
+  settings?: Settings | undefined;
+}
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const setup = async () => {
-      try {
-        const storedSettings = await get<Settings>('settings');
-        if (isMounted && storedSettings) {
-          setSettings(storedSettings);
-          // Sync i18n language with stored language
-          if ( storedSettings.language ) {
-            await i18n.changeLanguage(storedSettings.language);
-          }
-        }
-      } catch (error) {
-        //console.error('Error fetching settings:', error);
-      }
-    };
-
-    setup();
-
-    const unsub_settings = subscribe<Settings>('settings', (newSettings) => {
-      if (isMounted) {
-        setSettings(newSettings);
-        // Sync i18n language with updated settings
-        if (newSettings?.language && newSettings.language !== i18n.language) {
-          i18n.changeLanguage(newSettings.language);
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      unsub_settings();
-    };
-  }, [i18n]); // Include i18n in dependencies to handle language changes
+const LanguageSelector: React.FC<ContainerProps> = ({translations, i18n, settings}) => {
+  const t = translations;
 
   const handleAction = async (detail: any) => {
     console.log(i18n.languages)
@@ -68,7 +37,61 @@ const LanguageSelector: React.FC = () => {
 
   return (
     <>
-      <IonButton id="open-action-sheet" expand="block">
+        <IonActionSheet
+          trigger="open-language-action-sheet"
+          header={t('settings.selectLanguage') as string} // Use correct key
+          onDidDismiss={({ detail }) => handleAction(detail)}
+          buttons={[
+            {
+              text: '中文',
+              role: settings?.language === 'cn' ? 'selected' : undefined,
+              data: {
+                action: 'select',
+                language: 'cn',
+              },
+            },
+            {
+              text: 'English',
+              role: settings?.language === 'us' ? 'selected' : undefined,
+              data: {
+                action: 'select',
+                language: 'us',
+              },
+            },
+            {
+              text: 'Español',
+              role: settings?.language === 'es' ? 'selected' : undefined,
+              data: {
+                action: 'select',
+                language: 'es',
+              },
+            },
+            {
+              text: 'Française',
+              role: settings?.language === 'fr' ? 'selected' : undefined,
+              data: {
+                action: 'select',
+                language: 'fr',
+              },
+            },
+            {
+              text: 'Türkçe',
+              role: settings?.language === 'tr' ? 'selected' : undefined,
+              data: {
+                action: 'select',
+                language: 'tr',
+              },
+            },
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              data: {
+                action: 'cancel',
+              },
+            },
+          ]}
+        />
+      <IonButton id="open-language-action-sheet" expand="block">
         <ReactCountryFlag
           countryCode={i18n.language} // Adjust for correct flag (e.g., 'gb' for English)
           cdnSuffix="svg"
@@ -85,60 +108,6 @@ const LanguageSelector: React.FC = () => {
         />
         {t('settings.selectLanguage') as string} {/* Use correct key and remove .toString() */}
       </IonButton>
-      <IonActionSheet
-        trigger="open-action-sheet"
-        header={t('settings.selectLanguage') as string} // Use correct key
-        onDidDismiss={({ detail }) => handleAction(detail)}
-        buttons={[
-          {
-            text: '中文',
-            role: settings?.language === 'cn' ? 'selected' : undefined,
-            data: {
-              action: 'select',
-              language: 'cn',
-            },
-          },
-          {
-            text: 'English',
-            role: settings?.language === 'us' ? 'selected' : undefined,
-            data: {
-              action: 'select',
-              language: 'us',
-            },
-          },
-          {
-            text: 'Español',
-            role: settings?.language === 'es' ? 'selected' : undefined,
-            data: {
-              action: 'select',
-              language: 'es',
-            },
-          },
-          {
-            text: 'Française',
-            role: settings?.language === 'fr' ? 'selected' : undefined,
-            data: {
-              action: 'select',
-              language: 'fr',
-            },
-          },
-          {
-            text: 'Türkçe',
-            role: settings?.language === 'tr' ? 'selected' : undefined,
-            data: {
-              action: 'select',
-              language: 'tr',
-            },
-          },
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            data: {
-              action: 'cancel',
-            },
-          },
-        ]}
-      />
     </>
   );
 };
