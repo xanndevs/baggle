@@ -41,7 +41,7 @@ async function initStorage() {
           theme: 'dark',
           language: 'us',
           currency: 'USD',
-    
+
         });
       }
     });
@@ -156,10 +156,19 @@ export async function remove(key: string): Promise<void> {
   emitter.emit(key, null);
 }
 
-export async function push(key: string, value: GeneralType): Promise<void> {
+export async function push(key: string, value: GeneralTravelType | GeneralTravelType[]): Promise<void> {
   await initStorage();
   const existingData = await store.get(key) || [];
-  existingData.push(value);
+  if (Array.isArray(value)) {
+    value.forEach((item) => {
+      const index = existingData.findIndex((existingItem: GeneralTravelType) => existingItem.uuid === item.uuid);
+      if (index === -1) {
+        existingData.push(item);
+      }
+    });
+  } else {
+    existingData.push(value);
+  }
   await store.set(key, existingData);
   emitter.emit(key, existingData);
 }
@@ -243,49 +252,59 @@ interface ExportType {
   items: Item[];
 }
 
-export const buildExportPayload = async (selectedIds: string[] | null): Promise<ExportType> => {
-    // read full collections (use existing storage keys)
-    const [allTravels, allBaggages, allItems] = await Promise.all([
-      get<Travel[]>('travels'),
-      get<Bag[]>('baggages'),
-      get<Item[]>('items'),
-    ]);
+export const build_export_payload = async (selectedIds: string[] | null): Promise<ExportType> => {
+  // read full collections (use existing storage keys)
+  const [allTravels, allBaggages, allItems] = await Promise.all([
+    get<Travel[]>('travels'),
+    get<Bag[]>('baggages'),
+    get<Item[]>('items'),
+  ]);
 
-    const travelsArr = allTravels ?? [];
-    const baggagesArr = allBaggages ?? [];
-    const itemsArr = allItems ?? [];
+  const travelsArr = allTravels ?? [];
+  const baggagesArr = allBaggages ?? [];
+  const itemsArr = allItems ?? [];
 
-    // Determine which travels to export
-    const travelsToExport =
-      !selectedIds || selectedIds.length === 0
-        ? travelsArr
-        : travelsArr.filter((t) => selectedIds.includes(t.uuid));
+  // Determine which travels to export
+  const travelsToExport =
+    !selectedIds || selectedIds.length === 0
+      ? travelsArr
+      : travelsArr.filter((t) => selectedIds.includes(t.uuid));
 
-    // collect baggage uuids referenced by those travels
-    const baggageUuids = new Set<string>();
-    travelsToExport.forEach((t) => {
-      (t.bags ?? []).forEach((bId) => baggageUuids.add(bId)); 
-    });
+  // collect baggage uuids referenced by those travels
+  const baggageUuids = new Set<string>();
+  travelsToExport.forEach((t) => {
+    (t.bags ?? []).forEach((bId) => baggageUuids.add(bId));
+  });
 
-    // include baggage objects that match
-    const baggagesToExport = baggagesArr.filter((b) => baggageUuids.has(b.uuid));
+  // include baggage objects that match
+  const baggagesToExport = baggagesArr.filter((b) => baggageUuids.has(b.uuid));
 
-    // collect item uuids from these baggages
-    const itemUuids = new Set<string>();
-    baggagesToExport.forEach((b) => {
-      (b.items ?? []).forEach((iId) => itemUuids.add(iId));
-    });
+  // collect item uuids from these baggages
+  const itemUuids = new Set<string>();
+  baggagesToExport.forEach((b) => {
+    (b.items ?? []).forEach((iId) => itemUuids.add(iId));
+  });
 
-    // include items that match
-    const itemsToExport = itemsArr.filter((it) => itemUuids.has(it.uuid));
+  // include items that match
+  const itemsToExport = itemsArr.filter((it) => itemUuids.has(it.uuid));
 
-    return {
-      meta: {
-        exportedAt: new Date().toISOString(),
-        app: 'baggle',
-      },
-      travels: travelsToExport,
-      baggages: baggagesToExport,
-      items: itemsToExport
-    };
+  return {
+    meta: {
+      exportedAt: new Date().toISOString(),
+      app: 'baggle',
+    },
+    travels: travelsToExport,
+    baggages: baggagesToExport,
+    items: itemsToExport
   };
+};
+
+export const importData = async (data: ExportType): Promise<void> => {
+  await initStorage();
+
+  // Import travels
+  push("travels", data.travels);
+  push("baggages", data.baggages);
+  push("items", data.items);
+  // push already emits events for subscribers so theres no need to emit them again
+};

@@ -1,11 +1,12 @@
 // src/components/LanguageSelector.tsx
-import { CheckboxCustomEvent, IonButton, IonCheckbox, IonContent, IonHeader, IonModal, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
+import { CheckboxCustomEvent, IonButton, IonCheckbox, IonContent, IonHeader, IonIcon, IonModal, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
 import { TFunction } from 'i18next';
 import React, { useEffect, useRef, useState } from 'react';
-import { buildExportPayload, get, subscribe } from '../../../utils/storage';
+import { build_export_payload, get, subscribe } from '../../../utils/storage';
 import "../Settings.css";
 import { Directory, Encoding, Filesystem }  from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
+import { downloadOutline, saveOutline, shareOutline } from 'ionicons/icons';
 // Define Settings interface (adjust based on your actual structure)
 interface Settings {
     language: string;
@@ -94,7 +95,7 @@ const ExportSettings: React.FC<ContainerProps> = ({translations}) => {
 
   const handleExport = async () => {
     try {
-      const payload = await buildExportPayload(selectedTravels.length ? selectedTravels : null);
+      const payload = await build_export_payload(selectedTravels.length ? selectedTravels : null);
       const content = JSON.stringify(payload, null, 2);
       const filename = `baggle-export-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
 
@@ -125,7 +126,8 @@ const ExportSettings: React.FC<ContainerProps> = ({translations}) => {
 
     return (
         <>
-            <IonButton id="open-settings-picker" expand="block">
+            <IonButton id="open-travels-export-picker" expand="block"  >
+              <IonIcon slot='start' icon={shareOutline}></IonIcon>
                 {t('settings.exportTravels') as string} {/* Use correct key and remove .toString() */}
             </IonButton>
             <IonModal
@@ -136,7 +138,7 @@ const ExportSettings: React.FC<ContainerProps> = ({translations}) => {
                 initialBreakpoint={1}
                 breakpoints={[0,1]}
                 animated
-                trigger="open-settings-picker"
+                trigger="open-travels-export-picker"
             >
                 <div style={{ display: 'flex', flexDirection: 'column', height: '466px'}}>
 

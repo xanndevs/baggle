@@ -43,6 +43,7 @@ declare global {
     //#endregion
 
 
-    type GeneralType = Item | Bag | Travel | Settings;
+    type GeneralTravelType = Item | Bag | Travel;
+    type GeneralType  = GeneralTravelType | Settings;
 }
 export {};

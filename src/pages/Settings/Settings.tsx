@@ -14,6 +14,7 @@ import "./Settings.css";
 import LanguageSelector from './modal/LanguageSelector';
 import CurrencySelector from './modal/CurrencySelector';
 import ExportSettings from './modal/ExportSettings';
+import ImportSettings from './modal/ImportSettings';
 
 
 const Settings: React.FC = () => {
@@ -76,6 +77,7 @@ const Settings: React.FC = () => {
           <LanguageSelector translations={t} i18n={i18n} settings={settings}/>
           <CurrencySelector translations={t} settings={settings} />
           <ExportSettings translations={t} />
+          <ImportSettings translations={t} />
         </div>
       </IonContent>
     </IonPage>
