@@ -2,7 +2,7 @@
 import { CheckboxCustomEvent, IonButton, IonCheckbox, IonContent, IonHeader, IonModal, IonProgressBar, IonTitle, IonToolbar } from '@ionic/react';
 import { TFunction } from 'i18next';
 import React, { useEffect, useRef, useState } from 'react';
-import { get, subscribe } from '../../../utils/storage';
+import { buildExportPayload, get, subscribe } from '../../../utils/storage';
 import "../Settings.css";
 import { Directory, Encoding, Filesystem }  from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
@@ -91,52 +91,6 @@ const ExportSettings: React.FC<ContainerProps> = ({translations}) => {
     }
   };
 
-  const buildExportPayload = async (selectedIds: string[] | null) => {
-    // read full collections (use existing storage keys)
-    const [allTravels, allBaggages, allItems] = await Promise.all([
-      get<Travel[]>('travels'),
-      get<Bag[]>('baggages'),
-      get<Item[]>('items'),
-    ]);
-
-    const travelsArr = allTravels ?? [];
-    const baggagesArr = allBaggages ?? [];
-    const itemsArr = allItems ?? [];
-
-    // Determine which travels to export
-    const travelsToExport =
-      !selectedIds || selectedIds.length === 0
-        ? travelsArr
-        : travelsArr.filter((t) => selectedIds.includes(t.uuid));
-
-    // collect baggage uuids referenced by those travels
-    const baggageUuids = new Set<string>();
-    travelsToExport.forEach((t) => {
-      (t.bags ?? []).forEach((bId) => baggageUuids.add(bId)); 
-    });
-
-    // include baggage objects that match
-    const baggagesToExport = baggagesArr.filter((b) => baggageUuids.has(b.uuid));
-
-    // collect item uuids from these baggages
-    const itemUuids = new Set<string>();
-    baggagesToExport.forEach((b) => {
-      (b.items ?? []).forEach((iId) => itemUuids.add(iId));
-    });
-
-    // include items that match
-    const itemsToExport = itemsArr.filter((it) => itemUuids.has(it.uuid));
-
-    return {
-      meta: {
-        exportedAt: new Date().toISOString(),
-        app: 'baggle',
-      },
-      travels: travelsToExport,
-      baggages: baggagesToExport,
-      items: itemsToExport
-    };
-  };
 
   const handleExport = async () => {
     try {

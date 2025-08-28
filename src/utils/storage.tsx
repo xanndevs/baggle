@@ -232,3 +232,60 @@ export function subscribe<T>(key: string, callback: (value: T) => void): () => v
   emitter.on(key, callback);
   return () => emitter.off(key, callback); // unsubscribe
 }
+
+interface ExportType {
+  meta: {
+    exportedAt: string;
+    app: string;
+  };
+  travels: Travel[];
+  baggages: Bag[];
+  items: Item[];
+}
+
+export const buildExportPayload = async (selectedIds: string[] | null): Promise<ExportType> => {
+    // read full collections (use existing storage keys)
+    const [allTravels, allBaggages, allItems] = await Promise.all([
+      get<Travel[]>('travels'),
+      get<Bag[]>('baggages'),
+      get<Item[]>('items'),
+    ]);
+
+    const travelsArr = allTravels ?? [];
+    const baggagesArr = allBaggages ?? [];
+    const itemsArr = allItems ?? [];
+
+    // Determine which travels to export
+    const travelsToExport =
+      !selectedIds || selectedIds.length === 0
+        ? travelsArr
+        : travelsArr.filter((t) => selectedIds.includes(t.uuid));
+
+    // collect baggage uuids referenced by those travels
+    const baggageUuids = new Set<string>();
+    travelsToExport.forEach((t) => {
+      (t.bags ?? []).forEach((bId) => baggageUuids.add(bId)); 
+    });
+
+    // include baggage objects that match
+    const baggagesToExport = baggagesArr.filter((b) => baggageUuids.has(b.uuid));
+
+    // collect item uuids from these baggages
+    const itemUuids = new Set<string>();
+    baggagesToExport.forEach((b) => {
+      (b.items ?? []).forEach((iId) => itemUuids.add(iId));
+    });
+
+    // include items that match
+    const itemsToExport = itemsArr.filter((it) => itemUuids.has(it.uuid));
+
+    return {
+      meta: {
+        exportedAt: new Date().toISOString(),
+        app: 'baggle',
+      },
+      travels: travelsToExport,
+      baggages: baggagesToExport,
+      items: itemsToExport
+    };
+  };
