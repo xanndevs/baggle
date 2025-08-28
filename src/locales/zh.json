@@ -9,7 +9,9 @@
     "selectLanguage": "更改语言",
     "selectCurrency": "更改货币",
     "exportTravels":  "导出行程",
-    "selectTravelsToExport": "选择行程"
+    "selectTravelsToExport": "选择行程",
+    "importTravels": "导入行程",
+    "successfullyImported": "行程成功导入"
   },
   "generic": {
     "noContent": "暂无内容",
@@ -29,7 +31,8 @@
     "deleteConfirmationText": "确定要删除吗？",
     "add": "新建",
     "categoryName": "类别名称",
-    "export": "导出"
+    "export": "导出",
+    "dismiss": "忽略"
   },
   "travels": {
     "new": "新建行程",

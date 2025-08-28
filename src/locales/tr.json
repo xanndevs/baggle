@@ -9,7 +9,9 @@
     "selectLanguage": "Dili Değiştir",
     "selectCurrency": "Para Birimini Değiştir",
     "exportTravels":  "Seyahatleri Dışa Aktar",
-    "selectTravelsToExport": "Seyahatleri Seçin"
+    "selectTravelsToExport": "Seyahatleri Seçin",
+    "importTravels": "Seyahatleri İçe Aktar",
+    "successfullyImported": "Seyahatler Başarıyla İçe Aktarıldı."
   },
   "generic": {
     "noContent": "İçerik Yok",
@@ -29,7 +31,8 @@
     "deleteConfirmationText": "Emin misiniz?",
     "add": "Yeni",
     "categoryName": "Kategori Adı",
-    "export": "Dışa Aktar"
+    "export": "Dışa Aktar",
+    "dismiss": "Gizle"
   },
   "travels": {
     "new": "Yeni Seyahat",

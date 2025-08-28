@@ -9,7 +9,9 @@
     "selectLanguage": "Cambiar Idioma",
     "selectCurrency": "Cambiar Moneda",
     "exportTravels":  "Exportar Viajes",
-    "selectTravelsToExport": "Seleccionar Viajes"
+    "selectTravelsToExport": "Seleccionar Viajes",
+    "importTravels": "Importar Viajes",
+    "successfullyImported": "Viajes importados con éxito."
   },
   "generic": {
     "noContent": "Sin Contenido",
@@ -29,7 +31,8 @@
     "deleteConfirmationText": "¿Estás seguro?",
     "add": "Nuevo",
     "categoryName": "Categoría",
-    "export": "Exportar"
+    "export": "Exportar",
+    "dismiss": "Descartar"
   },
   "travels": {
     "new": "Nuevo Viaje",

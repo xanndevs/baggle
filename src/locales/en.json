@@ -9,7 +9,9 @@
     "selectLanguage": "Change Language",
     "selectCurrency": "Change Currency",
     "exportTravels":  "Export Travels",
-    "selectTravelsToExport": "Select Travels"
+    "selectTravelsToExport": "Select Travels",
+    "importTravels": "Import Travels",
+    "successfullyImported": "Travels imported successfully."
   },
   "generic": {
     "noContent": "No Content",
@@ -29,7 +31,8 @@
     "deleteConfirmationText": "Are you sure?",
     "add": "New",
     "categoryName": "Category Name",
-    "export": "Export"
+    "export": "Export",
+    "dismiss": "Dismiss"
   },
   "travels": {
     "new": "New Travel",
