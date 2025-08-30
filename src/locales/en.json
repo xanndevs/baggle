@@ -73,6 +73,8 @@
     "unnamed":"Unnamed Item",
     "unboughtPrice":"Total: {{amount}}",
     "iDontHaveYet":"Needed",
+    "seeImage": "See Image",
+    "imageOf": "Image of {{name}}",
     "store": "Stored Items",
     "ready": "Ready Items",
     "packed": "Packed Items",

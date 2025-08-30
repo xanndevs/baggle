@@ -52,7 +52,7 @@
     
     object-fit: cover;
     background-color: var(--ion-background-color);
-    box-shadow: 0 0 12px rgba(0,0,0,0.5) inset;
+    box-shadow: var(--ion-box-shadow-inset);
 }
 
 .item-details{

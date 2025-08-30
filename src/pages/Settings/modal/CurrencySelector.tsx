@@ -61,10 +61,8 @@ const CurrencySelector: React.FC<ContainerProps> = ({translations, settings}) =>
         columns={[
           {
             name: 'currencies',
-            selectedIndex: 0,
-            options: [
-              { text: "defg", value: '' },
-            ],
+            selectedIndex: buttonValues.findIndex(option => option.value === settings?.currency),
+            options: [ ...buttonValues],
           },
         ]}
         buttons={[

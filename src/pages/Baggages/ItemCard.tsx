@@ -1,13 +1,14 @@
 
 
 import { createGesture, GestureDetail, IonBadge, IonButton, IonCard, IonCheckbox, IonChip, IonIcon, IonImg, IonLabel, useIonActionSheet, useIonPopover } from '@ionic/react';
-import { bagAddOutline, bagAddSharp, bagOutline, imageOutline, pencilSharp, pricetag, pricetagOutline, trashSharp } from 'ionicons/icons';
+import { bagAddOutline, bagAddSharp, bagOutline, image, imageOutline, pencilSharp, pricetag, pricetagOutline, trashSharp } from 'ionicons/icons';
 import React, { useEffect, useRef } from 'react';
 import { edit_uuid, get, pop_uuid, subscribe } from '../../utils/storage';
 import './ItemCard.css';
 import { useTranslation } from 'react-i18next';
 import { presentDeleteConfirmation, presentReadyOrPackedSelection } from '../Settings/modal/DeleteActionSheet';
 import { settings } from 'cluster';
+import { useHistory } from 'react-router';
 
 interface ContainerProps {
   item: Item;
@@ -28,27 +29,34 @@ interface FormState extends Item {
 
 const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
   const { t } = useTranslation();
-
+  const history = useHistory(); // <-- Create history
 
 
 
   const Popover = () =>
     <>
-      { item.type !== "store" &&
-        <IonButton expand='block' size='default' fill='clear'  color={'light'} className='popover-button' onClick={handleNeeded}>
-        <IonIcon slot="start" color={"primary"} style={{position: 'absolute', left: '8px'}} icon={pricetag} />
-        <IonLabel color={'primary'} style={{position: 'absolute', left: '32px'}}>{t("items.iDontHaveYet") as string}</IonLabel>
-      </IonButton>
+      {item.type !== "store" &&
+        <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleNeeded}>
+          <IonIcon slot="start" color={"primary"} style={{ position: 'absolute', left: '8px' }} icon={pricetag} />
+          <IonLabel color={'primary'} style={{ position: 'absolute', left: '32px' }}>{t("items.iDontHaveYet") as string}</IonLabel>
+        </IonButton>
       }
 
       <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleEdit}>
-        <IonIcon slot="start" color={"primary"} style={{position: 'absolute', left: '8px'}} icon={pencilSharp} />
-        <IonLabel color={'primary'} style={{position: 'absolute', left: '32px'}}>{t("generic.edit") as string}</IonLabel>
+        <IonIcon slot="start" color={"primary"} style={{ position: 'absolute', left: '8px' }} icon={pencilSharp} />
+        <IonLabel color={'primary'} style={{ position: 'absolute', left: '32px' }}>{t("generic.edit") as string}</IonLabel>
       </IonButton>
 
+      {item.image &&
+        <IonButton expand='block' size='default' fill='clear' color={'light'} className='popover-button' onClick={handleOpenImage}>
+          <IonIcon slot="start" color={"primary"} style={{ position: 'absolute', left: '8px' }} icon={image} />
+          <IonLabel color={'primary'} style={{ position: 'absolute', left: '32px' }}>{t("items.seeImage") as string}</IonLabel>
+        </IonButton>
+      }
+
       <IonButton fill='clear' size='default' className='popover-button' color={'light'} expand='block' onClick={handleDelete}>
-        <IonIcon slot="start" color={"danger"} style={{position: 'absolute', left: '8px'}} icon={trashSharp} />
-        <IonLabel color={'danger'} style={{position: 'absolute', left: '32px'}}>{t("generic.delete") as string}</IonLabel>
+        <IonIcon slot="start" color={"danger"} style={{ position: 'absolute', left: '8px' }} icon={trashSharp} />
+        <IonLabel color={'danger'} style={{ position: 'absolute', left: '32px' }}>{t("generic.delete") as string}</IonLabel>
       </IonButton>
     </>
 
@@ -73,7 +81,7 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
     await dispatch({ type: "RESET" })
     await dispatch({ type: "UPDATE", field: "isEdit", value: true });
     await dispatch({ type: "UPDATE", field: "uuid", value: item.uuid });
-    
+
     await dispatch({ type: "UPDATE", field: "amount", value: item.amount });
     await dispatch({ type: "UPDATE", field: "category", value: item.category });
     await dispatch({ type: "UPDATE", field: "image", value: item.image });
@@ -146,32 +154,32 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
     }
   }, []);
 
-    const [settings, setSettings] = React.useState<Settings>();
-    useEffect(() => {
-      let isMounted = true;
-  
-      const setup = async () => {
-        const settings = await get("settings") as Settings;
-  
-        if (isMounted && settings) { setSettings(settings); }
-  
-      };
-  
-      setup();
-  
+  const [settings, setSettings] = React.useState<Settings>();
+  useEffect(() => {
+    let isMounted = true;
 
-      const unsub_settings = subscribe<Settings>('settings', (settings) => {
-        if (isMounted) {
-          setSettings(settings);
-          //console.log("Settings data updated:", settings);
-        }
-      });
-  
-      return () => {
-        isMounted = false;
-        unsub_settings();
-      };
-    }, []);
+    const setup = async () => {
+      const settings = await get("settings") as Settings;
+
+      if (isMounted && settings) { setSettings(settings); }
+
+    };
+
+    setup();
+
+
+    const unsub_settings = subscribe<Settings>('settings', (settings) => {
+      if (isMounted) {
+        setSettings(settings);
+        //console.log("Settings data updated:", settings);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      unsub_settings();
+    };
+  }, []);
 
 
 
@@ -219,6 +227,11 @@ const ItemCard: React.FC<ContainerProps> = ({ item, dispatch, modal }) => {
     return;
 
   }
+
+  const handleOpenImage = () => {
+    // Open the image by redirecting the user to /image/<itemuuid>
+    history.push(`/image/${item.uuid}`);
+  };
 
 
   return (

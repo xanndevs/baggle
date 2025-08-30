@@ -167,7 +167,10 @@ export async function push(key: string, value: GeneralTravelType | GeneralTravel
       }
     });
   } else {
-    existingData.push(value);
+    const index = existingData.findIndex((existingItem: GeneralTravelType) => existingItem.uuid === value.uuid);
+    if (index === -1) {
+      existingData.push(value);
+    }
   }
   await store.set(key, existingData);
   emitter.emit(key, existingData);

@@ -148,7 +148,7 @@ const TravelsCard: React.FC<ComponentProps> = ({ travel, modal, dispatch }) => {
 
   return (
     <>
-      <IonCard ref={card} className='card-margin' color={"light"} button routerLink={`/travels/${travel.uuid}`} >
+      <IonCard ref={card} className='card-margin'  button routerLink={`/travels/${travel.uuid}`} >
         <IonCardHeader className='padding-bottom-none padding-small'>
           <IonCardSubtitle><BaggleDaysLabel date={travel.date} withFullDate={true} /></IonCardSubtitle>
 

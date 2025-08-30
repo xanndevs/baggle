@@ -74,6 +74,8 @@
     "unnamed": "Article Sans Nom",
     "unboughtPrice": "Total : {{amount}}",
     "iDontHaveYet": "Manquant",
+    "seeImage": "Voir l'image",
+    "imageOf": "Image de {{name}}",
     "store": "Articles en magasin",
     "ready": "Articles Prêts",
     "packed": "Articles Emballés",

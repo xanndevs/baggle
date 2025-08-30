@@ -41,6 +41,7 @@ import Settings from './pages/Settings/Settings';
 import TravelDetails from './pages/Travels/details/TravelDetails';
 import './theme/variables.css';
 import { get, subscribe } from './utils/storage';
+import ItemImageViewer from './pages/Baggages/ItemImageViewer';
 
 
 
@@ -119,9 +120,14 @@ const App: React.FC = () => {
               <Settings />
             </Route>
 
+            
+            <Route path="/image/:uuid" component={ItemImageViewer} />
+            
             <Route exact path="/">
               <Redirect to="/travels" />
             </Route>
+
+
 
           </IonRouterOutlet>
           <IonTabBar slot="bottom" className='floating-tabs glow-border'>

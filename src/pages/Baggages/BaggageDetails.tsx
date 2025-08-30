@@ -374,12 +374,12 @@ const BaggageDetails: React.FC = () => {
             </div>
             <div id='id-modal-content' style={{ display: 'flex', flexDirection: 'column', height: '350px', }}>
 
-              <IonHeader style={{ 'background': "var(--ion-card-background)", borderRadius: "15px 15px 0px 0px" }}>
+              <IonHeader className='item-modal-header'>
                 <IonToolbar style={{ borderRadius: "var(--ion-border-radius) var(--ion-border-radius) 0px 0px" }}>
                   <IonTitle>{formState.title}</IonTitle>
 
                 </IonToolbar>
-                <IonProgressBar value={formState.progress}></IonProgressBar>
+                <IonProgressBar color={'primary'} value={formState.progress}></IonProgressBar>
               </IonHeader>
               <IonContent className="ion-padding">
 

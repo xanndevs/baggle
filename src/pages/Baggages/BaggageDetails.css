@@ -29,6 +29,12 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     align-items: center;
 }
 
+@media (prefers-color-scheme: light) {
+.item-preview-card {
+    background-color: white;
+}
+}
+
 .item-card {
     position: sticky;
     background-color: var(--ion-card-background);
@@ -80,7 +86,7 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     align-items: center;
 
     object-fit: cover;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5) inset;
+    box-shadow: var(--ion-box-shadow-inset);
 }
 
 .item-preview-details {
@@ -182,4 +188,15 @@ ion-toolbar .sc-ion-searchbar-ios-h {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.item-modal-header{
+    background: var(--ion-card-background);
+    border-radius: 15px 15px 0px 0px;
+}
+
+@media (prefers-color-scheme: light) {
+    .item-modal-header {
+        background-color: white;
+    }
 }

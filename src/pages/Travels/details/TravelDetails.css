@@ -25,7 +25,7 @@ padding: 0px 8px;
     pointer-events: none;
 
     background: #000000;
-    background: linear-gradient(90deg, var(--ion-card-background) 10px, rgba(0, 0, 0, 0) 30px, rgba(0, 0, 0, 0) calc(100% - 30px), var(--ion-card-background) calc(100% - 10px));
+    background: linear-gradient(90deg, var(--ion-card-background) 10px, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 0) calc(100% - 20px), var(--ion-card-background) calc(100% - 10px));
 }
 
 .float-end{
@@ -70,7 +70,11 @@ ion-modal {
 
 
 .details-inner-card{
-    border: none;
-    background: transparent;
-    box-shadow: none;
+    background-color: var(--ion-card-background);
+    filter: brightness(1.1) contrast(0.96) sepia(0.12);
+}
+
+.baggage-card{
+    background-color: var(--ion-card-background);
+    filter: brightness(1.1) contrast(0.96) sepia(0.12);
 }

@@ -72,7 +72,7 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date, withFullDate = false,
   return (<>
     {withFullDate && (
       <>
-        <IonLabel className='baggle-days-label' color={'medium'}>{date.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel>
+        <IonLabel className='baggle-days-label' >{date.toString().split(" ", 6).splice(0, 4).join(" ")}</IonLabel>
         {withFullDate && withRemainingDays &&(<> • </>)}
       </>
     )}

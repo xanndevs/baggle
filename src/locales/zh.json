@@ -73,6 +73,8 @@
     "unnamed": "未命名物品",
     "unboughtPrice": "总计：{{amount}}",
     "iDontHaveYet": "缺少",
+    "seeImage": "查看图片",
+    "imageOf": "图片 - {{name}}",
     "store": "商店商品",
     "ready": "已准备物品",
     "packed": "已打包物品",
