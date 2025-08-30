@@ -55,7 +55,7 @@ const BaggleDaysLabel: React.FC<ContainerProps> = ({ date, withFullDate = false,
     const hours = remainingHours
 
     if (days > 3) {
-      return "medium"
+      return undefined
     }
     else if (days >= 0) {
       if (hours > 0) { return "warning" }
